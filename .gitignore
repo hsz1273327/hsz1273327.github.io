@@ -1,0 +1,7 @@
+node_modules
+# ---> macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+_site/
+.vscode

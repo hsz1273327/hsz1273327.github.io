@@ -1,0 +1,122 @@
+# Site settings
+title: Hsz's Blog
+SEOTitle: 黄思喆的博客 | Hsz's Blog
+header-img: img/home-bg.png
+email: hsz1273327@gmail.com
+description: "黄思喆的博客--编程,数据与生活"
+keyword: "编程,数据,生活"
+url: "http://blog.hszofficial.site"              # your host, for absolute URL
+#url: "http://127.0.0.1:4000"              # your host, for absolute URL
+baseurl: ""
+
+author: "Huang Sizhe"
+
+
+# Build settings
+# from 2016, 'pygments' is unsupported on GitHub Pages. Use 'rouge' for highlighting instead.
+highlighter: rouge
+permalink: pretty
+paginate: 10
+exclude: ["less","node_modules","Gruntfile.js","package.json","README.md","tools","drafts","Gemfile","Gemfile.lock","package-lock.json"]
+include: ['_pages']
+
+collections:
+  keynotes:
+    output: true
+    permalink: /keynotes/:path/
+
+  series:
+    output: true
+    permalink: /series/:path/
+
+defaults:
+  - scope:
+      path: ""
+      type: "posts"
+    values:
+      layout: "post"
+  - scope:
+      path: ""
+      type: "keynotes"
+    values:
+      layout: "keynote"
+  - scope:
+      path: ""
+      type: "series"
+    values:
+      layout: "series"
+
+
+# Gems
+# from PR#40, to support local preview for Jekyll 3.0
+gems: [jekyll-paginate]
+
+# Markdown settings
+# replace redcarpet to kramdown,
+# although redcarpet can auto highlight code, the lack of header-id make the catalog impossible, so I switch to kramdown
+# document: http://jekyllrb.com/docs/configuration/#kramdown
+markdown: kramdown
+kramdown:
+  input: GFM                            # use Github Flavored Markdown !important
+
+
+
+# 功能开关  
+
+# 全页面功能
+#---------------
+# 开始网站分析,支持Google Analytics和Baidu Analytics,具体设置请去`_data/site_analysis.json`下进行
+site_analytics: true
+
+# 是否开启讨饭 详细设置请设置`_data/donate.json`
+donate: true
+
+# post页面功能
+#---------------
+# markdown特殊语法支持
+#==========================
+# 开启latex数学公式支持,
+# 使用'$'和 "\\(","\\)"对编写内嵌公式
+# 使用'$$'和"\\[","\\]"对编写公式段
+math_support: true
+# 开启flowchar语法支持,可以用于绘制流程图,使用```flow ... ```结构使用
+flowchart_support: true
+# 开启sequence语法支持,可以用于绘制流程图,火车图等,更加灵活
+sequence_support: true
+# 是否启用高亮
+code_highlight: true
+
+
+# 其他功能
+#=========================
+# 是否给post侧边章节锚
+anchorjs: true       
+# 是否要用gitment在github上通过issue做评论,具体设置在`_data/comment.json`,请替换我的配置
+comment: true       
+
+
+
+# 侧边栏设置
+page_sidebar:
+  ## 是否渲染非文章页面的侧边栏
+  render: true                           # whether or not using Sidebar.
+  ## 是否给出最新的post链接
+  latest_post: true
+  ## 展示全部标签,详细设置在`_data/featured_tags.json`
+  featured_tags: true                      
+  ## 是否渲染朋友blog链接,详细设置在`_data/friends.json`
+  friend_links: true
+  ## 个人简短介绍
+  short_about: 
+    ### 是否渲染个人简介,个人简介详细设置在`_data/short_about.json`
+    render: true
+    ## 是否渲染社交网络账号
+    social_accounts: true
+
+post_sidebar:
+  ## 是否渲染文章的侧边栏
+  render: true                      # whether or not using Sidebar.
+  ## 文章标签
+  post_tags: true                     # whether or not using Feature-Tags
+  ## 文章类型
+  post_category: true

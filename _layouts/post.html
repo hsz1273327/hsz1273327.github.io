@@ -1,0 +1,79 @@
+---
+layout: default
+---
+
+<header class="intro-header">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <h1>{{ page.title }}</h1>
+                    {% comment %}
+                    always create a h2 for keeping the margin , Hux
+                    {% endcomment %}
+                    {% comment %} if page.subtitle {% endcomment %}
+                    <h2 class="subheading">{{ page.subtitle }}</h2>
+                    {% comment %} endif {% endcomment %}
+                    <span class="meta">Posted by {% if page.author %}{{ page.author }}{% else %}{{ site.title }}{%
+                        endif %} on {{ page.date | date: "%B %-d, %Y" }}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            {% if site.post_sidebar.render == false %}
+            <!-- Post Container -->
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 post-container">
+                    {{ content }}
+                    {% if site.comment %}
+                    {% include content/comment.html %}
+                    {% endif %}
+                    {% include content/pager.html %}
+            </div>
+            {% else %}
+            <!-- Post Container -->
+            <div class="col-lg-8 col-lg-offset-1 col-md-10 col-md-offset-1 col-sm-12 col-xs-12 post-container">
+                    {{ content }}
+                    {% if site.comment %}
+                    {% include content/comment.html %}
+                    {% endif %}
+                    {% include content/pager.html %}
+            </div>
+            <!-- Sidebar Container -->
+            {% include sidebar_post.html %}
+            {% endif %}
+        </div>
+    </div>
+</article>
+
+{% if site.math_support%}
+{% include content/math_support.html %}
+{% endif %}
+
+{% if site.flowchart_support%}
+{% include content/flowchart_support.html %}
+{% endif %}
+{% if site.sequence_support%}
+{% include content/sequence_support.html %}
+{% endif %}
+
+
+
+{% if site.code_highlight%}
+{% include content/code_highlight.html %}
+{% endif %}
+
+{% if site.anchorjs%}
+{% include content/post_anchor.html %}
+{% endif %}
+<style type="text/css">
+@import url('{{ "/assets/css/post.css" | prepend: site.url }}');
+header.intro-header{
+    background-image: url('{{ site.baseurl }}/{% if page.header-img %}{{ page.header-img }}{% else %}{{ site.header-img }}{% endif %}');
+}
+</style>

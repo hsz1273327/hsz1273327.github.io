@@ -1,0 +1,43 @@
+---
+title: "可视化git工具githubDesktop"
+date: 2016-11-26
+author: "Hsz"
+category: recommend
+tags:
+    - Git
+    - Github
+    - Visualization
+header-img: "img/home-bg-o.jpg"
+update: 2016-11-26
+series:
+    get_along_well_with_github:
+        index: 2
+---
+# 可视化git工具(githubDesktop)
+
+广为流行的版本控制工具git几乎已经成为行业标准,但其完全命令行操作的特点也确实难到了不少人.github公司开发的githubDesktop工具很好的解决了这个问题.目前该工具已经跨越全部桌面环境,去[官网下载](https://desktop.github.com/)对应版本按提示安装即可.
+
+git命令其实也不复杂,但是作为工具我觉得直观可见是很好的特性,我想这也是github流行的原因吧.所以命令行党请退散~
+
+进入正片
+
+我们先来了解下他的各个部分按钮的作用
+
+![][1]
+
+## 项目
+
+点击下左上角的`+`号后会看到这样的:
+
+![][2]
+
+根据你的需求选择是怎样的创建方式
+
+创建完了之后就是描述和确定版本了,如果需要的话也可以上传去github
+
+## 分支
+
+这个概念可能不太常见,一个项目可以有不同的版本,这些版本可能各具特点,这就是分支的概念了.创建分支也是简单的点击取个名字而已.
+
+[1]: {{site.url}}/img/in-post/github/gitdesktop_global.png
+[2]: {{site.url}}/img/in-post/github/githubdesktop_project.png

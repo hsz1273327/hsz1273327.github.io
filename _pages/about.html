@@ -1,0 +1,130 @@
+---
+layout: page
+title: "About"
+description: "This is Hsz."
+header-img: "img/about-bg.png"
+---
+
+<!-- Language Selector -->
+<select onchange="onLanChange(this.options[this.options.selectedIndex].value)">
+    <option value="0" selected> 中文 Chinese </option>
+    <option value="1"> 英语 English </option>
+</select>
+
+<!-- Chinese Version -->
+<div class="zh post-container">
+    <blockquote>
+
+        {{ site.data.short_about.sidebar-about-description }}
+    </blockquote>
+    <p>1. 使用计算机以及所有有助于了解这个世界本质的事物都不应受 到任何限制。任何事情都应该亲手尝试。</p>
+    <p>2. 所有信息应该都是自由的。</p>
+    <p>3. 不信任权威,提倡去中心化。</p>
+    <p>4. 判断一名黑客的水平应该看他的技术能力,而不是看他的学历、 年龄或地位等其他标准。</p>
+    <p>5. 你可以用计算机创造美和艺术。</p>
+    <p>6. 计算机使生活更美好。</p>
+
+
+    <p style="text-align:right;">
+        —— 史蒂文· 利维 －《黑客:计算机革命的英雄》
+    </p>
+
+</div>
+
+<!-- English Version -->
+<div class="en post-container">
+    <blockquote>
+        Designer or Engineer, things in between.
+    </blockquote>
+
+    <p>1. Access to computers—and anything that might teach you something about the way the world works—should be
+        unlimited and total. Always yield to the Hands-On Imperative!</p>
+    <p>2. All information should be free.</p>
+    <p>3. Mistrust Authority—Promote Decentralization.</p>
+    <p>4. Hackers should be judged by their hacking, not bogus criteria such as degrees, age, race, or position</p>
+    <p>5. You can create art and beauty on a computer.</p>
+    <p>6. Computers can change your life for the better.</p>
+
+    <p style="text-align:right;">
+        —— Steven Levy － Hackers: Heroes of the Computer Revolution
+    </p>
+</div>
+
+<!-- Handle Language Change -->
+<script type="text/javascript">
+    var $zh = document.querySelector(".zh");
+    var $en = document.querySelector(".en");
+
+    function onLanChange(index) {
+        if (index == 0) {
+            $zh.style.display = "block";
+            $en.style.display = "none";
+        } else {
+            $en.style.display = "block";
+            $zh.style.display = "none";
+        }
+    }
+    onLanChange(0);
+</script>
+
+
+
+{% if site.duoshuo_username %}
+<!-- 多说评论框 start -->
+<div class="comment">
+    <div class="ds-thread" {% if site.duoshuo_username=="huxblog" %} data-thread-id="1187623191091085319" {% else %}
+        data-thread-key="{{site.duoshuo_username}}/about" {% endif %} data-title="{{page.title}}" data-url="{{site.url}}/about/"></div>
+</div>
+<!-- 多说评论框 end -->
+
+<!-- Duoshuo hacking -->
+<input id="dsUser" type="hidden" value="{{site.duoshuo_username}}" />
+
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+    // dynamic User hacking by Hux
+    var _user = document.getElementById('dsUser').value;
+    // duoshuo comment query.
+    var duoshuoQuery = {
+        short_name: _user
+    };
+    (function () {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';
+        ds.async = true;
+        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0] ||
+            document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+</script>
+<!-- 多说公共JS代码 end -->
+{% endif %}
+
+
+{% if site.disqus_username %}
+<!-- disqus 评论框 start -->
+<div class="comment">
+    <div id="disqus_thread" class="disqus-thread">
+
+    </div>
+</div>
+<!-- disqus 评论框 end -->
+
+<!-- disqus 公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES * * */
+    var disqus_shortname = "{{site.disqus_username}}";
+    var disqus_identifier = "{{site.disqus_username}}/{{page.url}}";
+    var disqus_url = "{{site.url}}{{page.url}}";
+
+    (function () {
+        var dsq = document.createElement('script');
+        dsq.type = 'text/javascript';
+        dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<!-- disqus 公共JS代码 end -->
+{% endif %}

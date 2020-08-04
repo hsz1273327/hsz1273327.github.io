@@ -1,0 +1,26 @@
+[{
+        "title": "pmfp",
+        "url": "https://github.com/Python-Tools/pmfp/",
+        "description": "python3.5+使用的项目管理工具"
+    },
+    {
+        "title": "aioorm",
+        "url": "https://github.com/Python-Tools/aioorm/",
+        "description": "一个异步非阻塞的orm,是peewee针对asyncio的改造"
+    },
+    {
+        "title": "ScoreCardModel",
+        "url": "https://github.com/data-science-tools/ScoreCardModel/",
+        "description": "评分卡模型工具"
+    },
+    {
+        "title": "Messagepack RPC",
+        "url": "https://github.com/Basic-Components/msgpack-rpc-protocol",
+        "description": "接口简单的基于tcp的应用层RPC协议和其python实现"
+    },
+    {
+        "title": "asyncio-executor",
+        "url": "https://github.com/Python-Tools/asyncio-executor",
+        "description": "满足标准库`concurrent.futures.Executor`接口的协程执行器"
+    }
+]

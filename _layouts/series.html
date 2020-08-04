@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+
+  <title>
+    {% if page.title %}
+    {{ page.title }} | {{ site.title }}
+    {% else %}
+    {{ site.title }}
+    {% endif %}
+  </title>
+
+  <meta name="author" content="{{ page.author }}" />
+
+  <!-- Description -->
+  {% if page.description %}
+  <meta name="description" content="{{ page.description }}" />
+  {% else %}
+  <meta name="description" content="{{ site.description }}">
+  {% endif %}
+
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <!-- Bootstrap Core CSS -->
+  <link rel="stylesheet" href="{{ "/assets/css/bootstrap.min.css" | prepend: site.url }}">
+  <style>
+    .flex-container {
+      display: -webkit-flex;
+      display: flex;
+      -webkit-flex-direction: row;
+      flex-direction: row;
+      margin: auto;
+    }
+
+    aside {
+      width: 18%;
+      margin: auto;
+    }
+
+    .posts {
+      width: 72%;
+      height: 100vh;
+      margin: auto;
+    }
+  </style>
+
+
+
+</head>
+
+<body>
+  {% include content/nav.html %}
+
+  <main class="flex-container">
+    <aside class="button-list">
+      <div class="post-heading">
+        <h1>{{ page.title }}</h1>
+        {% comment %}
+        always create a h2 for keeping the margin
+        {% endcomment %}
+        {% comment %} if page.subtitle {% endcomment %}
+        <h2 class="subheading">{{ page.subtitle }}</h2>
+        {% comment %} endif {% endcomment %}
+        <span class="meta">Posted by {% if page.author %}{{ page.author }}{% else %}{{ site.title }}{%
+          endif %} on {{ page.date | date: "%B %-d, %Y" }}</span>
+        <div class="tags">
+          </br>
+          <p>keywords:</p>
+          {% for tag in page.tags %}
+          <a class="tag" href="{{ site.url }}/_pages/tags/#{{ tag }}" title="{{ tag }}">{{ tag }}</a>
+          {% endfor %}
+        </div>
+        {% if page.description %}
+        </br>
+        <div class="description">
+          <p> {{ page.description }} </p>
+          {% endif %}
+        </div>
+      </div>
+      <div class="index">
+        <p>index:</p>
+        {{ content }}
+      </div>
+
+    </aside>
+    <iframe id="posts" class="posts" sandbox="allow-forms allow-scripts allow-same-origin" seamless src="http://localhost:4000/introduce/2018/02/19/%E6%A0%91%E8%8E%93%E6%B4%BElinux%E7%B3%BB%E7%BB%9F%E5%AE%89%E8%A3%85%E5%92%8C%E9%85%8D%E7%BD%AE/">
+    </iframe>
+
+  </main>
+  <script>
+    var buttons = document.querySelectorAll(".button-list .index a")
+
+    var iframe = document.querySelector("#posts")
+
+    function aOnClick(a) {
+      return function () {
+        console.log("onclick")
+        iframe.src = a.href
+        return false
+      }
+    }
+    console.log(buttons.length)
+    for (var i = 0; i < buttons.length; ++i) {
+      console.log(buttons[i])
+      buttons[i].onclick = aOnClick(buttons[i])
+    }
+  </script>
+
+
+</body>
+
+</html>

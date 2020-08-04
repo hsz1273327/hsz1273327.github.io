@@ -1,0 +1,15 @@
+<div id="gitmentContainer"></div>
+<link rel="stylesheet" href="{{ "/assets/css/gitment.css" | prepend: site.url }}">
+<script src="{{ site.url}}/assets/js/gitment.browser.js"></script>
+<script>
+    var gitment = new Gitment({
+        id: '{{ page.title }}',
+        owner: '{{ site.data.comment.owner }}',
+        repo: '{{ site.data.comment.repo }}',
+        oauth: {
+            client_id: '{{ site.data.comment.oauth.client_id }}',
+            client_secret: '{{ site.data.comment.oauth.client_secret }}',
+        },
+    });
+    gitment.render('gitmentContainer');
+</script>

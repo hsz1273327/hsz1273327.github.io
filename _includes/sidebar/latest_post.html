@@ -1,0 +1,14 @@
+<!-- new blogs -->
+<section>
+    <hr class="hidden-sm hidden-xs">
+    <h5>NEWEST 5 Update</h5>
+    <ul>
+        {% assign postlist = site.posts| sort: "update" | reverse | slice: 0,5 %}
+        {% for post in postlist %}
+        <li>
+            <a href="{{ post.url }}"> <strong>{{ post.title }}</strong> </br>updated @ {{ post.update }}</a>
+        </li>
+        {% endfor%}
+    </ul>
+    <p></p>
+</section>

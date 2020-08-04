@@ -1,0 +1,18 @@
+<div class="col-lg-3 col-lg-offset-0 col-md-3 col-md-offset-0 col-sm-12 col-xs-12 sidebar-container">
+     <!-- Featured Tags -->
+    {% if site.page_sidebar.featured_tags %}
+        {% include sidebar/featured_tags.html %}
+    {% endif %}
+    <!-- Latest Post -->
+    {% if site.page_sidebar.latest_post %}
+        {% include sidebar/latest_post.html %}
+    {% endif %}
+    <!-- Short About -->
+    {% if site.page_sidebar.short_about %}
+        {% include sidebar/short_about.html %}
+    {% endif %}
+    <!-- Friends Blog -->
+    {% if site.page_sidebar.friend_links %}
+        {% include sidebar/friends_side.html %}
+    {% endif %}
+</div>

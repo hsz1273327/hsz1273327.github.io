@@ -1,0 +1,11 @@
+<!-- Sidebar Container -->
+<div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 sidebar-container">
+    <!-- Featured Tags -->
+    {% if site.page_sidebar.featured_tags %}
+    {% include sidebar/featured_tags.html %}
+    {% endif %}
+    <!-- Friends Blog -->
+    {% if site.page_sidebar.friend_links %}
+    {% include sidebar/friends_side.html %}
+    {% endif %}
+</div>

@@ -1,0 +1,29 @@
+---
+layout: page
+title: "Books"
+description: "My gitbooks"
+header-img: "img/books-bg.png"
+---
+
+{% for book in site.data.books %}
+<div class="book-preview">
+    <a href="{{ book.url }}">
+        <h4 class="post-title">
+            {{ book.title }}
+        </h4>
+    </a>
+        {% if book.subtitle %}
+        <h5 class="post-subtitle">
+            {{ book.subtitle }}
+        </h5>
+        {% endif %}
+        <div class="post-content-preview">
+            {{ book.description }}
+        </div>
+
+    <p class="post-meta">
+        Posted by {% if post.author %}{{ post.author }}{% else %}{{ site.title }}{% endif %}
+    </p>
+</div>
+<hr>
+{% endfor %}

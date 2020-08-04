@@ -1,0 +1,12 @@
+<div class="col-lg-3 col-lg-offset-0 col-md-10 col-md-offset-1 col-sm-12 col-xs-12 sidebar-container">
+    <!-- Post Tags -->
+    {% if site.post_sidebar.post_tags %}
+    {% include sidebar/post_tags.html %}
+    {% endif %}
+
+    <!-- Post category -->
+    {% if site.post_sidebar.post_category %}
+    {% include sidebar/post_category.html %}
+    {% endif %}
+
+</div>
