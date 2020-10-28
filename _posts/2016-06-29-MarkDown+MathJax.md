@@ -78,11 +78,13 @@ markdown是html的子集,所以对于一些html标签和样式可以直接插入
 就像你下面看到的一样
 
 ---
+
 ```markdown
 ---
 
 ---
 ```
+
 ---
 
 #### 标题
@@ -90,12 +92,13 @@ markdown是html的子集,所以对于一些html标签和样式可以直接插入
 markdown的标题用复数个连续`#`表示,`#`越多标题层级越低,连续`#`后空一格再写标题内容即可
 
 ---
+
 ```markdown
 # 第一级
 ## 第二级
 ```
 
-#第一级
+# 第一级
 
 ## 第二级
 
@@ -112,10 +115,10 @@ markdown的标题用复数个连续`#`表示,`#`越多标题层级越低,连续`
 >
 > Back to the first level.
 >
-> ## 这是一个标题。
+> ## 这是一个标题
 >
-> 1.   这是第一行列表项。
-> 2.   这是第二行列表项。
+> 1. 这是第一行列表项。
+> 2. 这是第二行列表项。
 >
 > 给出一些例子代码：
 >
@@ -129,10 +132,10 @@ markdown的标题用复数个连续`#`表示,`#`越多标题层级越低,连续`
 >
 > Back to the first level.
 >
-> ## 这是一个标题。
+> ## 这是一个标题
 >
-> 1.   这是第一行列表项。
-> 2.   这是第二行列表项。
+> 1. 这是第一行列表项。
+> 2. 这是第二行列表项。
 >
 > 给出一些例子代码：
 >
@@ -206,8 +209,6 @@ Markdown 支持有序列表和无序列表。
 
 ***这是粗斜体***
 
-
-
 ---
 
 ### 页面元素
@@ -251,7 +252,6 @@ Markdown 支持有序列表和无序列表。
 
 [1]: http://google.com/
 
-
 ---
 
 ### 表格
@@ -270,20 +270,17 @@ Markdown 支持有序列表和无序列表。
 小马哥|0987
 小黑|9870
 
-
-
 ### 图片
 
 图片可以有内连和脚注两种引用方式
 
-#### 内连方式:
+#### 内连方式
 
 ```markdown
 ![Alt google](https://lh4.googleusercontent.com/-v0soe-ievYE/AAAAAAAAAAI/AAAAAAAAAAA/OixOH_h84Po/photo.jpg)
 ```
 
 ![Alt google](https://lh4.googleusercontent.com/-v0soe-ievYE/AAAAAAAAAAI/AAAAAAAAAAA/OixOH_h84Po/photo.jpg)
-
 
 #### 脚注方式
 
@@ -292,10 +289,10 @@ Markdown 支持有序列表和无序列表。
 
 [2]: https://lh4.googleusercontent.com/-v0soe-ievYE/AAAAAAAAAAI/AAAAAAAAAAA/OixOH_h84Po/photo.jpg
 ```
+
 ![Alt google][2]
 
 [2]: https://lh4.googleusercontent.com/-v0soe-ievYE/AAAAAAAAAAI/AAAAAAAAAAA/OixOH_h84Po/photo.jpg
-
 
 ### 插入代码
 
@@ -309,8 +306,6 @@ Markdown 支持有序列表和无序列表。
 
     你好`s=hello`
 
-
-
 + 通过tab键缩进(不建议)
 
 tab $ git clone xxxxx
@@ -319,6 +314,7 @@ tab $ git clone xxxxx
 
 + 使用三个\`符号包裹,首行的```后面接上代码的类型可以高亮关键字
 
+    ```markdown
         ```python
 
         def func(a:int)->int:
@@ -326,6 +322,8 @@ tab $ git clone xxxxx
             return a+b
 
         ```
+    ```
+
     对应的结果:
 
     ```python
@@ -353,15 +351,16 @@ tab $ git clone xxxxx
 ### 音频
 
 可以通过html标签实现(github不可以)
+
 ```html
 <audio controls>
   <source src="{{site.url}}/source/{{page.title}}/蔡志展 - 战斗音乐.mp3">
 </audio>
 ```
+
 <audio controls>
   <source src="{{site.url}}/source/{{page.title}}/蔡志展 - 战斗音乐.mp3">
 </audio>
-
 
 #### 数学公式的支持
 
@@ -371,7 +370,7 @@ tab $ git clone xxxxx
 
 公式段落使用像这样:
 
-```
+```markdown
 $$
 f(x)=\sum (x_i)^2
 $$
@@ -385,13 +384,13 @@ $$
 
 latex符号可以查看[这篇总结](http://blog.163.com/goldman2000@126/blog/static/167296895201221242646561/)和[这篇总结](http://mlworks.cn/posts/introduction-to-mathjax-and-latex-expression/)
 
-
 #### 流程图
 
 流程图不是markdown默认支持的语法,需要通过js模块提供支持,有的环境有支持但大多数没有.不过我的博客是支持的.
 
 通常我们使用[flowchart.js](http://flowchart.js.org/)语法
 
+```markdown
     ```flowchart
     st=>start: Start:>http://www.google.com[blank]
     e=>end:>http://www.google.com
@@ -405,6 +404,7 @@ latex符号可以查看[这篇总结](http://blog.163.com/goldman2000@126/blog/s
     cond(yes)->io->e
     cond(no)->sub1(right)->op1
     ```
+```
 
 效果如下:
 
@@ -424,6 +424,7 @@ cond(no)->sub1(right)->op1
 
 另一种是使用[sequence](https://bramp.github.io/js-sequence-diagrams/)
 
+```markdown
     ```sequence
     participant Device
     participant Browser
@@ -438,6 +439,7 @@ cond(no)->sub1(right)->op1
     Browser->Server: response
     Note over Server: verify response
     ```
+```
 
 效果如下:
 
