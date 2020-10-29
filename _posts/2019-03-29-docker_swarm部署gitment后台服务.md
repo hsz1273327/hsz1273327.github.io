@@ -18,6 +18,7 @@ update: 2019-03-29
 但有一段时间了gitment失效了...为什么呢?经过查找发现这个js会向一个服务器发送请求...然后这个服务器是作者自己搭建的,而且已经停了....
 
 那要怎么修复就很简单了.
+
 1. 自己建立这个服务器
 2. browser.js中引用这个网址的地方，改为自己的网址
 3. 主题中引用的browser.js，不能是原来gitment的js，而要是自己修改过的js
@@ -93,18 +94,16 @@ networks:
 
 顺道一提如果要自己建一个网络让别的服务挂载可以在manager节点的命令行中输入`docker network create --attachable --driver overlay --scope swarm xxxxx`创建
 
++ `restart_policy`用于设置重启的选项,一旦程序报错退出,docker会自动按这个配置重启容器,上面这个配置的意思是当有错误时延迟5s重启,最大重试3次,每次间隔120s
 
-`restart_policy`用于设置重启的选项,一旦程序报错退出,docker会自动按这个配置重启容器,上面这个配置的意思是当有错误时延迟5s重启,最大重试3次,每次间隔120s
++ `replicas`表示我们会起多少个实例
 
-
-`replicas`表示我们会起多少个实例
-
-
-`update_config`则指定更新service时的行为,上面配置的意思是更新时先更新两个,隔10s再更新剩下的两个
++ `update_config`则指定更新service时的行为,上面配置的意思是更新时先更新两个,隔10s再更新剩下的两个
 
 ### 部署服务
 
 有两种方式:
+
 1. 进去[我的这个项目仓库](https://github.com/hsz1273327/gh-oauth-server),吧`cocker-compose.yml`的内容复制下来,之后打开`portainer`,按路径`stacks=>addstack`进入创建stack的页面,然后选择`web editor`,把内容贴上然后点`deploy the stack`.
 2. 进去[我的这个项目仓库](https://github.com/hsz1273327/gh-oauth-server),fork下,之后打开`portainer`,按路径`stacks=>addstack`进入创建stack的页面,然后选择`git Repository`,把自己的登录信息和项目仓库地址填上,并在开始的地方为这个stack取个名字.然后点`deploy the stack`
 

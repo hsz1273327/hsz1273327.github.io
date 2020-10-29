@@ -1,7 +1,7 @@
 ---
-title: "玩转github"
+title: "玩转Github"
 series_name: "get_along_well_with_github"
-description: "github是全球最流行的开源项目托管平台,也是全球最大的IT领域同性交友平台(😁),本系列将介绍如何利用github参与开源项目和结交大佬."
+description: "Github是全球最流行的开源项目托管平台,也是全球最大的IT领域同性交友平台(😁),本系列将介绍如何利用github参与开源项目和结交大佬."
 date: 2019-03-14
 author: "Hsz"
 category: recommend

@@ -1,22 +1,20 @@
 ---
-title: "2020-10-29-使用Jekyll构建博客"
-date: 2020-10-29
+title: "利用GITHUBpage托管静态HTTP服务"
+date: 2020-11-05
 author: "Hsz"
 category: recommend
 tags:
     - Github
-    - Jekyll
-    - DocumentTool
 header-img: "img/home-bg-o.jpg"
-update: 2020-10-29
+update: 2020-11-05
 series:
     get_along_well_with_github:
-        index: 1
+        index: 8
 ---
 # 利用Github-Page搭建个人博客和项目主页
 
 github 提供了github page这个静态网站托管服务,你可以为你个人或者你的项目写一个"官网",
-这样便于推广自己和自己的项目,关键他是免费的!你最多就是花个几十块买个域名就够了!
+这样便于推广自己和自己的项目,关键他是免费的!你最多就是花个几十块买个域名就够了
 <!--more-->
 
 ## 各种申请
@@ -31,7 +29,6 @@ _sign_ _up_ _for_ _github_ 就是创建账号了和一般的网站注册一样,�
 这时候就需要一些"不可描述的手段"了,总之先解决了网络问题,之后就可以注册了
 google一般是拿gmail邮箱做为google账号,所以申请个gmail先,这个不多说,一路没啥难度.
 
-
 利用谷歌账号开通:
 
 + [站长工具](https://www.google.com/webmasters/),
@@ -40,96 +37,7 @@ google一般是拿gmail邮箱做为google账号,所以申请个gmail先,这个�
 
 + [分析工具](https://www.google.com/analytics/)
 
-
-## jekyll及其配置
-
-[jekyll](http://jekyll.com.cn/)是github支持的静态网站生成器,它支持类似jinjia2的模板格式[Liquid](https://help.shopify.com/themes/liquid/basics),而且支持markdown格式,关于markdown可以看我的[这篇文章](http://blog.hszofficial.site/recommend/2016/06/29/MarkDown+MathJax/),
-使用它你在第一次配置好后就不用再纠结你的站了,写就好.
-
-### 安装ruby环境
-
-window 下[这里下载ruby](http://rubyinstaller.org/)，安装好后顺手把rails一起安了吧～
-
-安装完成后记得[设置环境变量](http://jingyan.baidu.com/article/d5a880eb6aca7213f047cc6c.html)，
-具体就是把安装好的ruby位置放到环境变量里去。
-
-`win+R` 调出运行，然后输入`cmd` 呼出terminal，敲入`gem install rails`等待安装完成吧～～
-
-
-mac下自带ruby。
-
-### 安装gitpage相同的jekyll环境
-
-命令行输入`gem install bundler`等待安装完，
-
-命令行输入`gem install jekyll 和 gem install jekyll-paginate`等待安装完，
-
-接下来就是找个好看的模板了,可以在[这边找](http://jekyllthemes.org/),当然也可以下载[我的模板](https://github.com/hsz1273327/hsz1273327.github.io)
-
-将模板解压后放到你的项目文件夹即可
-
-你可以看到其中有这样几个文件/文件夹
-
-+ `_config.yml` 配置文件
-+ `_drafts`文件夹 用来存放草稿,当运行`jekyll build --drafts`后,草稿将会被编译成文章,并自动加上发布如期
-+ `_includes`文件夹 保存你网站的部件,你可以加载这些部件到你的布局或者文章中以方便重用。可以用这个标签 `` \{\% include file.ext \%\} ``来把文件 `_includes/file.ext` 包含进来。
-+ `_layouts`文件夹 `layouts` 是包裹在文章外部的模板。布局可以在`` YAML ``头信息中根据不同文章进行选择。标签 \{\{ content \}\} 可以将content插入页面中。
-+ `_posts`文件夹 这里放的就是你的文章了。文件格式很重要，必须要符合: `YEAR-MONTH-DAY-title.MARKUP`。 `The permalinks` 可以在文章中自己定制，但是数据和标记语言都是根据文件名来确定的。
-+ `_site`一旦 Jekyll 完成转换，就会将生成的页面放在这里（默认）。最好将这个目录放进你的 `.gitignore` 文件中。
-+ `index.html` 如果这些文件中包含 YAML 头信息 部分，Jekyll 就会自动将它们进行转换。当然，其他的如 .html， .markdown，  .md，或者 .textile 等在你的站点根目录下或者不是以上提到的目录中的文件也会被转换。
-+ `css,images,favicon.ico`等不用说,就是前端折腾的工具了.
-
-这样jekyll环境就算搭建好了
-
-要直接用主题那就没啥可折腾的了,如果想要自己设计修改,还是先好好读读上面给的文档再下手比较好~
-
-
-### 配置_config
-
-`_config.yml`是主要需要修改的部分,这边有几个主要参数是往往要修改的
-
-+ title   你的站点标题
-+ SEOTitle: SEO标题,方便搜索引擎抓取
-+ email: 你的email地址
-+ description: 你站点的介绍
-+ keyword: 关键字
-+ url: 你网站的url **这个一定要修改**
-+ duoshuo_username: 你的多说账号 (如果你要用的话)  
-+ duoshuo_share: [true /false] (如果你要用的话)   
-+ ba_track_id: 百度分析工具id(如果你要用的话)   
-+ ga_track_id: 谷歌分析工具id(如果你要用的话)  
-+ ga_domain: 谷歌分析工具指向的域名(如果你要用的话)   
-
-当然具体看你下载主题的说明
-
-### jekyll逻辑简述
-
-模板放在 *_includes* 里 静态文件自己定好,像我就是图片放`img`这类
-
-模板内用 \{\{  \}\}来传递模块或页面的属性
-
-用\{\%  \%\} 描述逻辑
-
-每个页面开头用`---` `---`分隔出独立位置记录这个页面的属性，其中`layout:` 和 `title:`是
-必须的属性.
-一个例子:
-```
----
-layout: post
-title: "helloworld"
-date: 2016-05-27
-author: "Hsz"
-header-img: "img/post-bg-js-module.jpg"
----
-```
-
-## 运行jekyll
-
-命令行依然cd到你的项目目录，输入 `jekyll build` ，运行完了后再输入 `jekyll serve`。
-tips：没事terminal不要关。
-
-浏览器里输入地址[http:\\localhost:4000](http:\\localhost:4000)你就能看到博客主页了
-
+## 部署
 
 ## 不用jekyll
 
@@ -153,7 +61,7 @@ github page 提供了搭建纯静态的blog的环境和工具,它允许使用jek
 接下来这个部分我会详细讲解如何搭建一个类似的小站。
 
 
-### 利用gitpage搭建静态个人博客网站
+### 利用Github Page搭建静态个人博客网站
 
 先进入你的github主页，这里你可以查看和管理你的所有项目
 
