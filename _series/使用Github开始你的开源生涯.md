@@ -1,13 +1,14 @@
 ---
-title: "玩转Github"
+title: "使用Github开始你的开源生涯"
 series_name: "get_along_well_with_github"
 description: "Github是全球最流行的开源项目托管平台,也是全球最大的IT领域同性交友平台(😁),本系列将介绍如何利用github参与开源项目和结交大佬."
-date: 2019-03-14
+date: 2020-10-29
 author: "Hsz"
 category: recommend
 tags:
     - github
-update: 2019-03-14
+    - Open Source
+update: 2020-11-01
 ---
 
 {% assign series_posts = "" | split: "" %}
