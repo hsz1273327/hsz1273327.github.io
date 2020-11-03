@@ -124,9 +124,9 @@ jenkins支持多节点,其好处是可以在多台机器上做编译,测试工�
 + `New 任务->输入项目名->多分支流水线`进入多分支流水线设置页面
 + 设置`Build Configuration`选`Mode: by Jenkinsfile`,`Script Path:Jenkinsfile`这样我们就是可以使用项目中的`Jenkinsfile`来定义过程了
 + 如果用于编译的库不在dockerhub拉取而是在自己的镜像仓库拉取,name可以设置`Pipeline Model Definition`中的内容
-  + `Docker Label`用于设置默认拉取的镜像标签(如果没显式的写出来),
-  + `Docker registry URL`用于设置私有仓库地址
-  + `Registry credentials`用于设置私有仓库的登录凭证
+    + `Docker Label`用于设置默认拉取的镜像标签(如果没显式的写出来),
+    + `Docker registry URL`用于设置私有仓库地址
+    + `Registry credentials`用于设置私有仓库的登录凭证
 + `Scan 多分支流水线 Triggers`勾选`Periodically if not otherwise run`,将周期设为`1h`一般就可以了.这个设置可以隔段时间扫描下仓库创建出合适的分支
 
 这些都设置好了还不能保存,我们开始重点--针对`gogs`和`github`项目的配置,这个项目需要配置`Branch Sources`
@@ -343,7 +343,7 @@ stage('Test') {
 
 我们可以在post中定义发送邮件的逻辑
 
-```
+```text
 emailext body: '''pipelie failure:
   构建名称:${JOB_NAME}
   构建结果:${BUILD_STATUS}
