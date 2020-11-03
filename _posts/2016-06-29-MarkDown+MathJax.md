@@ -7,9 +7,6 @@ tags:
     - DocumentTool
 header-img: "img/home-bg-o.jpg"
 update: 2019-03-13
-series:
-    get_along_well_with_github:
-        index: 4
 ---
 # MarkDown+MathJax
 
