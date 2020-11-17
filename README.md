@@ -38,9 +38,10 @@ gem install bundle
 
 
 1. 安装github pages相同的插件环境,在项目根目录下执行
-```shell
-bundle install
-```
+
+  ```shell
+  bundle install
+  ```
 
 ### 小工具的使用环境
 
@@ -105,6 +106,7 @@ bundle install
   update: 2019-02-02
   ---
   ```
+
 3. 使用markdown语法写文章
 4. 文章标题改为型如`2016-06-10-xxxxx.md`的固定格式放入`_post`文件夹
 5. 将项目推到仓库即发布.
