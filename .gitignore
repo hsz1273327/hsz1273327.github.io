@@ -8,3 +8,5 @@ _site/
 
 .mypy_cache
 env
+docs
+document
