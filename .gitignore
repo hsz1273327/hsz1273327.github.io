@@ -137,3 +137,6 @@ docs
 .LSOverride
 _site/
 .vscode
+
+_drafts
+_posts
