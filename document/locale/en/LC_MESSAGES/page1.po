@@ -1,0 +1,49 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2020, hsz
+# This file is distributed under the same license as the sample package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2020.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: sample 0.0.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2020-11-20 14:21+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.9.0\n"
+
+#: ../../page1.md:1
+msgid "page1"
+msgstr ""
+
+#: ../../page1.md:3
+msgid "测试math"
+msgstr "test math"
+
+#: ../../page1.md:1
+msgid ""
+"x_{n+1} = x_n - \\frac {x_n^k-a} {kx_n^{k-1}} = \\frac {k-1}{k} x_n + "
+"\\frac {a}{kx_n^{k-1}}"
+msgstr ""
+
+#: ../../page1.md:9
+msgid "section1"
+msgstr ""
+
+#: ../../page1.md:11
+msgid "12134"
+msgstr ""
+
+#: ../../page1.md:13
+msgid "section2"
+msgstr ""
+
+#: ../../page1.md:15
+msgid "sadf"
+msgstr ""
+
