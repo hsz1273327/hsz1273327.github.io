@@ -130,3 +130,10 @@ dmypy.json
 .vscode
 
 docs
+
+# ---> macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+_site/
+.vscode
