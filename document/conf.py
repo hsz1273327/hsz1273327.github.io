@@ -90,15 +90,24 @@ try:
     html_context
 except:
     html_context = dict()
+html_context["current_version"] = version
 html_context['display_lower_left'] = True
 
 # 从环境变量`CURRENT_LANGUAGE`获取当前语言,默认为zh_CN
 current_language = os.environ.get('CURRENT_LANGUAGE') if os.environ.get('CURRENT_LANGUAGE') else 'zh_CN'
 html_context['current_language'] = current_language
 
-# # POPULATE LINKS TO OTHER LANGUAGES
-html_context['languages'] = [('zh_CN', '/')]
+if current_language == 'zh_CN':
+    # # POPULATE LINKS TO OTHER LANGUAGES
+    html_context['languages'] = [('zh_CN', 'index.html')]
 
-languages = [lang.name for lang in Path(__file__).parent.joinpath("locale").iterdir() if lang.is_dir()]
-for lang in languages:
-    html_context['languages'].append((lang, f'/{lang}/'))
+    languages = [lang.name for lang in Path(__file__).parent.joinpath("locale").iterdir() if lang.is_dir()]
+    for lang in languages:
+        html_context['languages'].append((lang, f'{lang}/index.html'))
+else:
+    # # POPULATE LINKS TO OTHER LANGUAGES
+    html_context['languages'] = [('zh_CN', '../index.html')]
+
+    languages = [lang.name for lang in Path(__file__).parent.joinpath("locale").iterdir() if lang.is_dir()]
+    for lang in languages:
+        html_context['languages'].append((lang, f'../{lang}/index.html'))
