@@ -61,10 +61,11 @@ source_suffix[".md"] = 'markdown'
 
 # 设置markdown渲染器的自定义项
 
+
 def setup(app):
     github_doc_root = 'https://localhost:5000'
     app.add_config_value('recommonmark_config', {
-        #'url_resolver': lambda url: github_doc_root + url,
+        # 'url_resolver': lambda url: github_doc_root + url,
         "enable_auto_toc_tree": True,
         "auto_toc_tree_section": "目录",
         'auto_toc_maxdepth': 2,
@@ -73,3 +74,14 @@ def setup(app):
     }, True)
 
     app.add_transform(AutoStructify)
+
+# autoapi
+
+
+extensions.append('autoapi.extension')
+extensions.append("sphinx.ext.napoleon")
+autoapi_type = 'python'
+autoapi_dirs = ['../pythonsrc']
+# autoapi_options = ['members', 'undoc-members', 'show-inheritance',
+#                    'show-module-summary', 'special-members', 'show-inheritance-diagram', 'imported-members']
+# autoapi_add_toctree_entry = False
