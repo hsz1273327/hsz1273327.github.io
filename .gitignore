@@ -5,3 +5,8 @@ node_modules
 .LSOverride
 _site/
 .vscode
+
+.mypy_cache
+env
+docs
+document
