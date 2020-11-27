@@ -75,13 +75,13 @@ def setup(app):
 
     app.add_transform(AutoStructify)
 
-# autoapi
+# autoapi-python
 
 
 extensions.append('autoapi.extension')
 extensions.append("sphinx.ext.napoleon")
 autoapi_type = 'python'
-autoapi_dirs = ['../pythonsrc']
+autoapi_dirs = ['../src']
 # autoapi_options = ['members', 'undoc-members', 'show-inheritance',
 #                    'show-module-summary', 'special-members', 'show-inheritance-diagram', 'imported-members']
 # autoapi_add_toctree_entry = False
