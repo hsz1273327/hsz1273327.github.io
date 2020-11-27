@@ -73,3 +73,12 @@ def setup(app):
     }, True)
 
     app.add_transform(AutoStructify)
+
+# autoapi-javascript
+
+
+extensions.append('autoapi.extension')
+autoapi_type = 'javascript'
+autoapi_dirs = ['../src']
+autoapi_options = ['members', 'undoc-members', 'show-inheritance',
+                   'show-module-summary', 'special-members','imported-members']
