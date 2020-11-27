@@ -61,10 +61,11 @@ source_suffix[".md"] = 'markdown'
 
 # 设置markdown渲染器的自定义项
 
+
 def setup(app):
     github_doc_root = 'https://localhost:5000'
     app.add_config_value('recommonmark_config', {
-        #'url_resolver': lambda url: github_doc_root + url,
+        # 'url_resolver': lambda url: github_doc_root + url,
         "enable_auto_toc_tree": True,
         "auto_toc_tree_section": "目录",
         'auto_toc_maxdepth': 2,
@@ -74,11 +75,14 @@ def setup(app):
 
     app.add_transform(AutoStructify)
 
-# autoapi-javascript
 
+# autoapi-go
+extensions.append('sphinx_js')
 
-extensions.append('autoapi.extension')
-autoapi_type = 'javascript'
-autoapi_dirs = ['../src']
-autoapi_options = ['members', 'undoc-members', 'show-inheritance',
-                   'show-module-summary', 'special-members','imported-members']
+# 如果要用ts,设置js_language = 'typescript'
+
+js_source_path = '../src'
+
+# root_for_relative_js_paths = "../"
+# 如果有对jsdoc或者typedoc的设置文件要使用,可以设置 jsdoc_config_path = '../conf.json'
+primary_domain = 'js'  # 如果没有其他编程语言需要生成文档,就设置这个
