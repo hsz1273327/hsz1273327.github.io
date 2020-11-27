@@ -61,10 +61,11 @@ source_suffix[".md"] = 'markdown'
 
 # 设置markdown渲染器的自定义项
 
+
 def setup(app):
     github_doc_root = 'https://localhost:5000'
     app.add_config_value('recommonmark_config', {
-        #'url_resolver': lambda url: github_doc_root + url,
+        # 'url_resolver': lambda url: github_doc_root + url,
         "enable_auto_toc_tree": True,
         "auto_toc_tree_section": "目录",
         'auto_toc_maxdepth': 2,
@@ -73,3 +74,12 @@ def setup(app):
     }, True)
 
     app.add_transform(AutoStructify)
+
+
+# autoapi-go
+extensions.append('autoapi.extension')
+extensions.append('sphinxcontrib.golangdomain')
+
+autoapi_type = 'go'
+autoapi_dirs = ['../']
+autoapi_keep_files = True
