@@ -55,34 +55,34 @@ gem install bundle
 
 ### 特殊常量
 
-特殊常量|说明
----|---
-`site.data.books`|本人在github上挂的书籍项目信息
-`site.data.comment`|使用[gitment](https://github.com/imsun/gitment)基于github构建评论,评论实际在对应项目的issue中
-`site.data.donate`|存放收款二维码
-`site.data.featured_tags`|存放tags过滤的一些条件,大于`featured-condition-size`数值出现次数的tag会被展示
-`site.data.friends`|存放好友博客列表
-`site.data.projects`|存放个人开源项目信息
-`site.data.short_about`|存放个人简介内容
-`site.data.analysis`|存放百度或谷歌站长统计设置信息
-`site.keynotes`|幻灯片集合
-`site.series`|文章系列
+| 特殊常量                  | 说明                                                                                          |
+| ------------------------- | --------------------------------------------------------------------------------------------- |
+| `site.data.books`         | 本人在github上挂的书籍项目信息                                                                |
+| `site.data.comment`       | 使用[gitment](https://github.com/imsun/gitment)基于github构建评论,评论实际在对应项目的issue中 |
+| `site.data.donate`        | 存放收款二维码                                                                                |
+| `site.data.featured_tags` | 存放tags过滤的一些条件,大于`featured-condition-size`数值出现次数的tag会被展示                 |
+| `site.data.friends`       | 存放好友博客列表                                                                              |
+| `site.data.projects`      | 存放个人开源项目信息                                                                          |
+| `site.data.short_about`   | 存放个人简介内容                                                                              |
+| `site.data.analysis`      | 存放百度或谷歌站长统计设置信息                                                                |
+| `site.keynotes`           | 幻灯片集合                                                                                    |
+| `site.series`             | 文章系列                                                                                      |
 
 ## 文章分类
 
 这个项目非强制的限定了如下几个文章分类:
 
-分类|说明
----|---
-`introduce`|介绍类文章,主要是一些工具的使用配置过程
-`recommend`|推荐向文章,推荐工具介绍用法
-`comment`|评论类文章,主要是评论一些外界的消息
-`analysis`|分析类文章,针对一个主题做分析.
-`demo`|测试类文章,用于测试一些jekyll模板功能和一些前端技术
-`experiment`|实验记录
-`reading_note`|读书笔记
-`travel_note`|游记
-`essay`|随笔也就是瞎写
+| 分类           | 说明                                                |
+| -------------- | --------------------------------------------------- |
+| `introduce`    | 介绍类文章,主要是一些工具的使用配置过程             |
+| `recommend`    | 推荐向文章,推荐工具介绍用法                         |
+| `comment`      | 评论类文章,主要是评论一些外界的消息                 |
+| `analysis`     | 分析类文章,针对一个主题做分析.                      |
+| `demo`         | 测试类文章,用于测试一些jekyll模板功能和一些前端技术 |
+| `experiment`   | 实验记录                                            |
+| `reading_note` | 读书笔记                                            |
+| `travel_note`  | 游记                                                |
+| `essay`        | 随笔也就是瞎写                                      |
 
 
 ## 如何写博客
@@ -191,15 +191,15 @@ update: 2019-03-14
 
 元数据中
 
-字段|说明
----|---
-`title`|系列名
-`series_name`|系列的标识名,注意要英语且无空格
-`description`|系列简介
-`date`|创建日期
-`author`|编辑者
-`tags`|系列关键字
-`update`|更新时间
+| 字段          | 说明                            |
+| ------------- | ------------------------------- |
+| `title`       | 系列名                          |
+| `series_name` | 系列的标识名,注意要英语且无空格 |
+| `description` | 系列简介                        |
+| `date`        | 创建日期                        |
+| `author`      | 编辑者                          |
+| `tags`        | 系列关键字                      |
+| `update`      | 更新时间                        |
 
 下面的模板中需要将`sort: "series.get_along_well_with_github.index"`这边的`get_along_well_with_github`替换为你的系列的`series_name`
 
@@ -273,10 +273,10 @@ multiplex: # 暂时没搞明白
 
 由于幻灯片是一个很低频的功能,所以它支持的特性不在配置文件中开启而是在每个幻灯片中在元数据中单独开启.支持的特性有:
 
-特性|说明
----|---
-`diagram: bool`|是否支持流程图
-`mathjax: bool`|是否支持latex数学公式
+| 特性            | 说明                  |
+| --------------- | --------------------- |
+| `diagram: bool` | 是否支持流程图        |
+| `mathjax: bool` | 是否支持latex数学公式 |
 
 ### 写ppt
 
@@ -293,24 +293,24 @@ ppt的内容写法和博文大体是一样的,只是需要多出一个分页来
 
 ## 项目结构
 
-文件/文件夹|用途
----|---
-`_data`|存项目中的常量
-`_drafts`|存草稿
-`_include`|存前端模板组件
-`_layout`|存前端页面模板
-`_pages`|存导航指向的页面
-`_posts`|存博文
-`_keynotes`|存幻灯片
-`_series`|文章系列目录文件
-`_site`|渲染完成后的项目
-`assets`|css,字体,js脚本等静态文件
-`img`|用到的图片
-`source`|各篇文章用到的资源(图片,音频,视频)
-`tools`|辅助开发工具(js写的)
-`_config.yml`|配置文件,主要是用于开关特性
-`index.html`|主页
-`package.json`|npm的执行脚本在其中
+| 文件/文件夹    | 用途                               |
+| -------------- | ---------------------------------- |
+| `_data`        | 存项目中的常量                     |
+| `_drafts`      | 存草稿                             |
+| `_include`     | 存前端模板组件                     |
+| `_layout`      | 存前端页面模板                     |
+| `_pages`       | 存导航指向的页面                   |
+| `_posts`       | 存博文                             |
+| `_keynotes`    | 存幻灯片                           |
+| `_series`      | 文章系列目录文件                   |
+| `_site`        | 渲染完成后的项目                   |
+| `assets`       | css,字体,js脚本等静态文件          |
+| `img`          | 用到的图片                         |
+| `source`       | 各篇文章用到的资源(图片,音频,视频) |
+| `tools`        | 辅助开发工具(js写的)               |
+| `_config.yml`  | 配置文件,主要是用于开关特性        |
+| `index.html`   | 主页                               |
+| `package.json` | npm的执行脚本在其中                |
 
 ## 模板引擎
 
