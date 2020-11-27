@@ -1,0 +1,13 @@
+.. _exhale_function_c__maths_8h_1a5bcd255923a444399131bd5670454e3f:
+
+Function cm_sub
+===============
+
+- Defined in :ref:`file_include_c_maths.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: cm_sub(int, int)

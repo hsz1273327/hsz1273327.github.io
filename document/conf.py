@@ -61,10 +61,11 @@ source_suffix[".md"] = 'markdown'
 
 # 设置markdown渲染器的自定义项
 
+
 def setup(app):
     github_doc_root = 'https://localhost:5000'
     app.add_config_value('recommonmark_config', {
-        #'url_resolver': lambda url: github_doc_root + url,
+        # 'url_resolver': lambda url: github_doc_root + url,
         "enable_auto_toc_tree": True,
         "auto_toc_tree_section": "目录",
         'auto_toc_maxdepth': 2,
@@ -73,3 +74,35 @@ def setup(app):
     }, True)
 
     app.add_transform(AutoStructify)
+
+
+# C 语言支持
+extensions.append('breathe')
+extensions.append('exhale')
+# Setup the breathe extension
+breathe_projects = {
+    "Sample": "./doxyoutput/xml"
+}
+
+breathe_default_project = "Sample"
+
+# Setup the exhale extension
+exhale_args = {
+    # These arguments are required
+    "containmentFolder": "./api",
+    "rootFileName": "index.rst", # "library_root.rst",
+    "rootFileTitle": "Library API",
+    "doxygenStripFromPath": "..",
+    # Suggested optional arguments
+    "createTreeView": True,
+    # TIP: if using the sphinx-bootstrap-theme, you need
+    # "treeViewIsBootstrap": True,
+    "exhaleExecutesDoxygen": True,
+    "exhaleDoxygenStdin": "INPUT = ../include"
+}
+
+# Tell sphinx what the primary language being documented is.
+primary_domain = 'cpp'
+
+# Tell sphinx what the pygments highlight language should be.
+highlight_language = 'cpp'
