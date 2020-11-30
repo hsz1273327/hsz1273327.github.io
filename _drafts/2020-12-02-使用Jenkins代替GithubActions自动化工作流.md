@@ -1,38 +1,34 @@
 ---
 layout: post
-title: "使用Jenkins做CICD"
-date: 2019-04-10
+title: "使用Jenkins代替GithubActions自动化工作流"
+date: 2020-12-02
 author: "Hsz"
-category: introduce
+category: recommend
 tags:
     - DevOps
 header-img: "img/home-bg-o.jpg"
-update: 2019-04-10
+update: 2020-12-02
 series:
     get_along_well_with_github:
-        index: 6
+        index: 10
 ---
-# 使用Jenkins做CI/CD
+# 使用Jenkins代替GithubActions自动化工作流
 
-CI/CD是提高工作效率的基础.我们知道一般开发行为中开发编码的时间往往只占30%,剩下的全是测试和部署.如果可以降低测试和部署的时间那就可以大大提高工作效率.
-
+CI/CD是现代开发体系中提高工作效率的基础.我们知道一般开发行为中开发编码的时间往往只占30%,剩下的全是测试和部署.如果可以降低测试和部署的时间那就可以大大提高工作效率.
 CI/CD就是这样的工具,它的作用就是利用脚本自动化测试和部署.
 
-那为啥使用[Jenkins](https://github.com/jenkinsci/jenkins)呢?毕竟这已经是一个比较旧的工具了,而且用于配置`Jenkinsfile`使用的是类似C语言的写法(本质是groovy),与当今流行的json或者yml完全不通用.因为它可以不依赖任何其他的工具.
+在`Github Actions`出现之前,Github上也是使用第三方CI/CD工具的,那个时候[Jenkins](https://github.com/jenkinsci/jenkins)就是主流之一(另一个是Travis CI).
+<!--more-->
 
-当今最流行的CI/CD工具有3种:
+## Jenkins简介
 
-+ `Travis CI` 项目必须使用github托管,必须由github账号
-+ `Drone` 依赖docker集群
-+ `Gitlab runner` 依赖gitlab套件
-
-而`Jenkins`是完全开源免费的项目,它的使用也完全没有这种限制.而且它的部署不依赖代码仓库,用户系统也是和代码仓库不通用的,这也就意味着天生的开发与测试,部署隔离.同时它支持图形化的流程配置,可以一定程度上降低维护人员的学习成本.我们只需要忍受丑陋的ui即可.
+`Jenkins`是完全开源免费的项目,它的使用也没有什么限制.而且它的部署不依赖代码仓库,用户系统也是和代码仓库不通用的,这也就意味着天生的开发与测试,部署隔离.同时它支持图形化的流程配置,可以一定程度上降低维护人员的学习成本.我们只需要忍受丑陋的ui即可.
 
 本文推荐对想了解更多的读者可以看[jenkins官方文档](https://jenkins.io/zh/doc/book/pipeline/)作为补充
 
 顺道一提我之前公司一直使用的是gitlab套件,虽然体验上一致性还是不错的,但迁移了几次,每次都得重新部署全套,这相当让人厌烦.不少公司的运维人员恐怕连编程都不会,更不要提写脚本部署了,每次迁移都是一个伤筋动骨的过程,要不等上将近一周的时间等运维一个一个组件的部署完,要么自己动手.而权限分配也必然是我这个pm的任务,每次迁移都会重新配置一次权限.如果CI/CD和代码仓库分离,那么我只需要重新配置对应项目的仓库地址,这虽然也是个体力活,但已经比全部重配好得多.程序设计中有个单一职责原则,在工具选择上个人认为也是同样适用的.
 
-本项目对应的代码在[hszofficial/test_jenkins](https://github.com/hszofficial/test_jenkins)
+<!-- 本项目对应的代码在[hszofficial/test_jenkins](https://github.com/hszofficial/test_jenkins) -->
 
 ## docker集群上搭建Jenkins
 
