@@ -3,10 +3,9 @@ layout: post
 title: "使用Jenkins做CICD"
 date: 2019-04-10
 author: "Hsz"
-category: experiment
+category: introduce
 tags:
     - DevOps
-    - Git
 header-img: "img/home-bg-o.jpg"
 update: 2019-04-10
 series:
