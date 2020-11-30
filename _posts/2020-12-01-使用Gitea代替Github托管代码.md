@@ -1,13 +1,13 @@
 ---
 title: "使用Gitea代替Github托管代码"
-date: 2020-11-12
+date: 2020-12-01
 author: "Hsz"
 category: recommend
 tags:
     - Git
     - DevOps
 header-img: "img/home-bg-o.jpg"
-update: 2020-11-12
+update: 2020-12-01
 series:
     get_along_well_with_github:
         index: 9
