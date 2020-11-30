@@ -2,7 +2,7 @@
 title: "使用GithubActions自动化工作流"
 date: 2020-11-30
 author: "Hsz"
-category: recommend
+category: introduce
 tags:
     - Github
     - DevOps
