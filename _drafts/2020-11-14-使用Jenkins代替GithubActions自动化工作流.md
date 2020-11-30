@@ -6,7 +6,7 @@ author: "Hsz"
 category: experiment
 tags:
     - DevOps
-    - Github
+    - Git
 header-img: "img/home-bg-o.jpg"
 update: 2019-04-10
 series:
