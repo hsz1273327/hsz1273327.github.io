@@ -1,0 +1,15 @@
+version: "2.4"
+services:
+  webapp:
+    build: ./
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "200k"
+        max-file: "10"
+    ports:
+      - "5000:5000"
+    cpus: 1.0
+    mem_limit: 30m
+    restart: on-failure
+  

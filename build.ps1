@@ -1,0 +1,2 @@
+#docker buildx build --platform=linux/arm64,linux/amd64 -t dev.hszofficial.site:8443/test/test_sanic:0.0.0 -t dev.hszofficial.site:8443/test/test_sanic:latest . --push
+docker buildx build --platform=linux/arm/v6,linux/amd64 -t hsz1273327/test_sanic:0.0.0 -t hsz1273327/test_sanic:latest . --push
