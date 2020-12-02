@@ -5,7 +5,7 @@ header-img: img/home-bg.png
 email: hsz1273327@gmail.com
 description: "黄思喆的博客--编程,数据与生活"
 keyword: "编程,数据,生活"
-url: "http://blog.hszofficial.site"              # your host, for absolute URL
+url: "https://blog.hszofficial.site"              # your host, for absolute URL
 #url: "http://127.0.0.1:4000"              # your host, for absolute URL
 baseurl: ""
 
