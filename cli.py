@@ -6,7 +6,7 @@ if __name__ == "__main__":
     parser.add_argument('--authclient', action='store_true', default=False, help='是否双向认证')
     args = parser.parse_args()
     if args.authclient:
-        res = rq.get('https://github.com', verify='/path/to/certfile',cert=('/path/client.cert', '/path/client.key'))
+        res = rq.get('https://localhost:5000/ping', verify='/path/to/certfile',cert=('/path/client.cert', '/path/client.key'))
     else:
-        res = rq.get('https://github.com', verify='/path/to/certfile')
+        res = rq.get('https://localhost:5000/pong', verify='/path/to/certfile')
     print(res.json())
