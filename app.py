@@ -32,11 +32,12 @@ if __name__ == "__main__":
         context = ssl.SSLContext(ssl.PROTOCOL_SSLv23)
         # 设置服务证书和私钥
         context.load_cert_chain("./serverkey/server-cert.pem", keyfile="./serverkey/server-key.pem")
-        # 设置根证书
-        context.load_verify_locations('./ca/ca.pem')
+        # 设置根证书(双向校验有必要控制吊销的证书,文件夹下ca.pem为根证书,ca.crl为吊销证书的列表)
+        context.load_verify_locations(capath='./ca')
         # 强制双向认证
         context.verify_mode = ssl.CERT_REQUIRED
-        # context.post_handshake_auth = True
+        # 允许校验吊销的CRL列表
+        context.verify_flags = ssl.VERIFY_CRL_CHECK_LEAF
 
     else:
         # 单向校验
