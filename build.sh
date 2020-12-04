@@ -1,0 +1,1 @@
+docker build -t hsz1273327/gaww_nginx:static .
