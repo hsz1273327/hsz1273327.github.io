@@ -11,10 +11,6 @@
 
 + 这个静态网页托管的配置在`config/conf.d/static.d/static.conf`
 + 静态页面放在项目的`bbs`文件夹和`www`文件夹下
-+ build镜像可以在mac或linux下在`该项目根目录下`打开`terminal`直接执行`bash build.sh`,windows下的可以自己写个cmd脚本,我不会
 + 执行容器可以在`该项目根目录下`打开`terminal`使用`docker-compose up -d`
-+ 浏览器中打开页面`https://localhost:8043`可以看到helloworld项目
++ 浏览器中打开页面`https://localhost:8443`可以看到helloworld项目
 
-## 说明
-
-使用http协议访问`http://localhost:8080`也会显示,因为我们使用的路径`/usr/share/nginx/html`本来就是nginx的默认静态页面路径
