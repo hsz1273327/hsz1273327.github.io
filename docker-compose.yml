@@ -3,8 +3,7 @@ services:
   http-static:
     image: nginx:alpine
     ports:
-      - 8000:8000
-      - 8001:8001
+      - 8443:443
     logging:
       options:
         max-size: "10m"
@@ -13,3 +12,4 @@ services:
       - ./config/nginx.conf:/etc/nginx/nginx.conf
       - ./config/conf.d:/etc/nginx/conf.d
       - ./static:/usr/share/nginx/html
+      - ./crt:/data/crt
