@@ -1,4 +1,4 @@
-# nginx使用https
+# nginx使用https双向验证
 
 这个例子托管的前端页面使用的是我的[javascript攻略](https://tutorialforjavascript.github.io/)中[前端概览](https://tutorialforjavascript.github.io/web%E5%89%8D%E7%AB%AF%E6%8A%80%E6%9C%AF/%E5%89%8D%E7%AB%AF%E6%A6%82%E8%A7%88/)一篇的[helloworld项目](https://github.com/TutorialForJavascript/frontend-basic/tree/master/code/C0)中的成品
 
