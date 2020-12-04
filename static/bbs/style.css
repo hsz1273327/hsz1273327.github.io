@@ -1,0 +1,21 @@
+p {
+    font-family: "Times New Roman";
+    font-size: 20px;
+}
+
+.border {      
+  border: 1px solid black; 
+}
+
+ul {
+    width: 200px;
+    min-height: 100px;
+    margin: 50px auto;
+}
+
+ul li {
+    list-style: none;
+    width: 100px; 
+    background: #cce5ff;
+    margin: 5px;
+}

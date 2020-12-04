@@ -1,0 +1,14 @@
+version: "3.6"
+services:
+  http-static:
+    image: nginx:alpine
+    ports:
+      - 8080:80
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "3"
+    volumes:
+      - ./config/nginx.conf:/etc/nginx/nginx.conf
+      - ./config/conf.d:/etc/nginx/conf.d
+      - ./static:/usr/share/nginx/html
