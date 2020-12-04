@@ -3,7 +3,8 @@ services:
   http-static:
     image: nginx:alpine
     ports:
-      - 8080:80
+      - 8000:8000
+      - 8001:8001
     logging:
       options:
         max-size: "10m"

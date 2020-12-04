@@ -10,10 +10,6 @@
 ## 使用
 
 + 这个静态网页托管的配置在`config/conf.d/static.d/static.conf`
-+ 静态页面放在项目的`bbs`文件夹和`www`文件夹下
++ 静态页面放在项目的`static/bbs`文件夹和`static/www`文件夹下
 + 执行容器可以在`该项目根目录下`打开`terminal`使用`docker-compose up -d`
-+ 浏览器中打开页面`localhost:8080`可以看到helloworld项目,打开`127.0.0.1:8080`可以看到交互事件中拖拽项目
-
-## 说明
-
-localhost和127.0.0.1都指代本机,可以将这两个理解为同一台机器的两个域名
++ 浏览器中打开页面`localhost:8000`可以看到helloworld项目,打开`ocalhost:8001`可以看到交互事件中拖拽项目
