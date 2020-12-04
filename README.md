@@ -9,7 +9,7 @@
 
 ## 使用
 
-+ 这个静态网页托管的配置在`config/conf.d/static.d/static.conf`
-+ 静态页面放在项目的`bbs`文件夹和`www`文件夹下
++ 这个静态网页托管的配置在`config/conf.d/static.d/https.conf`
 + 执行容器可以在`该项目根目录下`打开`terminal`使用`docker-compose up -d`
 + 浏览器中打开页面`https://localhost:8443`可以看到helloworld项目
++ 需要先安装证书,证书是`clientkey/client-cert.pfx`
