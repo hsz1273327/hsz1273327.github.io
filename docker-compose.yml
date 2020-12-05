@@ -1,35 +1,19 @@
 version: "3.6"
 services:
-  redis-channel:
-    image: redis:latest
-    networks:
-      - rest_test
-
-  pg-store:
-    image: postgres:latest
-    networks:
-      - rest_test
-    environment: 
-     POSTGRES_PASSWORD: postgres
-  rest-helloworld:
+ 
+  rest-helloworld-1:
     image: hsz1273327/js-server:restful_c0
-    ports:
-      - 3001:3000
+    networks:
+      - rest_test
+  rest-helloworld-2:
+    image: hsz1273327/js-server:restful_c0
     networks:
       - rest_test
 
-  rest-notifucation:
-    image: hsz1273327/js-server:restful_c3
-    depends_on:
-      - pg-store
-      - redis-channel
+  rest-helloworld-3:
+    image: hsz1273327/js-server:restful_c0
     networks:
       - rest_test
-    ports:
-      - 3002:3000
-    volumes:
-      - ./conf:/conf
-    command: ./node_modules/.bin/babel-node server/index.js --config /conf/docker-env.json
 
   http-reverse-proxy:
     image: nginx:alpine
@@ -38,8 +22,9 @@ services:
     ports:
       - 5000:5000
     depends_on:
-      - rest-helloworld
-      - rest-notifucation
+      - rest-helloworld-1
+      - rest-helloworld-2
+      - rest-helloworld-3
     logging:
       options:
         max-size: "10m"

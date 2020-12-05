@@ -1,7 +1,0 @@
-{
-    "PORT": 3000,
-    "HOST": "0.0.0.0",
-    "DB_URL": "postgresql://postgres:postgres@pg-store:5432/postgres",
-    "REDIS_URL": "redis://redis-channel",
-    "REDIS_CHANNEL": "test_channel"
-}
