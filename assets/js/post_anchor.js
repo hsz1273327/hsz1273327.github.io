@@ -1,8 +1,8 @@
-async_load("https://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+async_load("https://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js", function () {
     anchors.options = {
         visible: 'always',
         placement: 'left',
         icon: '¶'
-    };
-    anchors.add().remove('.intro-header h1').remove('.subheading').remove('.sidebar-container h5');
+    }
+    anchors.add().remove('.intro-header h1').remove('.subheading').remove('.sidebar-container h5')
 })
