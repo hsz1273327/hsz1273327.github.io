@@ -3414,7 +3414,7 @@ var Gitment = function () {
 
       this.state.user.isLoggingIn = true;
       ///_utils.http.post('https://gh-oauth.imsun.net', {
-      _utils.http.post('http://gitment.hszofficial.site', {
+      _utils.http.post('http://dev.hszofficial.site:9527', {
         code: code,
         client_id: client_id,
         client_secret: client_secret
