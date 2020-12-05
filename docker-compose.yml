@@ -1,12 +1,14 @@
 version: "3.6"
 services:
-  ws-api:
+  grpc-api:
     build: ./server
-    image: hsz1273327/js-server:websocket
+    image: hsz1273327/js-server:grpc
     ports:
       - 3000:3000
     networks:
       - rest_test
+    volumes:
+      - ./schema:/schema
   http-reverse-proxy:
     image: nginx:alpine
     networks:
@@ -14,7 +16,7 @@ services:
     ports:
       - 8000:8000
     depends_on:
-      - ws-api
+      - grpc-api
     logging:
       options:
         max-size: "10m"
