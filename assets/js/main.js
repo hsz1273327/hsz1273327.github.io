@@ -80,7 +80,7 @@ if ($('#tag_cloud').length !== 0) {
     })
 }
 // fastClick.js 解决移动端延迟
-async_load("http://cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function () {
+async_load("https://cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function () {
     var $nav = document.querySelector("nav");
     if ($nav) FastClick.attach($nav);
 })

@@ -1,4 +1,4 @@
-async_load("http://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+async_load("https://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
     anchors.options = {
         visible: 'always',
         placement: 'left',
