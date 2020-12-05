@@ -1,6 +1,6 @@
-# 反向代理的负载均衡示例
+# nginx配置跨域
 
-这个例子这个例子使用了3个服务做反向代理的负载均衡.代理的服务是[使用Javascript构建RESTful接口服务](https://tutorialforjavascript.github.io/%E4%BD%BF%E7%94%A8Javascript%E6%90%AD%E5%BB%BA%E5%90%8E%E7%AB%AF%E6%9C%8D%E5%8A%A1/RESTful%E6%8E%A5%E5%8F%A3%E6%9C%8D%E5%8A%A1.html)文中的[C0](https://github.com/TutorialForJavascript/js-server/tree/master/code/RESTful%E6%8E%A5%E5%8F%A3%E6%9C%8D%E5%8A%A1/C0).例子已经打包好了上传在我的dockerhub下.有兴趣的可以去看下具体的实现.
+这个例子用于演示如何在nginx上配置CORS.
 
 ## 依赖
 
@@ -9,5 +9,8 @@
 
 ## 使用
 
++ 静态网页托管的配置在`config/conf.d/static.d/static.conf`
++ 静态页面放在项目的`static/www`文件夹下
++ api服务在`server`文件夹下
 + 执行容器可以在`该项目根目录下`打开`terminal`使用`docker-compose up -d`
-+ 浏览器中打开页面`https://localhost:5000`可以看到`/`下代理了接口
++ 浏览器中打开页面`localhost:8000/test`可以看到api的返回,打开`localhost:8001`可以看到一个包含一个按钮的页面,点击这个按钮可以看到`Hello World`,证明解决了跨域问题.

@@ -1,0 +1,10 @@
+FROM node:latest
+MAINTAINER hsz
+ADD index.js /app/index.js
+ADD package.json /app/package.json
+WORKDIR /app
+#安装依赖
+RUN npm install
+#对外暴露的端口
+EXPOSE 4000
+CMD [ "npm","start"]
