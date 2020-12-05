@@ -13,4 +13,6 @@
 
 + `npm install`安装测试用客户端的依赖
 + `docker-compose up -d`启动容器
-+ `npm test`测试是否可以代理
++ `npm install`安装测试的依赖
++ `npm test`测试是否可以连通ws服务
++ `npm run test_nginx`测试是否可以连通代理
