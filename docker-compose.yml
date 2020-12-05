@@ -1,22 +1,19 @@
 version: "3.6"
 services:
-  grpc-api:
-    build: ./server
-    image: hsz1273327/js-server:grpc
+  redis-test:
+    image: redis:latest
     ports:
-      - 3000:3000
+      - 6379:6379
     networks:
       - rest_test
-    volumes:
-      - ./schema:/schema
   http-reverse-proxy:
     image: nginx:alpine
     networks:
       - rest_test
     ports:
-      - 8000:8000
+      - 5000:5000
     depends_on:
-      - grpc-api
+      - redis-test
     logging:
       options:
         max-size: "10m"
@@ -24,6 +21,5 @@ services:
     volumes:
       - ./config/nginx.conf:/etc/nginx/nginx.conf
       - ./config/conf.d:/etc/nginx/conf.d
-
 networks:
   rest_test:
