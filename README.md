@@ -1,6 +1,6 @@
 # gh-oauth-server
 
-[gitment](https://github.com/imsun/gitment)依赖的中介服务.用于
+[gitment](https://github.com/imsun/gitment)依赖的中介服务,用于解决直接访问github接口的跨域问题
 
 ## 特性
 
@@ -10,6 +10,3 @@
 
 + 默认端口在3000
 
-```sh
-$ npm start
-```
