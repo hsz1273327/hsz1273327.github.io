@@ -1,0 +1,10 @@
+version: "2.4"
+services:
+  gh-oauth-server:
+    image: hsz1273327/gh-oauth-server:amd64-latest
+    ports:
+      - 9527:3000
+    cpu_percent: 20
+    mem_limit: 200m
+    memswap_limit: 300m
+    restart: on-failure
