@@ -1,13 +1,28 @@
-import Koa from 'koa'
-import logger from 'koa-pino-logger'
-import router from 'koa-route'
-const app = new Koa()
-app.use(logger())
-app.use(router.get('/test', async ctx => {
-    ctx.response.type = 'application/json'
-    ctx.body = JSON.stringify({
-        'message': 'Hello World'
-    })
-}))
+import WebSocket from 'ws'
 
-app.listen(4000)
+const wsserver = new WebSocket.Server({
+    port: 3000
+})
+
+
+wsserver.on('connection', ws => {
+    ws.on('message', message => {
+        console.log('received: %s', message)
+        switch (message) {
+            case "close":
+                {
+                    ws.close()
+                }
+                break
+            case "helloworld":
+                {
+                    ws.send('Hello World')
+                }
+                break
+            default:
+                {
+                    ws.send('unkonwn command')
+                }
+        }
+    })
+})

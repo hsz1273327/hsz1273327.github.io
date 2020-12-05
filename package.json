@@ -1,0 +1,30 @@
+{
+  "name": "test_ws",
+  "version": "0.0.1",
+  "description": "",
+  "author": "huangsizhe",
+  "license": "MIT",
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-polyfill": "^6.26.0",
+    "babel-preset-env": "^1.7.0",
+    "babel-register": "^6.26.0",
+    "eslint": "^5.15.2",
+    "mocha": "^6.0.2",
+    "nyc": "^13.3.0"
+  },
+  "babel": {
+    "presets": [
+      [
+        "env"
+      ]
+    ]
+  },
+  "dependencies": {
+    "ws": "^6.2.0"
+  },
+  "scripts": {
+    "test": "./node_modules/.bin/babel-node test/index.js",
+    "test_nginx": "./node_modules/.bin/babel-node test/index_nginx.js"
+  }
+}

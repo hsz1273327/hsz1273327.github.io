@@ -1,6 +1,8 @@
-# nginx配置跨域
+# nginx配置websocket反向代理
 
-这个例子用于演示如何在nginx上配置CORS.
+这个例子用于演示如何在nginx上配置websocket反向代理,代理的ws服务的例子来自于[js攻略中服务部分](https://tutorialforjavascript.github.io/%E4%BD%BF%E7%94%A8Javascript%E6%90%AD%E5%BB%BA%E5%90%8E%E7%AB%AF%E6%9C%8D%E5%8A%A1/Websocket%E6%8E%A5%E5%8F%A3%E6%9C%8D%E5%8A%A1.html)的[helloworld](https://github.com/TutorialForJavascript/js-server/tree/master/code/Websocket%E6%8E%A5%E5%8F%A3%E6%9C%8D%E5%8A%A1/C0)
+
+本例的测试使用的是node的[ws](https://github.com/websockets/ws)模块作为客户端
 
 ## 依赖
 
@@ -9,8 +11,6 @@
 
 ## 使用
 
-+ 静态网页托管的配置在`config/conf.d/static.d/static.conf`
-+ 静态页面放在项目的`static/www`文件夹下
-+ api服务在`server`文件夹下
-+ 执行容器可以在`该项目根目录下`打开`terminal`使用`docker-compose up -d`
-+ 浏览器中打开页面`localhost:8000/test`可以看到api的返回,打开`localhost:8001`可以看到一个包含一个按钮的页面,点击这个按钮可以看到`Hello World`,证明解决了跨域问题.
++ `npm install`安装测试用客户端的依赖
++ `docker-compose up -d`启动容器
++ `npm test`测试是否可以代理
