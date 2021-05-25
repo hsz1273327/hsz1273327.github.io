@@ -4,11 +4,6 @@
         "description": "python3.5+使用的项目管理工具"
     },
     {
-        "title": "aioorm",
-        "url": "https://github.com/Python-Tools/aioorm/",
-        "description": "一个异步非阻塞的orm,是peewee针对asyncio的改造"
-    },
-    {
         "title": "ScoreCardModel",
         "url": "https://github.com/data-science-tools/ScoreCardModel/",
         "description": "评分卡模型工具"
