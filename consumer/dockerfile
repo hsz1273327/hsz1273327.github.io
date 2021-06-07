@@ -1,0 +1,8 @@
+FROM --platform=$TARGETPLATFORM python:3.8.6-slim-buster
+ADD ../pip.conf /etc/pip.conf
+RUN pip --no-cache-dir install --upgrade pip
+WORKDIR /code
+ADD ../requirements.txt /code/requirements.txt
+RUN python -m pip --no-cache-dir install -r requirements.txt
+ADD consumer.py /code/consumer.py
+ENTRYPOINT [ "python", "consumer.py"]
