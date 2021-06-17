@@ -1,0 +1,19 @@
+version: '2.4'
+services:
+  tf-serv:
+    image: tensorflow/serving:latest
+    logging:
+      options:
+        max-file: 3
+        max-size: 10m
+    ports:
+        - "8501:8501"
+        - "8500:8500"
+    volumes:
+        - "./testdata/saved_model_half_plus_two_cpu:/models/half_plus_two"
+    environment:
+        MODEL_NAME: half_plus_two
+    cpus: 1
+    mem_limit: 500m
+    restart: on-failure
+    command: ["tensorflow/serving", "&"]
