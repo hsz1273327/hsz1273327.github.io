@@ -139,6 +139,7 @@ Configs 是安装在容器的文件系统中的而不是使用 RAM 磁盘.可以
 config可以在compose中申明,也可以在外部定义
 
 在使用时当做文件访问,例子如下:
+
 ```yml
 version: "3.3"
 services:
