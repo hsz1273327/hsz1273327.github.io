@@ -9,10 +9,10 @@
         "description": "SQl语言攻略,介绍如何使用SQL语言操作数据"
     },
     {
-        "title": "数据科学攻略",
-        "subtitle": "数据科学相关理论和技术的介绍攻略",
-        "url": "http://blog.hszofficial.site/TutorialForDataScience/",
-        "description": "介绍数据科学相关的技术栈和学科知识"
+        "title": "PostgreSQL攻略",
+        "subtitle": "PostgreSQL的入门介绍",
+        "url": "http://blog.hszofficial.site/TutorialForPostgreSQL/#/",
+        "description": "介绍PostgreSQL的特性和使用方法"
     },
     {
         "title": "Javascript攻略",
