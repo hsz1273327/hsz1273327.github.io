@@ -1,0 +1,19 @@
+{
+    "added_components": {
+        "cp_dockercompose//server_standalone": "docker-compose.yml",
+        "cp_dockerfiles//go_grpc_pure_dockerfile": "dockerfile",
+        "cp_go_grpc//main": "main.go",
+        "cp_go_grpc//sdk": "echo_sdk",
+        "cp_go_grpc//serv": "echo_serv",
+        "cp_go_grpc//service_schema": "pbschema/echo.proto"
+    },
+    "author": "hsz12",
+    "env": "gomod",
+    "requires": [
+        "github.com/Golang-Tools/loggerhelper@v0.0.3",
+        "github.com/Golang-Tools/schema-entry-go@v0.0.4",
+        "github.com/json-iterator/go@v1.1.11",
+        "google.golang.org/grpc@v1.38.0"
+    ],
+    "version": "0.0.0"
+}

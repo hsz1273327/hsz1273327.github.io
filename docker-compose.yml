@@ -1,0 +1,55 @@
+version: "3.8"
+services:
+    serv:
+        image: hsz1273327/grpc_echo_go:0.0.0
+        logging:
+            options:
+                max-file: 3
+                max-size: 10m
+        environment:
+            ECHOSERV_LOG_LEVEL: "INFO"
+        command:
+            - serv
+        deploy:
+            mode: global
+            endpoint_mode: dnsrr
+            resources:
+                limits:
+                    cpus: "0.50"
+                    memory: 50M
+                reservations:
+                    cpus: "0.25"
+                    memory: 20M
+            restart_policy:
+                condition: on-failure
+                delay: 5s
+                max_attempts: 3
+                window: 120s
+    test:
+        image: hsz1273327/grpc_echo_go:0.0.0
+        logging:
+            options:
+                max-file: 3
+                max-size: 10m
+        environment:
+            ECHOSERV_LOG_LEVEL: "INFO"
+        command:
+            - test
+            - --Address=serv:5000
+        
+        deploy:
+            mode: replicated
+            replicas: 0
+            labels:
+                - "swarm.cronjob.enable=true"
+                - "swarm.cronjob.schedule=*/5 * * * *"
+                - "swarm.cronjob.skip-running=false"
+            resources:
+                limits:
+                    cpus: "0.50"
+                    memory: 50M
+                reservations:
+                    cpus: "0.25"
+                    memory: 20M
+            restart_policy:
+                condition: none
