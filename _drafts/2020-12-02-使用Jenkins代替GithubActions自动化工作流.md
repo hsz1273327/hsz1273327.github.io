@@ -35,7 +35,7 @@ CI/CD就是这样的工具,它的作用就是利用脚本自动化测试和部�
 不啰嗦直接上docker-compose.yml
 
 ```yml
-version: "3.6"
+version: "2.4"
 services:
   jenkins-server:
     image: jenkinsci/blueocean
@@ -58,9 +58,6 @@ volumes:
   jenkins-data:
     external: true
 
-networks:
-  net-output:
-    external: true
 ```
 
 这边有两个预先创建的项:
