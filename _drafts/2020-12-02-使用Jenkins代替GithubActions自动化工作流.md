@@ -30,44 +30,39 @@ CI/CD就是这样的工具,它的作用就是利用脚本自动化测试和部�
 
 <!-- 本项目对应的代码在[hszofficial/test_jenkins](https://github.com/hszofficial/test_jenkins) -->
 
-## docker集群上搭建Jenkins
+## docker上搭建Jenkins
 
 不啰嗦直接上docker-compose.yml
 
 ```yml
-version: "2.4"
-services:
-  jenkins-server:
-    image: jenkinsci/blueocean
-    volumes:
-      - jenkins-data:/var/jenkins_home
-      - /var/run/docker.sock:/var/run/docker.sock
-    networks:
-      - net-output
-    deploy:
-      restart_policy:
-        condition: on-failure
-        delay: 5s
-        max_attempts: 3
-        window: 20s
-      replicas: 1
-      placement:
-        constraints: [node.labels.codehub == codehub]
-
-volumes:
-  jenkins-data:
-    external: true
+jenkins-server:
+  image: jenkinsci/blueocean
+  volumes:
+    - /volume2/docker_deploy/devtools/jenkins/data:/var/jenkins_home
+    - /var/run/docker.sock:/var/run/docker.sock
+  mem_limit: 2g
+  restart: on-failure
+  ports:
+    - "8080:8080"
+  logging:
+    <<: *default-log
 
 ```
 
-这边有两个预先创建的项:
+如果要使用https,我们需要设置如下环境变量,当然还要把证书和私钥挂到volumes上.
 
-+ `jenkins-data`,用于挂载运行过程中产生的数据
-+ `net-output`,对外网络,让网关的nginx可以识别到,默认端口是8080,我个人是将它反向代理到一个二级域名上.
+```yaml
+environment: 
+  JENKINS_OPTS: "--httpPort=-1 --httpsPort=8083 --httpsCertificate=/certs/x.pem --httpsPrivateKey=/certs/x.key"
+```
 
-我是在swarm集群上部署的,可以使用protainer进行管理,新建一个stack把上面配置的贴上就可以部署了.
+如果要考虑后续的扩展性,可以打开`50000端口`,这个端口可以用于后续挂载slaver节点.
+
+我是在protainer上进行部署的,新建一个stack把上面配置的贴上就可以部署了.
 
 jenkins至今依然是一个活跃的开源项目,依然会有更新,其中的插件也会有更新,在protainer中更新的方式很简单,先拉取最新的镜像,之后进入stack使用`update`即可.
+
+注意目前该镜像只支持amd64指令集
 
 ## 配置jenkins的各项功能
 
@@ -76,7 +71,7 @@ jenkins至今依然是一个活跃的开源项目,依然会有更新,其中的�
 + 节点配置(非必须)
 
 jenkins支持多节点,其好处是可以在多台机器上做编译,测试工作,以提高吞吐量,当然小型团队完全没有必要搞.
-一样我们可以使用镜像[jenkins/jnlp-slave.](https://hub.docker.com/r/jenkin/jnlp-slave),将它添加到上面的docker-compose.yml中,注意最好新建一个networks专门用于jenkins组件间通信,因为一个swarm网络最多只可以有255个服务.
+一样我们可以使用镜像[jenkins/inbound-agent](https://hub.docker.com/r/jenkins/inbound-agent/),最好将他部署到swarm集群上,注意目前该镜像也只支持amd64指令集
 
 部署好后再jenkins中`系统管理->节点管理`中对节点进行配置和监控.
 
