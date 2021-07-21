@@ -7,7 +7,7 @@ category: recommend
 tags:
     - DevOps
 header-img: "img/home-bg-o.jpg"
-update: 2020-12-02
+update: 2021-07-21
 series:
     get_along_well_with_github:
         index: 10
@@ -42,6 +42,8 @@ jenkins-server:
     - /var/run/docker.sock:/var/run/docker.sock
   mem_limit: 2g
   restart: on-failure
+  user: root
+  privileged: true
   ports:
     - "8080:8080"
   logging:
@@ -49,20 +51,18 @@ jenkins-server:
 
 ```
 
-如果要使用https,我们需要设置如下环境变量,当然还要把证书和私钥挂到volumes上.
+下面是部署的几个注意点:
 
-```yaml
-environment: 
-  JENKINS_OPTS: "--httpPort=-1 --httpsPort=8083 --httpsCertificate=/certs/x.pem --httpsPrivateKey=/certs/x.key"
-```
+1. 如果要使用https,我们需要设置如下环境变量,当然还要把证书和私钥挂到volumes上,同时可以闪电`8080`端口的映射.
 
-如果要考虑后续的扩展性,可以打开`50000端口`,这个端口可以用于后续挂载slaver节点.
+    ```yaml
+    environment: 
+      JENKINS_OPTS: "--httpPort=-1 --httpsPort=8083 --httpsCertificate=/certs/x.pem --httpsPrivateKey=/certs/x.key"
+    ```
 
-我是在protainer上进行部署的,新建一个stack把上面配置的贴上就可以部署了.
-
-jenkins至今依然是一个活跃的开源项目,依然会有更新,其中的插件也会有更新,在protainer中更新的方式很简单,先拉取最新的镜像,之后进入stack使用`update`即可.
-
-注意目前该镜像只支持amd64指令集
+2. 如果要考虑后续的扩展性,可以打开`50000端口`,这个端口可以用于后续挂载slaver节点.
+3. 如果我们要用到docker(现在几乎不会有用不到docker的情况),那么需要加上`user: root`和`privileged: true`,否则很容易docker会无权限使用
+4. 目前该镜像只支持amd64指令集
 
 ## 配置jenkins的各项功能
 
@@ -74,13 +74,16 @@ jenkins至今依然是一个活跃的开源项目,依然会有更新,其中的�
 
     部署好后再jenkins中`系统管理->节点管理`中对节点进行配置和监控.
 
-+ 插件管理
++ 安装插件管理
     在`系统管理->插件管理`中可以管理插件.安装插件在右上角搜索框中查找到后点它安装即可,插件安装完后需要重启服务,这个是自动的我们不用人为干预.
+
+    ![插件管理界面]({{site.url}}/img/in-post/jenkins/jenkins-插件管理.PNG)
 
     我们会安装如下插件:
     + `Git Parameter`用于选择分支执行
-    + `Gitea`用于与gitea代码仓库相连
     + `Docker`和`Docker Pipeline`用于使用镜像来作为沙盒执行CI/CD任务
+
+    其他实用插件我会在后面专门的章节补充介绍
 
 + 用户和安全配置
     在`系统管理->管理用户`中可以对用户进行管理.
@@ -102,44 +105,49 @@ jenkins至今依然是一个活跃的开源项目,依然会有更新,其中的�
 
     前面和默认邮箱配置一致,后面会有一些新的内容,主要是设置默认的收件人`Default Recipients`,可填写多个,中间用空格隔开.这个值可以在`$DEFAULT_RECIPIENTS`变量中取到
 
-## 构建一个基于gitea的项目
+## 使用gitea作为代码仓库
 
-基于git的项目我们一般使用`多分支流水线`,针对不同的分支和行为进行不同的管理.创建方法是:
+在使用gitea作为代码仓库的情况下我们需要分别在jenkins和gitea上做出如下设置:
 
-+ 在`凭据->系统`下添加一个域比如叫`ops`,进入其中使用`添加凭据`创建一条凭据,凭据可以是用户名密码也可以是ssh的秘钥.
-+ 在`设置`中设置插件`Gitea`,将自己的gitea仓库注册进去
-+ 如果用于编译的库不在dockerhub拉取而是在自己的镜像仓库拉取,name可以设置`Pipeline Model Definition`中的内容
-    + `Docker Label`用于设置默认拉取的镜像标签(如果没显式的写出来),
-    + `Docker registry URL`用于设置私有仓库地址
-    + `Registry credentials`用于设置私有仓库的登录凭证
-+ 在`BlueOcean`中新建一个git项目,将仓库指定到其中
-+ `Scan 多分支流水线 Triggers`勾选`Periodically if not otherwise run`,将周期设为`1h`一般就可以了.这个设置可以隔段时间扫描下仓库创建出合适的分支
+> gitea上的设置
 
-这些都设置好了还不能保存,我们开始重点--针对`gogs`和`github`项目的配置,这个项目需要配置`Branch Sources`
+1. [可选]如果你的jenkins使用了https协议且签名是自己发布的,那么需要在git的配置文件中加上下面配置否则webhook会无法发送成功
 
-### 配置gitea项目
+    ```conf
+    [webhook]
+    ; Allow insecure certification
+    SKIP_TLS_VERIFY = true
+    ```
 
+2. 创建一个用户专门用于给jenkins操作,这个用户并不需要是管理员,但创建完后我们需要进去(`用户->应用`中)为它生成一个`access token`
 
-> jenkins端的设置
+3. 将所有需要让jenkins管理cicd的代码库都添加上新建的用户为协作者,并给它写权限
 
-1. 在`Branch Sources`中选择`Git`,复制上项目的仓库地址并填上登录凭证,
-2. `Behaviours`中添加行为,包括
-   1. Discover branches
-   2. Discover tags
+    ![设置协作者]({{site.url}}/img/in-post/jenkins/gitea-协作者.PNG)
 
-之后保存,保存好了后gogs会扫描项目创建pipeline
+> jenkins上的设置
 
-> gogs端的配置
+1. 安装插件`Gitea`,这个插件可以自动将gitea代码仓库和jenkins关联.
+2. 在`系统配置->Manage Credentials(凭据)->Stores scoped to jenkins-> Jenkins(域为全局)->系统->全局凭据`下用`添加凭据`创建一条类型为`Gitea Personal Access Token`的凭据,`Token`字段填上刚才新建出来的`access token`
+    ![添加凭据1]({{site.url}}/img/in-post/jenkins/jenkins-添加凭据1.PNG)
+    ![添加凭据2]({{site.url}}/img/in-post/jenkins/jenkins-添加凭据2.PNG)
+3. 在`系统管理->系统配置`中设置插件`Gitea`的配置项`Gitea Servers`,将自己的gitea仓库注册进去,并勾选`Manage hooks`,并在`Credentials`上使用刚才配置的凭证
+    ![Gitea插件配置]({{site.url}}/img/in-post/jenkins/jenkins-Gitea插件配置.PNG)
+4. 点击`新建任务`,选择`Gitea Organization`进入配置页面,需要注意的只有如下几个配置项:
+    1. `Project->Credentials`选择上面创建的凭证
+    2. `Project->Owner`上写上要关注的命名空间(用户名或者组织名)
+        ![基本配置]({{site.url}}/img/in-post/jenkins/jenkins-owner.PNG)
+    3. `Behaviours`中选择需要的行为测lure,主要是针对`pull request`,另外建议点击`Add`将`Discover tags`添加上
+        ![行为]({{site.url}}/img/in-post/jenkins/jenkins-behaviour.PNG)
+    4. `扫描 Gitea Organization 触发器`部分根据需要选择扫描的时间间隔,个人建议使用默认的1 day
+    5. `孤儿项策略`中设置好就流水线的删除策略,建议`保留旧的流水线的天数`设置为3,`保留旧的流水线的最大数`设置为30
+        ![其他设置]({{site.url}}/img/in-post/jenkins/jenkins-其他设置.PNG)
 
-pipeline配置gogs需要在gogs中进入要配置的项目
+上面这些都设置好了以后只要我们的仓库中包含文件`Jenkinsfile`并且语法没问题就会在扫描过后被添加进来.我们也可以不等它定时扫描,通过项目上点击`立刻扫描 Gitea Organization`来主动扫描添加仓库.
 
-![gogs上配置]({{site.url}}/img/in-post/jenkins/gogs测试.png)
+## 为项目构建CI/CD流程
 
-之后保存,然后再次进去这个webhook可以在gogs上测试线是否可以连通
-
-## 为项目构建pipeline
-
-我们可以每个分支都有一个`Jenkinsfile`,也可以只在`master`分支有一个`Jenkinsfile`个人推荐在项目创建之初就将`Jenkinsfile`创建好,后面每次创建分支就会都带上这个文件,需要修改的话就单独修改.
+`Jenkinsfile`是描述CI/CD流程的声明文件,使用[Groovy语法](https://www.w3cschool.cn/groovy/groovy_basic_syntax.html),我们可以每个分支都有一个`Jenkinsfile`,也可以只在`master`分支有一个`Jenkinsfile`个人推荐在项目创建之初就将`Jenkinsfile`创建好,后面每次创建分支就会都带上这个文件,需要修改的话就单独修改.
 
 一个典型的`Jenkinsfile`如下:
 
@@ -249,15 +257,15 @@ pipeline {
 + `agent`用于定义全局使用的执行代理,
 + `environment`用于定义全局的变量
 + `stages`则用于定义管道中的步骤.
-+ `post`用于定义不同时点的输出.一般用于发送邮件
++ `post`用于定义不同时点的输出.角色类似python中的`try...except...else`语句,通常通过发送邮件起到通知作用
 
 每个步骤包括名字和实现两个部分,实现部分又分为
 
 + `when`触发条件
 
-+ `agent`使用的执行代理
++ `agent`使用的执行代理(现在一版都是docker)
 
-+ `steps`具体的执行步骤
++ `steps`具体的执行步骤,支持的所有`steps`可以在[这里找到](https://www.jenkins.io/doc/pipeline/steps/),不过最常用的还是只有`echo`,`sh`,和`dir`
 
 ```groovy
 stage('Test') {
@@ -277,20 +285,23 @@ stage('Test') {
     withEnv(["HOME=${env.WORKSPACE}"]) {
       sh 'python -m pip install --user -r requirements.txt'
       sh 'python -m coverage run --source=test_drone -m unittest discover -v -s .'
-      sh 'python -m coverage report -m >report.txt'
+      sh 'python -m coverage report -m > report.txt'
     }
   }
 }
 ```
 
-这一块的具体配置可以看[pipeline定义文档](https://www.w3cschool.cn/jenkins/jenkins-jg9528pb.html)和[使用script定义文档的关键字文档](https://jenkins.io/doc/pipeline/steps/workflow-basic-steps/#code-readfile-code-read-file-from-workspace)
+每隔步骤中也可以定义`agent`和`environment`,他们会在当前定义的步骤范围内生效
 
+这一块的具体配置可以看[pipeline定义文档](https://www.w3cschool.cn/jenkins/jenkins-jg9528pb.html)和[使用script定义文档的关键字文档](https://jenkins.io/doc/pipeline/steps/workflow-basic-steps/#code-readfile-code-read-file-from-workspace)
 
 ### 展示html报告
 
 我们可以在项目的`pipeline syntax`中设置`publish HTML`,然后只要我们在pipeline中有对应的`publishHTML`被执行了,就可以在分支的pipeline中左侧找到对应的链接了.
 
-![设置邮箱]({{site.url}}/img/in-post/jenkins/html.png)
+![设置html报告位置]({{site.url}}/img/in-post/jenkins/html.png)
+
+我们甚至可以用它来部署接口文档
 
 ### 发送邮件
 
@@ -310,32 +321,16 @@ emailext body: '''pipelie failure:
 
 body中可以定义html模板,subject是主题,to指定发送去的邮箱
 
-## 分支管理
+## 定义api触发任务
 
-在实际项目中我的经验是主干分支策略会比较高效.
+一些任务我们可能需要外部触发执行,我们可以在`新建任务`中选择`流水线`,然后在`构建触发器`位置选择`触发远程构建 (例如,使用脚本)`(如果要构造定时任务在这里选`定时构建`).
+然后在`身份验证令牌`位置填一个随机的字符串作为token(推荐使用uuid4或者拿时间戳和一个密码做个md5),这样就可以通过api来触发执行了.
 
-> 如果没有专职的运维,那么应该把代码和配置分开,配置打包进image中
+api有两种:
 
-```shell
++ 不带参数的任务用`<jenkin_url>/job/test-api/build?token=<TOKEN>`
++ 带参数的任务`<jenkin_url>/job/test-api/buildWithParameters?token=<TOKEN>&<param_name>=<param_value>&...`
 
-{代码开发 v0-base(v0-base分支)  ==>   dev-0.0.0(dev分支)  ==>  0.0.0(master分支,同时打好latest标签)  ==>  release-0.0.0(release-0.0.0分支,留档) }
-                                            |                          |
-                                            V                          V
-                                {代码调试 (debug分支)}        {配置文件部分 deploy-xxx(release-xxx分支,使用latest标签)}
-                                                                        |
-                                                                        V
-                                                            {部署部分 test分支,使用标签为deploy-xxx的镜像}
-                                                                        |
-                                                                        V
-                                                            {部署部分 production分支,使用标签为deploy-xxx的镜像}
-```
+### 定义外部参数
 
-> 如果有专职的运维,那么代码仓库中应该只管代码
-
-```shell
-
-{代码开发 v0-base(v0-base分支)  ==>   dev-0.0.0(dev分支)  ==>  0.0.0(master分支,同时为image打好latest标签)  ==>  v0.0.0(v0.0.0 tag,留档) }
-                                     |           |
-                                     V           V
-                     {代码调试 (debug分支)}      {test分支,使用标签为test-xxx的镜像}
-```
+在任务配置的`General`位置我们可以勾选`参数化构建过程`,勾选以后我们就可以向其中添加不同类型的参数,最常用的是`字符串型`,`布尔型`和`选项型`,其中需要注意的是`选项型`中的选项使用回车分隔,且第一个选项为默认值
