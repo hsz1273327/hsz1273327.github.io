@@ -121,6 +121,8 @@ jenkins-server:
 
 2. 创建一个用户专门用于给jenkins操作,这个用户并不需要是管理员,但创建完后我们需要进去(`用户->应用`中)为它生成一个`access token`
 
+    ![生成令牌]({{site.url}}/img/in-post/jenkins/gitea-生成令牌.PNG)
+
 3. 将所有需要让jenkins管理cicd的代码库都添加上新建的用户为协作者,并给它写权限
 
     ![设置协作者]({{site.url}}/img/in-post/jenkins/gitea-协作者.PNG)
@@ -326,6 +328,8 @@ body中可以定义html模板,subject是主题,to指定发送去的邮箱
 一些任务我们可能需要外部触发执行,我们可以在`新建任务`中选择`流水线`,然后在`构建触发器`位置选择`触发远程构建 (例如,使用脚本)`(如果要构造定时任务在这里选`定时构建`).
 然后在`身份验证令牌`位置填一个随机的字符串作为token(推荐使用uuid4或者拿时间戳和一个密码做个md5),这样就可以通过api来触发执行了.
 
+![api触发器]({{site.url}}/img/in-post/jenkins/jenkins-api触发器.PNG)
+
 api有两种:
 
 + 不带参数的任务用`<jenkin_url>/job/test-api/build?token=<TOKEN>`
@@ -334,3 +338,5 @@ api有两种:
 ### 定义外部参数
 
 在任务配置的`General`位置我们可以勾选`参数化构建过程`,勾选以后我们就可以向其中添加不同类型的参数,最常用的是`字符串型`,`布尔型`和`选项型`,其中需要注意的是`选项型`中的选项使用回车分隔,且第一个选项为默认值
+
+![声明外部参数]({{site.url}}/img/in-post/jenkins/jenkins-声明外部参数.PNG)
