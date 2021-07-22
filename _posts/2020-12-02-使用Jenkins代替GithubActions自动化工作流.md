@@ -123,7 +123,7 @@ jenkins-server:
 
     ![生成令牌]({{site.url}}/img/in-post/jenkins/gitea-生成令牌.PNG)
 
-3. 将所有需要让jenkins管理cicd的代码库都添加上新建的用户为协作者,并给它写权限
+3. 将所有需要让jenkins管理cicd的代码库都添加上新建的用户为协作者,并给它管理员权限
 
     ![设置协作者]({{site.url}}/img/in-post/jenkins/gitea-协作者.PNG)
 
