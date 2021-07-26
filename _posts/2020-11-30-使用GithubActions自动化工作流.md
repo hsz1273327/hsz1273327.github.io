@@ -271,8 +271,9 @@ Webhook事件是借由Github的webhook事件触发的事件,具体有哪些可�
 + `matrix`,执行策略中定义的变量,每次执行每个key只会有一个取值
 + `env`,workflow中`env`定义的变量
 + `github`,通常用于获取仓库和分支的信息,比较值得关注的有:
-    + `github.repository` 执行的仓库名,也就是`{namespace}/{repo_name}`
-    + `github.ref`工作流的分支或tag,分支为`refs/heads/<branch_name>`格式,tag时`refs/tags/<tag_name>`格式
+    + `github.repository` 执行的仓库名,也就是`{namespace}/{repo_name}`,如果只要repo_name,可以使用`${GITHUB_REPOSITORY#*/}`
+    + `github.ref`工作流的分支或tag,分支为`refs/heads/<branch_name>`格式,tag是`refs/tags/<tag_name>`格式,如果只要tag名可以使用`${GITHUB_REF/refs\/tags\//}`
+    + `${GITHUB_SHA::8}`可以用于获得前8位的commit的id值
     + `github.event.inputs`由手动事件触发传入的参数
 
 + `secrets`,项目或命名空间定义的账号密码信息,可以在`项目的Settings->Secrets`中设置,一般用于上传package或者docker镜像.
@@ -294,7 +295,7 @@ Webhook事件是借由Github的webhook事件触发的事件,具体有哪些可�
 | `==`   | 等于         |
 | `!=`   | 不等于       |
 | `&&`   | 和           |
-| `||`   | 或           |
+| `\|\|` | 或           |
 
 可以看到这些运算符解百纳都是用于做谓词的.因此同擦汗给你都与`if`字段配合使用
 
@@ -360,6 +361,18 @@ Github Action支持一些内置函数,比较有用的有:
 + [docker/build-push-action@v1](https://github.com/marketplace/actions/docker-build-push-action),登录docker 镜像仓库
 + [actions/upload-artifact@v2](https://github.com/marketplace/actions/upload-a-build-artifact),将`Artifact`发送到workflow的管理界面用于下载
 + [getsentry/action-release@v1](https://github.com/marketplace/actions/sentry-release),发送消息到sentry
+
+## jobs间的依赖关系
+
+当我们单纯定义job时这些job会并行执行,而如果希望明确其中的依赖关系,则可以使用关键字`needs`.`needs`后的值可以是字符串也可以是字符串为元素的列表
+
+```yaml
+jobs:
+  build_and_pub_to_pypi:
+    ...
+  docker-build:
+    needs: build_and_pub_to_pypi
+```
 
 ## workflow执行器
 
