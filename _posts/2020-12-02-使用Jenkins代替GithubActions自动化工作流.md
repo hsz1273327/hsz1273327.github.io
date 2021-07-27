@@ -293,7 +293,10 @@ stage('Test') {
 }
 ```
 
-每隔步骤中也可以定义`agent`和`environment`,他们会在当前定义的步骤范围内生效
+每隔步骤中也可以定义`agent`和`environment`,他们会在当前定义的步骤范围内生效,全局的环境变量则有两种:
+
+1. `在设置->全局元素中`点击环境变量添加.
+2. 默认会有一些环境变量,可以在<https://wiki.jenkins.io/display/JENKINS/Building+a+software+project>中查到
 
 这一块的具体配置可以看[pipeline定义文档](https://www.w3cschool.cn/jenkins/jenkins-jg9528pb.html)和[使用script定义文档的关键字文档](https://jenkins.io/doc/pipeline/steps/workflow-basic-steps/#code-readfile-code-read-file-from-workspace)
 
