@@ -21,16 +21,16 @@
         "description": "介绍Docker及其生态以及一些实践中的使用方法"
     },
     {
-        "title": "Javascript攻略",
-        "subtitle": "js语法和相关技术",
-        "url": "http://blog.hszofficial.site/TutorialForJavascript/",
-        "description": "介绍基本的ES6语法和相关技术,主要是web技术"
+        "title": "Web前端攻略",
+        "subtitle": "广泛适用的客户端技术",
+        "url": "https://blog.hszofficial.site/TutorialForFront-EndWeb/",
+        "description": "介绍可适用于快速技术验证和数据可视化的客户端技术"
     },
     {
         "title": "Go语言攻略",
         "subtitle": "Go语言后端微服务搭建",
         "url": "http://blog.hszofficial.site/TutorialForGoLang/",
-        "description": "介绍基本的Go语言项目构建工具以及后端微服务搭建方案"
+        "description": "介绍针对网络开发的go语言相关技巧和技术"
     },
     {
         "title": "C语言攻略",
