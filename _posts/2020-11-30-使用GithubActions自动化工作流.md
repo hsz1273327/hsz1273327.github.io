@@ -307,6 +307,7 @@ steps:
 ```
 
 `GitHub Action`进行的是宽松的等式比较,其原理是将不同类型的数据转换为数字进行比较:
+
 | 类型     | 结果                                         |
 | -------- | -------------------------------------------- |
 | `null`   | 0                                            |
@@ -361,6 +362,7 @@ Github Action支持一些内置函数,比较有用的有:
 + [docker/build-push-action@v1](https://github.com/marketplace/actions/docker-build-push-action),登录docker 镜像仓库
 + [actions/upload-artifact@v2](https://github.com/marketplace/actions/upload-a-build-artifact),将`Artifact`发送到workflow的管理界面用于下载
 + [getsentry/action-release@v1](https://github.com/marketplace/actions/sentry-release),发送消息到sentry
++ [jungwinter/split@2](https://github.com/JungWinter/split),将字符串分割为多段
 
 ## jobs间的依赖关系
 
