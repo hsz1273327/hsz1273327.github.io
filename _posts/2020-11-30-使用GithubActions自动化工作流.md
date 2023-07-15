@@ -378,7 +378,19 @@ jobs:
 
 ## workflow执行器
 
-github默认给每个用户提供了3个的执行器(两核7g内存16g硬盘),这三个执行器的配置是不可变的,但我们可以在`仓库的settings->Actions`中配置使用安全策略.
+github默认给每个用户提供了3个的执行器(两核7g内存16g硬盘),如果我们是构造比较大的docker镜像,那16g可能不够用,我们可以使用如下步骤先将预先安装好的永不到的库删掉:
+
+```yml
+steps:
+  ...
+  - name: Delete huge unnecessary tools folder
+    run: rm -rf /opt/hostedtoolcache
+  ...
+```
+
+这个步骤可以删除`CodeQL`,`Java_Temurin-Hotspot_jdk`,`PyPy`,`Python`,`Ruby`,`go`,`node`.
+
+这三个执行器的配置是不可变的,但我们可以在`仓库的settings->Actions`中配置使用安全策略.
 
 默认的允许所有行为自然是不安全的,但其实一般用问题也不大.当项目是私有项目时我们就需要对action进行限制了.
 
