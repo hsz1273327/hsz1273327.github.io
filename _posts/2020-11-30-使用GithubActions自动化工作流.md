@@ -7,7 +7,7 @@ tags:
     - Github
     - DevOps
 header-img: "img/home-bg-o.jpg"
-update: 2020-11-30
+update: 2023-12-01
 series:
     get_along_well_with_github:
         index: 8
@@ -116,6 +116,33 @@ jobs:
 + 手动触发事件: 在actions页面中手动触发的事件
 
 + Webhook事件:由github网站的钩子行为触发的事件,通常Git操作都有钩子可以用于触发
+
+如果我们希望多种触发都可以生效,可以有两种形式设置:
+
+1. 列表形式,注意这种形式中元素只能为字符串
+
+    ```yaml
+
+    on:
+      - workflow_dispatch
+      - push
+
+    ```
+
+2. 字典形式,这种形式最常用,其中的元素为字典形式
+  
+    ```yaml
+    on:
+      workflow_dispatch:
+        inputs:
+          withpypy:
+            description: 'True to print to STDOUT'
+            required: false
+            default: false
+            type: boolean
+      release:
+        types: [created]
+    ```
 
 #### 定时事件
 
@@ -297,7 +324,7 @@ Webhook事件是借由Github的webhook事件触发的事件,具体有哪些可�
 | `&&`   | 和           |
 | `\|\|` | 或           |
 
-可以看到这些运算符解百纳都是用于做谓词的.因此同擦汗给你都与`if`字段配合使用
+可以看到这些运算符解百纳都是用于做谓词的.因此通常都与`if`字段配合使用
 
 ```yml
 steps:
@@ -356,13 +383,16 @@ Github Action支持一些内置函数,比较有用的有:
 
 比较常用的action有:
 
-+ [actions/setup-python@v2](https://github.com/actions/setup-python),自动设置python环境
-+ [actions/setup-node@v1](https://github.com/marketplace/actions/setup-node-js-environment),设置node环境
-+ [actions/setup-go@v2](https://github.com/marketplace/actions/setup-go-environment),设置golang环境
-+ [docker/build-push-action@v1](https://github.com/marketplace/actions/docker-build-push-action),登录docker 镜像仓库
-+ [actions/upload-artifact@v2](https://github.com/marketplace/actions/upload-a-build-artifact),将`Artifact`发送到workflow的管理界面用于下载
++ [actions/checkout@v4](https://github.com/actions/checkout),检查workflow
++ [docker/build-push-action@v5](https://github.com/docker/build-push-action),登录docker 镜像仓库
++ [docker/setup-qemu-action@v3](https://github.com/docker/setup-qemu-action),设置qemu, 一般用于跨平台编译
++ [actions/upload-artifact@v3](https://github.com/actions/upload-artifact),将`Artifact`发送到workflow的管理界面用于下载
 + [getsentry/action-release@v1](https://github.com/marketplace/actions/sentry-release),发送消息到sentry
 + [jungwinter/split@2](https://github.com/JungWinter/split),将字符串分割为多段
++ [actions/setup-python@v4](https://github.com/actions/setup-python),自动设置python环境
++ [pypa/cibuildwheel@v2.16.2](https://github.com/pypa/cibuildwheel),python项目打包带扩展的wheel包
++ [actions/setup-node@v4](https://github.com/actions/setup-node),设置node环境
++ [actions/setup-go@v4](https://github.com/marketplace/actions/setup-go-environment),设置golang环境
 
 ## jobs间的依赖关系
 
@@ -375,6 +405,25 @@ jobs:
   docker-build:
     needs: build_and_pub_to_pypi
 ```
+
+## 设置跳过setp
+
+每个setup可以使用key`if`配合谓词来控制是否执行,比如:
+
+```yaml
+steps:
+  - uses: actions/checkout@v4
+
+  # Used to host cibuildwheel
+  - name: Set up QEMU 
+    if: runner.os == 'Linux'
+    uses: docker/setup-qemu-action@v3
+    with:
+      platforms: all
+...
+```
+
+需要注意,只有`if`没有`else`,因此如果是按一个变量做分支则需要将分支拆成多个if进行判断.
 
 ## workflow执行器
 
