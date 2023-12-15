@@ -4,6 +4,17 @@
         "description": "python3.10+编程攻略,详细介绍python语言的方方面面"
     },
     {
+        "title": "Cython攻略",
+        "url": "https://blog.hszofficial.site/TutorialForCython/",
+        "description": "Cython编程攻略,介绍Cython语言的语法和用法"
+    },
+    {
+        "title": "C语言攻略",
+        "subtitle": "C语言简单介绍",
+        "url": "http://blog.hszofficial.site/TutorialForCLang/",
+        "description": "介绍基本的C语言语法"
+    },
+    {
         "title": "SQL攻略",
         "url": "http://blog.hszofficial.site/TutorialForSQL/",
         "description": "SQl语言攻略,介绍如何使用SQL语言操作数据"
@@ -21,22 +32,16 @@
         "description": "介绍Docker及其生态以及一些实践中的使用方法"
     },
     {
-        "title": "Web前端攻略",
-        "subtitle": "广泛适用的客户端技术",
-        "url": "https://blog.hszofficial.site/TutorialForFront-EndWeb/",
-        "description": "介绍可适用于快速技术验证和数据可视化的客户端技术"
-    },
-    {
         "title": "Go语言攻略",
         "subtitle": "Go语言后端微服务搭建",
         "url": "http://blog.hszofficial.site/TutorialForGoLang/",
         "description": "介绍针对网络开发的go语言相关技巧和技术"
     },
     {
-        "title": "C语言攻略",
-        "subtitle": "C语言简单介绍",
-        "url": "http://blog.hszofficial.site/TutorialForCLang/",
-        "description": "介绍基本的C语言语法"
+        "title": "Web前端攻略",
+        "subtitle": "广泛适用的客户端技术",
+        "url": "https://blog.hszofficial.site/TutorialForFront-EndWeb/",
+        "description": "介绍可适用于快速技术验证和数据可视化的客户端技术"
     },
     {
         "title": "阳台种植速查手册",
