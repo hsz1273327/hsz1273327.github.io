@@ -218,6 +218,209 @@ gitea migrate-storage \
     --minio-insecure-skip-verify true
 ```
 
+### action runnner
+
+如果我们打算让用户使用gitea的actions功能做ci/cd,还需要额外安装配置action runnner.我们可以使用镜像[gitea/act_runner:latest](https://hub.docker.com/r/gitea/act_runner).我们可以遵循如下操作来实现部署
+
+> 在gitea中
+
+1. 决定runner级别,runner分为3个级别
+
+    + 实例级别：Runner将为实例中的所有存储库运行Job
+    + 组织级别：Runner将为组织中的所有存储库运行Job
+    + 存储库级别：Runner将为其所属的存储库运行Job
+
+    请注意即使存储库具有自己的存储库级别Runner,它仍然可以使用实例级别或组织级别Runner.
+
+2. 获取令牌,注册令牌的格式是一个形如`D0gvfu2iHfUjNqCYVljVyRV14fISpJxxxxxxxxxx`的随机字符串.runner级别决定了从哪里获取注册令牌:
+
+    + 实例级别: 管理员设置页面,例如`<your_gitea.com>/admin/actions/runners`
+    + 组织级别: 组织设置页面,例如`<your_gitea.com>/<org>/settings/actions/runners`
+    + 存储库级别: 存储库设置页面,例如`<your_gitea.com>/<owner>/<repo>/settings/actions/runners`
+    如果无法看到设置页面,请确保使用的用户具有正确的权限并且gitea已启用Actions.
+
+> 在本机
+
+1. 先拉下来镜像(最好指定版本)
+
+    ```bash
+    docker pull gitea/act_runner:latest
+    ```
+
+2. 生成默认配置文件
+
+    ```bash
+    docker run --entrypoint="" --rm -it gitea/act_runner:latest act_runner generate-config > config.yaml
+    ```
+
+    拿到的默认配置大致长这样
+
+    ```yml
+    # Example configuration file, it's safe to copy this as the default config file without any modification.
+
+    # You don't have to copy this file to your instance,
+    # just run `./act_runner generate-config > config.yaml` to generate a config file.
+
+    log:
+    # The level of logging, can be trace, debug, info, warn, error, fatal
+    level: info
+
+    runner:
+    # Where to store the registration result.
+    file: .runner
+    # Execute how many tasks concurrently at the same time.
+    capacity: 1
+    # Extra environment variables to run jobs.
+    envs:
+        A_TEST_ENV_NAME_1: a_test_env_value_1
+        A_TEST_ENV_NAME_2: a_test_env_value_2
+    # Extra environment variables to run jobs from a file.
+    # It will be ignored if it's empty or the file doesn't exist.
+    env_file: .env
+    # The timeout for a job to be finished.
+    # Please note that the Gitea instance also has a timeout (3h by default) for the job.
+    # So the job could be stopped by the Gitea instance if it's timeout is shorter than this.
+    timeout: 3h
+    # Whether skip verifying the TLS certificate of the Gitea instance.
+    insecure: false
+    # The timeout for fetching the job from the Gitea instance.
+    fetch_timeout: 5s
+    # The interval for fetching the job from the Gitea instance.
+    fetch_interval: 2s
+    # The labels of a runner are used to determine which jobs the runner can run, and how to run them.
+    # Like: "macos-arm64:host" or "ubuntu-latest:docker://gitea/runner-images:ubuntu-latest"
+    # Find more images provided by Gitea at https://gitea.com/gitea/runner-images .
+    # If it's empty when registering, it will ask for inputting labels.
+    # If it's empty when execute `daemon`, will use labels in `.runner` file.
+    labels:
+        - "ubuntu-latest:docker://gitea/runner-images:ubuntu-latest"
+        - "ubuntu-22.04:docker://gitea/runner-images:ubuntu-22.04"
+        - "ubuntu-20.04:docker://gitea/runner-images:ubuntu-20.04"
+
+    cache:
+    # Enable cache server to use actions/cache.
+    enabled: true
+    # The directory to store the cache data.
+    # If it's empty, the cache data will be stored in $HOME/.cache/actcache.
+    dir: ""
+    # The host of the cache server.
+    # It's not for the address to listen, but the address to connect from job containers.
+    # So 0.0.0.0 is a bad choice, leave it empty to detect automatically.
+    host: ""
+    # The port of the cache server.
+    # 0 means to use a random available port.
+    port: 0
+    # The external cache server URL. Valid only when enable is true.
+    # If it's specified, act_runner will use this URL as the ACTIONS_CACHE_URL rather than start a server by itself.
+    # The URL should generally end with "/".
+    external_server: ""
+
+    container:
+    # Specifies the network to which the container will connect.
+    # Could be host, bridge or the name of a custom network.
+    # If it's empty, act_runner will create a network automatically.
+    network: ""
+    # Whether to use privileged mode or not when launching task containers (privileged mode is required for Docker-in-Docker).
+    privileged: false
+    # And other options to be used when the container is started (eg, --add-host=my.gitea.url:host-gateway).
+    options:
+    # The parent directory of a job's working directory.
+    # NOTE: There is no need to add the first '/' of the path as act_runner will add it automatically. 
+    # If the path starts with '/', the '/' will be trimmed.
+    # For example, if the parent directory is /path/to/my/dir, workdir_parent should be path/to/my/dir
+    # If it's empty, /workspace will be used.
+    workdir_parent:
+    # Volumes (including bind mounts) can be mounted to containers. Glob syntax is supported, see https://github.com/gobwas/glob
+    # You can specify multiple volumes. If the sequence is empty, no volumes can be mounted.
+    # For example, if you only allow containers to mount the `data` volume and all the json files in `/src`, you should change the config to:
+    # valid_volumes:
+    #   - data
+    #   - /src/*.json
+    # If you want to allow any volume, please use the following configuration:
+    # valid_volumes:
+    #   - '**'
+    valid_volumes: []
+    # overrides the docker client host with the specified one.
+    # If it's empty, act_runner will find an available docker host automatically.
+    # If it's "-", act_runner will find an available docker host automatically, but the docker host won't be mounted to the job containers and service containers.
+    # If it's not empty or "-", the specified docker host will be used. An error will be returned if it doesn't work.
+    docker_host: ""
+    # Pull docker image(s) even if already present
+    force_pull: true
+    # Rebuild docker image(s) even if already present
+    force_rebuild: false
+
+    host:
+    # The parent directory of a job's working directory.
+    # If it's empty, $HOME/.cache/act/ will be used.
+    workdir_parent:
+
+    ```
+
+3. 修改配置文件,
+
+    我们使用的是docker方式部署,这样就需要额外配置`cache`
+
+    ```yml
+    cache:
+        # Enable cache server to use actions/cache.
+        enabled: true
+        # The directory to store the cache data.
+        # If it's empty, the cache data will be stored in $HOME/.cache/actcache.
+        dir: ""
+        # The host of the cache server.
+        # It's not for the address to listen, but the address to connect from job containers.
+        # So 0.0.0.0 is a bad choice, leave it empty to detect automatically.
+        host: "192.168.50.92"
+        # The port of the cache server.
+        # 0 means to use a random available port.
+        port: 8088
+        # The external cache server URL. Valid only when enable is true.
+        # If it's specified, act_runner will use this URL as the ACTIONS_CACHE_URL rather than start a server by itself.
+        # The URL should generally end with "/".
+        external_server: ""
+    ```
+
+> 在目标机器
+
+1. 先拉下来镜像(最好指定版本)
+
+    ```bash
+    docker pull gitea/act_runner:latest
+    ```
+
+2. 将本机写好的配置文件放到合适的位置
+
+    ```bash
+    scp config.yaml user@remote:/你的/配置/位置/config.yaml
+    ```
+
+3. 编辑启动的compose文件
+
+    ```yaml
+
+    services:
+        ...
+        runner:
+            image: gitea/act_runner:nightly
+            environment:
+                CONFIG_FILE: /config.yaml
+                GITEA_INSTANCE_URL: "${INSTANCE_URL}"
+                GITEA_RUNNER_REGISTRATION_TOKEN: "${REGISTRATION_TOKEN}"
+                GITEA_RUNNER_NAME: "${RUNNER_NAME}"
+                GITEA_RUNNER_LABELS: "${RUNNER_LABELS}"
+            ports:
+                - "8088:8088"
+            volumes:
+                - ./config.yaml:/config.yaml
+                - ./data:/data
+                - /var/run/docker.sock:/var/run/docker.sock
+    ```
+
+以组织级别为例,最后配好后就是这样
+
+![runner状态][1]
+
 ## 使用部分
 
 gitea一般是作为内部库或外部库的镜像库而存在的.在用法上也没什么特别之处.
@@ -226,7 +429,7 @@ gitea一般是作为内部库或外部库的镜像库而存在的.在用法上�
 
 Gitea的一大作用就是作为github的备份库,Gitea直接提供了对应的入口--左上角的`+`
 
-![备份github][1]
+![备份github][2]
 
 填好提交就可以了
 
@@ -234,7 +437,7 @@ Gitea的一大作用就是作为github的备份库,Gitea直接提供了对应的
 
 登陆进Gitea服务后界面如下:
 
-![Gitea的个人页][2]
+![Gitea的个人页][3]
 
 单纯作为代码仓库来说我们像用github一样用它即可.接下来的部分更多的是介绍它和github对标的各种实用功能
 
@@ -254,14 +457,9 @@ Gitea的一大作用就是作为github的备份库,Gitea直接提供了对应的
 
 ### CICD
 
-gitea的CICD有两种实现方式,一种是通过`Web Hook`触发外部CI/CD工具,这个可以看我的[<使用Jenkins代替GithubActions自动化工作流>这篇文章](https://blog.hszofficial.site/recommend/2020/12/02/%E4%BD%BF%E7%94%A8Jenkins%E4%BB%A3%E6%9B%BFGithubActions%E8%87%AA%E5%8A%A8%E5%8C%96%E5%B7%A5%E4%BD%9C%E6%B5%81/).另一种就是使用[gitea actions](https://docs.gitea.com/zh-cn/usage/actions/overview).这个功能是gitea社区跟进github actions做出来的,因此语法和github actions一样,使用上不同之处就是我们得自己部署runner了.
+gitea的CICD有两种实现方式,一种是通过`Web Hook`触发外部CI/CD工具,这个可以看我的[<使用Jenkins代替GithubActions自动化工作流>这篇文章](https://blog.hszofficial.site/recommend/2020/12/02/%E4%BD%BF%E7%94%A8Jenkins%E4%BB%A3%E6%9B%BFGithubActions%E8%87%AA%E5%8A%A8%E5%8C%96%E5%B7%A5%E4%BD%9C%E6%B5%81/).另一种就是使用[gitea actions](https://docs.gitea.com/zh-cn/usage/actions/overview).这个功能是gitea社区跟进github actions做出来的,因此语法和github actions一样,使用上不同之处就是我们得自己部署runner.如何部署runner可以查看上面运维部分的相关内容.
 
-#### 部署runner
-
-我们可以使用镜像[gitea/act_runner:latest](https://hub.docker.com/r/gitea/act_runner)
-
-
-
+在使用上gitea兼容github action,得益于这一点,我们可以几乎无缝的从github action切过来.和
 
 
 ### 项目管理工具
@@ -297,16 +495,16 @@ gitea提供了和github几乎完全一致的项目管理体验
 
 用户一旦创建了他就拥有了一个私人的仓库空间,在这个私人仓库空间中他是其中仓库的唯一拥有者,其他人则都仅仅有读权限.如果你想找帮手,你可以在`设置->协作者`中邀请他们成为`协作者`,每个协作者的权限则是需要你设置的.
 
-![Gitea的个人页协作者][3]
+![Gitea的个人页协作者][4]
 
 而有写权限的协作者也可以使用`分支保护`功能控制他对不同分支的写入权限.
 
 + 分支管理页
-![Gitea的个人页分支保护][4]
+![Gitea的个人页分支保护][5]
 
 + 分支保护设置
 
-![分支保护设置][5]
+![分支保护设置][6]
 
 通常来说,我们会希望主干分支无法被协作者修改,协作者只能通过`pull request`的方式提交特性到主干.
 
@@ -318,11 +516,11 @@ gitea提供了和github几乎完全一致的项目管理体验
 
 + 团队管理界面
 
-![组织团队][6]
+![组织团队][7]
 
 + 创建团队
 
-![创建团队][7]
+![创建团队][8]
 
 在组织中团队有三种类型
 
@@ -342,21 +540,21 @@ gitea提供了和github几乎完全一致的项目管理体验
 
 在项目管理方面gitea和github一样都使用的是基于工单的项目管理方案.工单本身可以看做是事项的最小单位,是各种项目管理工具的轴.
 
-![工单列表页][8]
+![工单列表页][9]
 
 工单功能本身就功能丰富,可以打标签,可以上传附件,可以点赞,可以指派处理的成员,还可以关联其他工单,`pull request`,milestone,以及project
 
-![工单创建页][9]
+![工单创建页][10]
 
 工单的创建者可以随时自己编辑工单信息,也可以关闭工单
 
-![工单管理页][10]
+![工单管理页][11]
 
 ##### 工单标签
 
 gitea中的工单也可以用标签分类.我们可以在标签管理页中对标签进行管理
 
-![工单标签管理页][11]
+![工单标签管理页][12]
 
 ##### 工单模版
 
@@ -423,15 +621,15 @@ gitea和github一样提供了milestone和project两种进度管理工具.这两�
 
 
 
-
-[1]: {{site.url}}/img/in-post/gitea/qianyi.PNG
-[2]: {{site.url}}/img/in-post/gitea/mainpage.PNG
-[3]: {{site.url}}/img/in-post/gitea/user_collaborator.png
-[4]: {{site.url}}/img/in-post/gitea/user_branch.png
-[5]: {{site.url}}/img/in-post/gitea/branch_protect.png
-[6]: {{site.url}}/img/in-post/gitea/org_group.png
-[7]: {{site.url}}/img/in-post/gitea/org_group_create.png
-[8]: {{site.url}}/img/in-post/gitea/issue_list.png
-[9]: {{site.url}}/img/in-post/gitea/issue_create.png
-[10]: {{site.url}}/img/in-post/gitea/issue_manager.png
-[11]: {{site.url}}/img/in-post/gitea/issue_tag.png
+[1]: {{site.url}}/img/in-post/gitea/gitea_runner.png
+[2]: {{site.url}}/img/in-post/gitea/qianyi.PNG
+[3]: {{site.url}}/img/in-post/gitea/mainpage.PNG
+[4]: {{site.url}}/img/in-post/gitea/user_collaborator.png
+[5]: {{site.url}}/img/in-post/gitea/user_branch.png
+[6]: {{site.url}}/img/in-post/gitea/branch_protect.png
+[7]: {{site.url}}/img/in-post/gitea/org_group.png
+[8]: {{site.url}}/img/in-post/gitea/org_group_create.png
+[9]: {{site.url}}/img/in-post/gitea/issue_list.png
+[10]: {{site.url}}/img/in-post/gitea/issue_create.png
+[11]: {{site.url}}/img/in-post/gitea/issue_manager.png
+[12]: {{site.url}}/img/in-post/gitea/issue_tag.png
