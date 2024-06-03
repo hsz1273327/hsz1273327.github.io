@@ -357,7 +357,9 @@ gitea migrate-storage \
 
     ```
 
-3. 修改配置文件,
+    需要注意`container.network`需要填上你`gitea`实例所在的网络名
+
+3. 修改配置文件
 
     我们使用的是docker方式部署,这样就需要额外配置`cache`
 
@@ -417,6 +419,8 @@ gitea migrate-storage \
                 - /var/run/docker.sock:/var/run/docker.sock
     ```
 
+注意如果你的gitea有dns解析有自己的域名,`GITEA_INSTANCE_URL`中应该使用该域名.
+
 以组织级别为例,最后配好后就是这样
 
 ![runner状态][1]
@@ -441,7 +445,18 @@ gitea migrate-storage \
 
         其中`DEFAULT_ACTIONS_URL`用于设置action的默认查找位置,默认是`github`,这里改为`self`则会在本地gitea中查找
 
-    2. 在gitea中新建一个组织`actions`,里面用镜像方式将自己常用的action放到本地
+    2. 在gitea中新建一个组织`actions`,里面用*镜像仓库*方式将自己常用的action放到本地.为了可以拉取镜像,我们也可以在gitea实例的容器中设置代理,以docker compose方式为例
+
+        ```yml
+        version: '2.4'
+        services:
+        gitea:
+            ...
+            environment:
+                https_proxy: "http://你的代理host:你的代理port"
+                http_proxy: "http://你的代理host:你的代理port"
+            ...
+        ```
 
     3. 通过`docker save`和`docker load`命令将用到的镜像都放到runnner所在机器上,目前可以使用的镜像可以查看[这个列表](https://github.com/nektos/act/blob/master/IMAGES.md)
 
@@ -485,12 +500,11 @@ Gitea的一大作用就是作为github的备份库,Gitea直接提供了对应的
 
 gitea的CICD有两种实现方式,一种是通过`Web Hook`触发外部CI/CD工具,这个可以看我的[<使用Jenkins代替GithubActions自动化工作流>这篇文章](https://blog.hszofficial.site/recommend/2020/12/02/%E4%BD%BF%E7%94%A8Jenkins%E4%BB%A3%E6%9B%BFGithubActions%E8%87%AA%E5%8A%A8%E5%8C%96%E5%B7%A5%E4%BD%9C%E6%B5%81/).另一种就是使用[gitea actions](https://docs.gitea.com/zh-cn/usage/actions/overview).这个功能是gitea社区跟进github actions做出来的,因此语法和github actions一样,使用上不同之处就是我们得自己部署runner.如何部署runner可以查看上面运维部分的相关内容.
 
-在使用上gitea兼容[github action的配置语法](https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#jobsjob_idruns-on),得益于这一点,我们可以几乎无缝的从github action切过来.当然了也不会是完全没有不同之处.不同点总结为
+在使用上gitea兼容[github action的配置语法](https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#jobsjob_idruns-on),得益于这一点,我们可以几乎无缝的从github action切过来.当然了也不会是完全没有不同之处.不同点可以看[这个文档总结](https://docs.gitea.com/zh-cn/usage/actions/comparison).比较重要的点包括:
 
-1. `gitea`中`uses`可以直接指定仓库.这一特性是作为`actions.DEFAULT_ACTIONS_URL`配置项的补充,例如你可以使用`uses: https://gitea.com/actions/checkout@v4`的写法来代替`uses: actions/checkout@v4`的写法,从而使用`gitea.com`中的action
-
-
-
+1. `gitea action`的定义文件在`.gitea/workflows/`目录下而不是`.github/workflows/`下
+2. `gitea`中`uses`可以直接指定仓库.这一特性是作为`actions.DEFAULT_ACTIONS_URL`配置项的补充,例如你可以使用`uses: https://gitea.com/actions/checkout@v4`的写法来代替`uses: actions/checkout@v4`的写法,从而使用`gitea.com`中的action.
+3. 不支持手动触发(即`workflow_dispatch`字段定义),也没有ui操作手动触发
 
 ### 项目管理工具
 
@@ -564,31 +578,102 @@ gitea提供了和github几乎完全一致的项目管理体验
 
 项目模版可以用来快速构建同一模式的代码仓库,比如用go写命令行工具怎么都会有个`go.mod`,怎么都会依赖一个命令行环境变量或从文件中读取参数的包.那就可以把这些共性的东西固定好作为项目模版管理起来,这样每次要写个新的go命令行工具时就可以快速开始.可以理解为是一个代码仓库级别的脚手架工具.
 
-<!-- todo https://docs.gitea.com/zh-cn/usage/template-repositories -->
+<!-- https://docs.gitea.com/zh-cn/usage/template-repositories -->
+
+我们可以在一个公共可访问的组织中统一管理项目模版(此处我们假设该组织为`share`).创建项目模版本质上也是创建一个项目,只是在创建时需要勾选最下方的`模版 设置仓库为模版仓库`即可.
+
+![创建模版仓库][9]
+
+之后在其他项目中要使用该模版时,在创建页面中选择需要的模版即可
+
+![使用模版仓库][10]
+
+模版仓库可以看做是最佳实践的一种固化,一般由资深开发人员来进行.
+
+模版仓库与一般仓库不同点在于:
+
+1. 内容文件中可以使用`${VAR}`(或`$VAR`)的形式导入变量占位使用或使用`${VAR_转换器}`(或`$VAR_转换器`)的形式将变量经过转换器处理后使用,目前支持的变量包括
+
+    | 变量                   | 含义                           | 是否可转换 |
+    | ---------------------- | ------------------------------ | ---------- |
+    | `REPO_NAME`            | 生成的仓库名称                 | ✓          |
+    | `REPO_DESCRIPTION`     | 生成的仓库描述                 | ✘          |
+    | `REPO_OWNER`           | 生成的仓库所有者               | ✓          |
+    | `REPO_LINK`            | 生成的仓库链接(不包含hostname) | ✘          |
+    | `REPO_HTTPS_URL`       | 生成的仓库的HTTP(S)克隆链接    | ✘          |
+    | `REPO_SSH_URL`         | 生成的仓库的SSH克隆链接        | ✘          |
+    | `TEMPLATE_NAME`        | 模板仓库名称                   | ✓          |
+    | `TEMPLATE_DESCRIPTION` | 模板仓库描述                   | ✘          |
+    | `TEMPLATE_OWNER`       | 模板仓库所有者                 | ✓          |
+    | `TEMPLATE_LINK`        | 模板仓库链接(不包含hostname)   | ✘          |
+    | `TEMPLATE_HTTPS_URL`   | 模板仓库的HTTP(S)克隆链接      | ✘          |
+    | `TEMPLATE_SSH_URL`     | 模板仓库的SSH克隆链接          | ✘          |
+
+    支持的转换器包括如下,我们以`go-sdk`作为输入的例子下面是转换器的效果
+
+    | 转换器   | 目标形式 |
+    | -------- | -------- |
+    | `SNAKE`  | `go_sdk` |
+    | `KEBAB`  | `go-sdk` |
+    | `CAMEL`  | `goSdk`  |
+    | `PASCAL` | `GoSdk`  |
+    | `LOWER`  | `go-sdk` |
+    | `UPPER`  | `GO-SDK` |
+    | `TITLE`  | `Go-Sdk` |
+
+    如果希望保留原始字面量不进行扩展,则使用`$${xxx}`或`$$xxx`的形式
+
+2. 根目录下需要有一个`.gitea/template`用于标识需要进行变量插入和转换的文件,其规则和`.gitignore`一致.
+
+    ```txt
+    README.md
+    pyproject.toml
+    **_SNAKE
+    **.py
+    ```
+
+    需要注意
+    1. 文件名文件夹名中有变量需要扩展的也需要在`.gitea/template`中匹配到的才能执行.
+    2. `REPO_LINK`和`TEMPLATE_LINK`仅为`path`部分,而`REPO_HTTPS_URL`和`TEMPLATE_HTTPS_URL`为完整url,但末尾会有`.git`
 
 #### 工单
 
 在项目管理方面gitea和github一样都使用的是基于工单的项目管理方案.工单本身可以看做是事项的最小单位,是各种项目管理工具的轴.
 
-![工单列表页][9]
+![工单列表页][11]
 
 工单功能本身就功能丰富,可以打标签,可以上传附件,可以点赞,可以指派处理的成员,还可以关联其他工单,`pull request`,milestone,以及project
 
-![工单创建页][10]
+![工单创建页][12]
 
 工单的创建者可以随时自己编辑工单信息,也可以关闭工单
 
-![工单管理页][11]
+![工单管理页][13]
 
 ##### 工单标签
 
 gitea中的工单也可以用标签分类.我们可以在标签管理页中对标签进行管理
 
-![工单标签管理页][12]
+![工单标签管理页][14]
 
 ##### 工单模版
 
-<!-- todo -->
+仓库的工单模版的表现形式有两种:
+
++ markdown模版.就是最基础的模版形式,模本文件写什么用它做模版的工单就写什么
++ yaml模版.表单问卷形式的模版.当用户使用该模版构造工单时,模版会根据yaml中描述的项目渲染一个表单,用户填好表单提交即完成了工单的提交工作
+
+仓库的工单模版在仓库根目录下的`.gitea`文件夹下维护,分为两种:
+
++ 默认工单模版.使用`.gitea/issue_template.md`或`.gitea/issue_template.yaml`文件描述.
++ 其他工单模版.放在`.gitea/issue_template/`目录下,同样可以是`.md`文件也可以是`.yaml`文件.
+
+我们也可以借助模版仓库将工单模版固定下来,这样相同类型的任务就可以有相同的工单形式,方便管理.
+
+#### pull request模版
+<!-- todo https://docs.gitea.com/zh-cn/usage/issue-pull-request-templates-->
+
+<!-- https://axolo.co/blog/p/part-3-github-pull-request-template -->
 
 #### 质量管理
 
@@ -600,8 +685,6 @@ gitea中的工单也可以用标签分类.我们可以在标签管理页中对�
 
 通常我们会视项目的性质,组织的规模来设置代码质量控制的方式
 
-##### pull request模版
-<!-- todo https://docs.gitea.com/zh-cn/usage/issue-pull-request-templates-->
 
 ##### 状态检查功能
 <!-- todo https://docs.gitea.com/zh-cn/api/1.22/#tag/repository/operation/repoListStatuses-->
@@ -659,7 +742,9 @@ gitea和github一样提供了milestone和project两种进度管理工具.这两�
 [6]: {{site.url}}/img/in-post/gitea/branch_protect.png
 [7]: {{site.url}}/img/in-post/gitea/org_group.png
 [8]: {{site.url}}/img/in-post/gitea/org_group_create.png
-[9]: {{site.url}}/img/in-post/gitea/issue_list.png
-[10]: {{site.url}}/img/in-post/gitea/issue_create.png
-[11]: {{site.url}}/img/in-post/gitea/issue_manager.png
-[12]: {{site.url}}/img/in-post/gitea/issue_tag.png
+[9]: {{site.url}}/img/in-post/gitea/create_template_repo.png
+[10]: {{site.url}}/img/in-post/gitea/use_template_repo.png
+[11]: {{site.url}}/img/in-post/gitea/issue_list.png
+[12]: {{site.url}}/img/in-post/gitea/issue_create.png
+[13]: {{site.url}}/img/in-post/gitea/issue_manager.png
+[14]: {{site.url}}/img/in-post/gitea/issue_tag.png
