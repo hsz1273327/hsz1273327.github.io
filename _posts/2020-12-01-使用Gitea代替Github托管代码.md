@@ -421,6 +421,32 @@ gitea migrate-storage \
 
 ![runner状态][1]
 
+要让用户可以比较安心的使用action功能,我们必须清晰的了解仓库的运行环境.
+
+1. 如果我们的仓库有境外网站访问环境
+
+    我们就什么都不需要额外设置直接使用即可.gitea的默认配置会从dockerhub下载镜像,从github下载actions使用,在外网使用没什么问题的情况下默认配置就可以了
+
+2. 如果我们的仓库没有境外网站访问环境或希望尽量少的访问境外网站
+
+    我们可以
+    1. 在gitea设置项中设置
+
+        ```conf
+        ...
+        [actions]
+        ENABLED: true
+        DEFAULT_ACTIONS_URL: self 
+        ```
+
+        其中`DEFAULT_ACTIONS_URL`用于设置action的默认查找位置,默认是`github`,这里改为`self`则会在本地gitea中查找
+
+    2. 在gitea中新建一个组织`actions`,里面用镜像方式将自己常用的action放到本地
+
+    3. 通过`docker save`和`docker load`命令将用到的镜像都放到runnner所在机器上,目前可以使用的镜像可以查看[这个列表](https://github.com/nektos/act/blob/master/IMAGES.md)
+
+    这样action就不会去连github和dockerhub了.
+
 ## 使用部分
 
 gitea一般是作为内部库或外部库的镜像库而存在的.在用法上也没什么特别之处.
@@ -459,7 +485,11 @@ Gitea的一大作用就是作为github的备份库,Gitea直接提供了对应的
 
 gitea的CICD有两种实现方式,一种是通过`Web Hook`触发外部CI/CD工具,这个可以看我的[<使用Jenkins代替GithubActions自动化工作流>这篇文章](https://blog.hszofficial.site/recommend/2020/12/02/%E4%BD%BF%E7%94%A8Jenkins%E4%BB%A3%E6%9B%BFGithubActions%E8%87%AA%E5%8A%A8%E5%8C%96%E5%B7%A5%E4%BD%9C%E6%B5%81/).另一种就是使用[gitea actions](https://docs.gitea.com/zh-cn/usage/actions/overview).这个功能是gitea社区跟进github actions做出来的,因此语法和github actions一样,使用上不同之处就是我们得自己部署runner.如何部署runner可以查看上面运维部分的相关内容.
 
-在使用上gitea兼容github action,得益于这一点,我们可以几乎无缝的从github action切过来.和
+在使用上gitea兼容[github action的配置语法](https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#jobsjob_idruns-on),得益于这一点,我们可以几乎无缝的从github action切过来.当然了也不会是完全没有不同之处.不同点总结为
+
+1. `gitea`中`uses`可以直接指定仓库.这一特性是作为`actions.DEFAULT_ACTIONS_URL`配置项的补充,例如你可以使用`uses: https://gitea.com/actions/checkout@v4`的写法来代替`uses: actions/checkout@v4`的写法,从而使用`gitea.com`中的action
+
+
 
 
 ### 项目管理工具
