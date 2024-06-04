@@ -533,26 +533,15 @@ gitea提供了和github几乎完全一致的项目管理体验
 + 软件包
 + Actions
 
-而分支保护则是在分支层面控制不同用户修改仓库的更精细的设置.
-
 ##### 私人仓库成员管理
 
 用户一旦创建了他就拥有了一个私人的仓库空间,在这个私人仓库空间中他是其中仓库的唯一拥有者,其他人则都仅仅有读权限.如果你想找帮手,你可以在`设置->协作者`中邀请他们成为`协作者`,每个协作者的权限则是需要你设置的.
 
 ![Gitea的个人页协作者][4]
 
-而有写权限的协作者也可以使用`分支保护`功能控制他对不同分支的写入权限.
-
-+ 分支管理页
-![Gitea的个人页分支保护][5]
-
-+ 分支保护设置
-
-![分支保护设置][6]
-
-通常来说,我们会希望主干分支无法被协作者修改,协作者只能通过`pull request`的方式提交特性到主干.
-
 不过一般来说私人仓库都是个人项目,很少会需要协作者.
+
+而对于分支的精细控制,我们一样是使用`分支保护`功能控制,只是其中增加可以用团队来控制的条件.
 
 ##### 组织成员管理
 
@@ -560,11 +549,11 @@ gitea提供了和github几乎完全一致的项目管理体验
 
 + 团队管理界面
 
-![组织团队][7]
+![组织团队][5]
 
 + 创建团队
 
-![创建团队][8]
+![创建团队][6]
 
 在组织中团队有三种类型
 
@@ -573,6 +562,25 @@ gitea提供了和github几乎完全一致的项目管理体验
 + `普通团队`,普通团队一般是有相同权限设置的一组用户,和上面`管理团队`一样也可以设置是否对全部仓库还是指定仓库有设置的权限,我们需要在创建时就将权限设置好,比如给实习生设置为全部只读权限且需要指定仓库,给普通开发者设置为只有`代码`,`工单`,`合并请求`为写权限其他都是读权限等.
 
 三种团队的成员中只有所有者或管理员团队的成员才能创建新的团队.一个组织只可以维护自己内部的团队,如果你希望引入组织成员外部的人员来参与个别项目,也可以像在私人仓库中一样通过引入外部的`协作者`来实现.而对于分支的精细控制,我们一样是使用`分支保护`功能控制,只是其中增加可以用团队来控制的条件.
+
+#### 分支保护
+
+分支保护是在分支层面控制有写入权限用户修改仓库的更精细的设置.
+
++ 分支管理页
+![Gitea的个人页分支保护][7]
+
++ 分支保护设置
+
+![分支保护设置][8]
+
+分支保护的策略一般跟着分支策略走,通常是保护长分支用的,对于多数分支策略来说,`main`或者`master`分支是重点保护对象,一般都只需pull-request不允许直接提交.而一些多长分支的策略比如`git flow`还会保护`dev`分支
+
+分支保护的核心保护机制有两个
+
+1. 状态检查,即需要指定触发`gitea action`行为必须执行成功才能执行合并.每个`gitea action`的执行会携带其commit构造一个唯一的`状态检查`我们只要在`分支保护->状态检查模式`中填入这些状态检查项即可.注意只有使用`gitea action`才会有`状态检查项`.在pull request合并前我们可以在信息页面看到这些检查项的状态,如果状态不满足也无法合并
+
+2. 人工审核,我们可以在`分支保护->所需审批`中设置合并提交需要审核通过的人数.我们也可以在创建pull request时指定审批人.
 
 #### 项目模版管理
 
@@ -656,13 +664,12 @@ gitea中的工单也可以用标签分类.我们可以在标签管理页中对�
 
 ![工单标签管理页][14]
 
-参考github,用工单标签的归类工单内容可以给出10种标签:
+参考github,用工单标签的归类工单内容可以给出如下几种标签:
 
 + `bug`提交一个bug
 + `dependencies`更新依赖
 + `documentation`改进文档
 + `enhancement`发起新特性
-+ `good first issue`给新手的工单,让他们可以从简单的入手加入项目
 + `help wanted`求助工单
 
 用工单标明状态又可以给出:
@@ -671,6 +678,7 @@ gitea中的工单也可以用标签分类.我们可以在标签管理页中对�
 + `question`工单描述信息不足
 + `wontfix`拒绝工单的要求
 + `duplicate`工单或者`pull request`已经存在,这种标签的一般要关联到已经存在的工单
++ `delay`工单被拖延过
 
 在加上急迫程度优先级,我们又可以给出:
 
@@ -787,21 +795,21 @@ pull request也是gitea项目管理的核心之一,是用于合并代码的核�
 
 ##### pull request模版
 
-pull request模版一样可以用markdown语法或yaml来定义.语法也完全相同.这个模版放在仓库的`.gitea/pull_request_template.yaml`或`.gitea/pull_request_template.md`文件中.我们可以参考[这个博文](https://axolo.co/blog/p/part-3-github-pull-request-template)来自行定义pull request模版
+pull request模版一样可以用markdown语法或yaml来定义.语法也完全相同.这个模版放在仓库的`.gitea/pull_request_template.yaml`或`.gitea/pull_request_template.md`文件中.我们可以参考[这个博文](https://axolo.co/blog/p/part-3-github-pull-request-template)来自行定义pull request模版.
+
+当然了,借助模版仓库功能我们也可以很轻松的实现对所有项目pull request模版的统一管理
 
 #### 质量管理
 
-`pull request`则是代码仓库的质量管理工具,它支持评论,`code review`.
+仓库代码的质量管理基本是借助`cd/cd`,`pull request`,成员权限管理,分支保护功能实现的.
 
-<!-- todo https://docs.gitea.com/zh-cn/usage/issue-pull-request-templates-->
+gitea下质量管理的基本思路是
 
-充分使用`pull request`配合CICD工具以及[状态检查功能](https://github.com/go-gitea/gitea/pull/7481)可以严格控制代码质量避免上线出问题.
+1. 使用成员权限管理,分支保护功能限制代码的写操作,让几个特定的主干分支在正常情况下只能通过`pull request`变更代码
+2. 使用`cd/cd`工具在一些符合要求的分支上自动执行代码的静态类型校验和单元测试,配合状态检查功能在最低程度上保证代码可用
+3. 通过分支保护功能设置code review引入人工审查进一步保证代码质量
 
-通常我们会视项目的性质,组织的规模来设置代码质量控制的方式
-
-
-##### 状态检查功能
-<!-- todo https://docs.gitea.com/zh-cn/api/1.22/#tag/repository/operation/repoListStatuses-->
+通常我们会视项目的性质,组织的规模来设置代码质量控制的方式.
 
 ##### 质量管理的严格程度
 
@@ -833,12 +841,70 @@ gitea和github一样提供了milestone和project两种进度管理工具.这两�
 
 通常这两种进度管理工具对立统一--我们通常用`里程碑方式`管理特定仓库中代码的迭代,用`项目方式`管理产品层面功能的迭代以及优化工作流
 
-##### Milestone
+##### 里程碑方式
 
-##### Project
+里程碑是挂在仓库下的一个进度管理工具,它可以设置deadline.
 
+![创建里程碑][19]
 
+一个项目当然可以有多个里程碑,但理论上同时开启的里程碑应该不会超过2个,一个是正在进行中的,一个是计划中的
 
+![里程碑列表][20]
+
+点击进入后我们也可以查看其中关联的工单以及编辑里程碑内容
+
+![里程碑详情][21]
+
+一般来说我们会以里程碑的方式管理一个仓库的版本发布,这个管理流程是这样的:
+
+1. 先定义一个版本里程碑,设置好deadline
+2. 从现有的`bug`标签中尽可能多的挑选出打算这个版本解决的,关联到这个版本的里程碑,并打上优先级标签,同时设置每个工单的deadline
+3. 如果目前版本额里程碑里有`help wanted`标签,则将其改为为`enhancement`标签并打上优先级标签,同时设置每个工单的deadline
+4. 创建`enhancement`标签的工单并关联到这个里程碑作为这个版本的目标功能,并打上优先级标签,同时设置每个工单的deadline
+5. 创建一个`dependencies`标签的工单并关联到这个里程碑作为这个版本的依赖更新的工单,同时从主干拉取一个`base-版本号`分支,更新好依赖调试没问题后作为上面目标功能分支的基分支
+6. 一个`documentation`标签的工单并关联到这个里程碑作为这个版本的文档更新的工单
+7. 创造下一个版本的里程碑,不用设置deadline
+8. 从现有的`help wanted`标签的中挑选出打算下个版本解决的,关联到下个版本的里程碑.
+
+注意如果我们有优先级标签,一定要严格的评估优先级,不能全是高也不能全是低,这样就没有区分的意义了.这里给出我优先级的定义标准你可以参考下:
+
++ 高: 涉及已经对外宣传会提供的特性;涉及商业上需要追赶潮流否则可能影响收入的特性;涉及会让系统无法使用的bug.一个milestone中高的比例不应高于50%,如果出现高于50%的情况,我们应该评估下是不是在本轮开发之外出现了严重失误,比如是不是上一个里程碑的质量管理有问题,测试,审查有严重失误;比如是不是外宣上有严重冒进问题.是不是产品对竞品有严重高估等.
++ 中: 正常推进的特性功能,正常推进的bug修复.
++ 低: 性能优化型的特性功能,边角特性功能,用户难以体验到的bug修复,非机制性的偶现bug修复等,这部分功能是可以优先放弃的,一个milestone中低的比例应该控制在10%~20%,为工程推进提供一定余量
+
+在一个里程碑进行的过程中我们很可能会因为各种原因延误工期,这时就需要取舍了--是延长deadline让计划中的项目完成,还是将一些当前计划中的项目放到下一个milestone中保证这个milestone按时完成?
+
+这里给出几个判断标准以供参考
+
++ 如果未完成的工单大部分是优先级为低的工单,那么可以考虑将未完成的放到下一个milestone中,同时给这些工单标注为`delay`并适当提高优先级或砍掉
++ 如果未完成的工单中有已经错过先机的功能,直接砍掉再重新评估
++ 剩下的情况更合适的是延期
+
+##### 项目方式
+
+项目是跨仓库的,我们通常在组织内定义项目.一个项目一般是一个长期主题.比如我们要开发一款游戏,那游戏有程序要写,有图片素材要做,有音频素材要做,有图标素材要做,有文案要做等等.这个开发周期可能要3年,每项工作是一个仓库,我们还要持续运营,在这个项目下修修改改出两个dlc.像这样的场景下项目方式就非常合适.项目通常不是为了管理某个具体功能或目标的进度,而是为了管理一个持续迭代的目标,也不存在deadline.它更加注重的是当前有哪些完成了有哪些在进行中这样的具体状态,然后根据这些状态和状态持续的时间优化工作流调整开发方向.
+
+我们可以在创建项目时根据不同的作用挑选看板模式
+
+![创建项目][22]
+
++ 如果是普通的进度管理我们就选`基础看板`
+
+![基础看板][23]
+
++ 如果是用来追踪bug的项目我们就选`BUG分类看板`
+
+![bug看板][24]
+
+我们可以在组织的项目中统一管理这个组织的项目
+
+![项目列表][25]
+
+当然了仓库也可以用项目方式管理,但个人认为意义不大.
+
+使用项目方式管理组织中的项目进度完全可以脱离仓库概念.组织也就成了单纯的人员管理单位,这也就意味着一个组织可以同时完成多个项目,比如一部分人在维护旧游戏的运营,一部分人在开发新游戏,他们就可以都在同一个组织中,借由不同的项目进行管理.这样人员也可以更加自由的在不同项目间流动,当一个老项目到了生命周期的末尾时人力也早就抽到新项目中了.
+
+我个人也更加推荐项目方式结合里程碑方式进行项目进度管理.里程碑用于做版本控制和工期控制,而项目则可以进行更宏观的仓库间版本对齐,人员配置优化,工作流优化等工作.
 
 ### 分发仓库
 
@@ -852,10 +918,10 @@ gitea和github一样提供了milestone和project两种进度管理工具.这两�
 [2]: {{site.url}}/img/in-post/gitea/qianyi.PNG
 [3]: {{site.url}}/img/in-post/gitea/mainpage.PNG
 [4]: {{site.url}}/img/in-post/gitea/user_collaborator.png
-[5]: {{site.url}}/img/in-post/gitea/user_branch.png
-[6]: {{site.url}}/img/in-post/gitea/branch_protect.png
-[7]: {{site.url}}/img/in-post/gitea/org_group.png
-[8]: {{site.url}}/img/in-post/gitea/org_group_create.png
+[5]: {{site.url}}/img/in-post/gitea/org_group.png
+[6]: {{site.url}}/img/in-post/gitea/org_group_create.png
+[7]: {{site.url}}/img/in-post/gitea/user_branch.png
+[8]: {{site.url}}/img/in-post/gitea/branch_protect.png
 [9]: {{site.url}}/img/in-post/gitea/create_template_repo.png
 [10]: {{site.url}}/img/in-post/gitea/use_template_repo.png
 [11]: {{site.url}}/img/in-post/gitea/issue_list.png
@@ -866,3 +932,10 @@ gitea和github一样提供了milestone和project两种进度管理工具.这两�
 [16]: {{site.url}}/img/in-post/gitea/pull_request_create.png
 [17]: {{site.url}}/img/in-post/gitea/pull_request_create_form.png
 [18]: {{site.url}}/img/in-post/gitea/pull_request_info.png
+[19]: {{site.url}}/img/in-post/gitea/milestone_create.png
+[20]: {{site.url}}/img/in-post/gitea/milestone_list.png
+[21]: {{site.url}}/img/in-post/gitea/milestone_info.png
+[22]: {{site.url}}/img/in-post/gitea/project_create.png
+[23]: {{site.url}}/img/in-post/gitea/project_info.png
+[24]: {{site.url}}/img/in-post/gitea/project_bug.png
+[25]: {{site.url}}/img/in-post/gitea/project_list.png
