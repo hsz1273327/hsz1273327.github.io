@@ -660,8 +660,81 @@ gitea中的工单也可以用标签分类.我们可以在标签管理页中对�
 
 仓库的工单模版的表现形式有两种:
 
-+ markdown模版.就是最基础的模版形式,模本文件写什么用它做模版的工单就写什么
++ markdown模版.就是最基础的模版形式,模本文件写什么用它做模版的工单就写什么.而其元信息则放在顶部`---`的包裹内
+
+    ```markdown
+    ---
+    name: "issue_defalut_template"
+    about: "默认工单模版!"
+    title: "[ISSUE] "
+    ref: "main"
+    ---
+
+    # 工单问题
+
+    + 针对版本:
+    + 针对平台:
+    + 针对操作系统:
+
+    ## 问题描述
+
+    ```
+
 + yaml模版.表单问卷形式的模版.当用户使用该模版构造工单时,模版会根据yaml中描述的项目渲染一个表单,用户填好表单提交即完成了工单的提交工作
+    yaml模版的形式为
+
+    ```yaml
+    name: Bug Report
+    about: File a bug report
+    title: "[Bug]: "
+    body:
+    - type: markdown  
+        attributes:
+        value: |
+            感谢填写本bug报告!
+    - type: input
+        id: contact
+        attributes:
+        label: 联系方式
+        description: 在我们需要更多信息时我们应当如何联系到您?
+        placeholder: ex. email@example.com
+        validations:
+        required: false
+    - type: textarea
+        id: what-happened
+        attributes:
+        label: 请描述bug的现象
+        description: 请同时描述下预期中的现象
+        placeholder: 告诉我们你看到了什么
+        value: "A bug happened!"
+        validations:
+        required: true
+    - type: dropdown
+        id: os
+        attributes:
+        label: 这个bug发生在什么操作系统?
+        multiple: true
+        options:
+            - Windows
+            - MacOS
+            - Linux
+    - type: checkboxes
+        id: terms
+        attributes:
+            label: Code of Conduct
+            description: By submitting this issue, you agree to follow our [Code of Conduct](https://example.com)
+            options:
+            - label: I agree to follow this project's Code of Conduct
+                required: true
+    ```
+
+    表单形式可以有
+
+    + markdown,即纯文本段落展示
+    + input,单行文本输入框
+    + textarea,多行文本输入框
+    + dropdown,单选输入框
+    + checkboxes,多选输入框
 
 仓库的工单模版在仓库根目录下的`.gitea`文件夹下维护,分为两种:
 
@@ -670,7 +743,10 @@ gitea中的工单也可以用标签分类.我们可以在标签管理页中对�
 
 我们也可以借助模版仓库将工单模版固定下来,这样相同类型的任务就可以有相同的工单形式,方便管理.
 
-#### pull request模版
+#### pull request
+
+
+##### pull request模版
 <!-- todo https://docs.gitea.com/zh-cn/usage/issue-pull-request-templates-->
 
 <!-- https://axolo.co/blog/p/part-3-github-pull-request-template -->
