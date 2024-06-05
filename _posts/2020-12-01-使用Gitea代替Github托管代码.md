@@ -1038,7 +1038,7 @@ pip install --index-url https://<gitea用户名>:<gitea用户密码>@<giteaurl>/
 
 使用`--no-deps`可以忽略依赖项
 
-##### 用于js包管理
+<!-- ##### 用于js包管理
 
 
 
@@ -1048,7 +1048,7 @@ pip install --index-url https://<gitea用户名>:<gitea用户密码>@<giteaurl>/
 ##### 用于C/C++包管理
 
 
-##### 用于镜像管理
+##### 用于镜像管理 -->
 
 
 
