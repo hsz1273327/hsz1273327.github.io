@@ -975,19 +975,37 @@ jobs:
 
 ![release中有制品][29]
 
-#### 用于python包管理
+#### package功能
+
+gitea实现了多种常见编程语言的包仓库以及docker镜像仓库的协议,这个功能叫`package`,我们可以利用这个功能也将它作为私有仓库使用.
+
+`package`可以在组织的对应选项卡中管理维护.
+
+![package详情][30]
+
+`package`也是*组织级别*的,我们上传也只能组织级别上传,然后在组织的package中找到包后进入设置中与仓库关联.
+
+![package关联仓库][31]
+
+`package`的上传个人建议也借由release的published事件出发由action进行处理.下面我会给出几种常见的场景下的上传action配置
+
+##### 用于python包管理
+
+```yaml
 
 
-#### 用于go包管理
+```
+
+##### 用于go包管理
 
 
-#### 用于js包管理
+##### 用于js包管理
 
 
-#### 用于C/C++包管理
+##### 用于C/C++包管理
 
 
-#### 用于镜像管理
+##### 用于镜像管理
 
 
 
@@ -1021,8 +1039,9 @@ jobs:
 [23]: {{site.url}}/img/in-post/gitea/project_info.png
 [24]: {{site.url}}/img/in-post/gitea/project_bug.png
 [25]: {{site.url}}/img/in-post/gitea/project_list.png
-
 [26]: {{site.url}}/img/in-post/gitea/release_create.png
 [27]: {{site.url}}/img/in-post/gitea/action_get_artifact.png
 [28]: {{site.url}}/img/in-post/gitea/release_upload_artifact.png
 [29]: {{site.url}}/img/in-post/gitea/release_with_artifact.png
+[30]: {{site.url}}/img/in-post/gitea/package_info.png
+[31]: {{site.url}}/img/in-post/gitea/package_link.png
