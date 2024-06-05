@@ -991,15 +991,58 @@ gitea实现了多种常见编程语言的包仓库以及docker镜像仓库的协
 
 ##### 用于python包管理
 
+上传可以使用下面的action配置:
+
 ```yaml
+name: Upload Python Package
 
+on:
+    release:
+        types: [published]
 
+jobs:
+    deploy:
+        runs-on: ubuntu-latest
+
+        steps:
+            - uses: actions/checkout@v4
+            - name: Set up Python
+              uses: actions/setup-python@v5
+              with:
+                  python-version: "3.x"
+            - name: Install dependencies
+              run: |
+                  python -m pip install --upgrade pip
+                  pip install setuptools wheel twine
+            - name: Build and publish
+              run: |
+                  python setup.py sdist bdist_wheel bdist_egg
+            - name: "Upload dist"
+              uses: "actions/upload-artifact@v3"
+              with:
+                  name: packages
+                  path: dist/*
+            - name: Publish
+              env:
+                  TWINE_USERNAME: ${{ secrets.PYPI_USERNAME }}
+                  TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
+                  TWINE_REPOSITORY_URL: ${{ github.server_url }}/api/packages/${{ github.repository_owner }}/pypi
+              run: twine upload dist/*
 ```
 
-##### 用于go包管理
+下载使用时命令
 
+```bash
+pip install --index-url https://<gitea用户名>:<gitea用户密码>@<giteaurl>/api/packages/<组织名>/pypi/simple --no-deps <包名>
+```
+
+使用`--no-deps`可以忽略依赖项
 
 ##### 用于js包管理
+
+
+
+##### 用于go包管理
 
 
 ##### 用于C/C++包管理
@@ -1009,8 +1052,17 @@ gitea实现了多种常见编程语言的包仓库以及docker镜像仓库的协
 
 
 
+## 使用gitea作为工作室管理工具
 
+由于gitea既有组织又有看板.还有非常完善的标签系统,实际上gitea也很适合作为工作室的管理工具一个工具包打天下.只是我们需要需要将工作室的组织架构和仓库相融合.下面是我总结的组织划分
 
++ `strategy`: 战略组织,成员为资方,老板,数分人员,仓库用于维护策划书,数据报表等文案,project则为策划的落地情况,报告的完成情况等等
++ `administrative`: 行政管理用组织,成员为财务,人事,内控等的人员,仓库用于维护公文,人员档案,财务档案,计划等文案,project则为招聘计划,财务计划,审计计划等
++ `core`: 技术核心组织,成员为业务组织和支持组织中的资深人员,这个组织用于维护需要开发经验的核心资源和高性能资源,以及技术选型等,同时还有给业务组织和支持组织管理维护项目模版的功能.这个组织的成员同时也要对业务和支持的代码质量负责.project则为模版迭代,核心迭代,技术调研等.
++ `bussiness`: 业务组织,也就是负责对外获取营收的组织.这个组织包含从产品到开发到测试的所有业务相关人员,project就是业务项目,
++ `support`: 支持组织,也就是负责内部运维开发以及内部使用工具开发的组织.不参与直接获取营收但负责平稳运行业务.仓库内容包括各种外部库简单包装,部署脚本,监控服务,容器平台建设等.project则为运维开发迭代,工具开发迭代
++ `mirror`: 外部工具的镜像库,定时自动同步
++ `actions`: github上有用的action的镜像,定时自动同步,自有action
 
 
 
