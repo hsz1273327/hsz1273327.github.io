@@ -920,7 +920,60 @@ gitea本职工作是代码仓库,但它和github一样也支持作为分发仓�
 gitea的提供了两种对分发仓库的支持
 
 1. `package`功能,gitea提供了主流编程语言的包管理仓库实现以及docker镜像仓库的实现,我们可以直接拿它当这些仓库使用,以满足第一第二种分发需求
-2. `release`功能,gitea提供了基于tag的版本发布功能,同时支持挂载附件,我们可以将可执行文件作为附件放在`release`版本中从而满足对其余分发需求的
+2. `release`功能,gitea提供了基于tag的版本发布功能,同时支持挂载附件,我们可以将可执行文件作为附件放在`release`版本中从而满足所有分发需求的
+
+#### 使用release触发发布操作
+
+`release`是用于发布版本的功能,我们创建一个release就会为它打个git的`tag`.同时这个`tag`对应的源码会被打包为`zip`和`tar.gz`保存到`release`记录中.
+
+![创建release][26]
+
+我们可以使用release利用`action`实现release的同时进行发布.只要将触发的行为设置为`release`的`published`即可
+
+```yaml
+name: Publish Package
+
+on:
+  release:
+    types: [published]
+
+jobs:
+    ....
+```
+
+##### release分发制品
+
+使用`release`分发制品是最基础的制品分发方式,我们可以利用`actions/upload-artifact@v3`(注意v4版本目前不支持)将获得的制品发送到action的制品中,
+
+```yaml
+name: Publish Package
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  deploy:
+    ...
+    - name: 'Build Artifacts'
+        ...
+    - name: 'Upload dist'
+      uses: 'actions/upload-artifact@v3'
+      with:
+        name: packages
+        path: dist/*
+    ...
+```
+
+![发送到action的制品][27]
+
+然后下载到本地,解压后将内容上传到`release`中
+
+![上传到release][28]
+
+之后在这个`release`中你就可以看到你的制品了
+
+![release中有制品][29]
 
 #### 用于python包管理
 
@@ -937,7 +990,7 @@ gitea的提供了两种对分发仓库的支持
 #### 用于镜像管理
 
 
-#### release分发程序
+
 
 
 
@@ -968,3 +1021,8 @@ gitea的提供了两种对分发仓库的支持
 [23]: {{site.url}}/img/in-post/gitea/project_info.png
 [24]: {{site.url}}/img/in-post/gitea/project_bug.png
 [25]: {{site.url}}/img/in-post/gitea/project_list.png
+
+[26]: {{site.url}}/img/in-post/gitea/release_create.png
+[27]: {{site.url}}/img/in-post/gitea/action_get_artifact.png
+[28]: {{site.url}}/img/in-post/gitea/release_upload_artifact.png
+[29]: {{site.url}}/img/in-post/gitea/release_with_artifact.png
