@@ -987,7 +987,15 @@ gitea实现了多种常见编程语言的包仓库以及docker镜像仓库的协
 
 ![package关联仓库][31]
 
-`package`的上传个人建议也借由release的published事件出发由action进行处理.下面我会给出几种常见的场景下的上传action配置
+`package`的上传个人建议也借由release的published事件出发由action进行处理.下面我会给出几种常见的场景下的上传action配置.这些配置多少都会需要有账户用于登录
+
+我们可以定义一个`dev`账户专门用于包的上传,将它的用户名密码分别放在`组织->设置->Actions->秘钥`的`PACKAGE_USERNAME`和`PACKAGE_PASSWORD`.并在用户的`设置->应用->管理 Access Token`中生成一个令牌.
+
+![][32]
+
+并将生成的令牌也放到`组织->设置->Actions->秘钥`的`PACKAGE_AUTH`中.
+![][33]
+
 
 ##### 用于python包管理
 
@@ -995,28 +1003,26 @@ gitea实现了多种常见编程语言的包仓库以及docker镜像仓库的协
 
 ```yaml
 name: Upload Python Package
-
 on:
     release:
         types: [published]
 
 jobs:
-    deploy:
+    publish:
         runs-on: ubuntu-latest
-
         steps:
             - uses: actions/checkout@v4
             - name: Set up Python
               uses: actions/setup-python@v5
               with:
-                  python-version: "3.x"
+                  python-version: "3.10"
             - name: Install dependencies
               run: |
                   python -m pip install --upgrade pip
-                  pip install setuptools wheel twine
-            - name: Build and publish
+                  pip install setuptools wheel twine build
+            - name: Build
               run: |
-                  python setup.py sdist bdist_wheel bdist_egg
+                  python -m build --wheel
             - name: "Upload dist"
               uses: "actions/upload-artifact@v3"
               with:
@@ -1024,8 +1030,8 @@ jobs:
                   path: dist/*
             - name: Publish
               env:
-                  TWINE_USERNAME: ${{ secrets.PYPI_USERNAME }}
-                  TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
+                  TWINE_USERNAME: ${{ secrets.PACKAGE_USERNAME }}
+                  TWINE_PASSWORD: ${{ secrets.PACKAGE_PASSWORD }}
                   TWINE_REPOSITORY_URL: ${{ github.server_url }}/api/packages/${{ github.repository_owner }}/pypi
               run: twine upload dist/*
 ```
@@ -1038,11 +1044,60 @@ pip install --index-url https://<gitea用户名>:<gitea用户密码>@<giteaurl>/
 
 使用`--no-deps`可以忽略依赖项
 
-<!-- ##### 用于js包管理
+##### 用于js包管理
+
+上传可以使用下面的action配置:
+
+```yaml
+name: Upload Javascript Package
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: ["20"]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: "npm"
+      - name: Install devDependence
+        run: |
+          npm install
+      - name: Build
+        run: |
+          npm run build
+      - name: "Upload dist"
+        uses: "actions/upload-artifact@v3"
+        with:
+          name: packages
+          path: dist/*
+      - name: Publish
+        run: |
+          npm config set $URL:registry=https://<你的gitea实例host>/api/packages/${{ github.repository_owner }}/npm/
+          npm config set -- '//<你的gitea实例host>/api/packages/${{ github.repository_owner }}/npm/:_authToken' "${{ secrets.PACKAGE_AUTH }}"
+          npm publish
+```
+
+其他项目需要安装它时在项目根目录下创建.npmrc
+
+```txt
+@组织名:registry=https://hszszgitea.ddnsto.com/api/packages/组织名/npm/
+//hszszgitea.ddnsto.com/api/packages/组织名/npm/:_authToken=你的登录令牌
+```
+
+然后像正常一样使用`npm install`即可
 
 
 
-##### 用于go包管理
+<!-- ##### 用于go包管理
 
 
 ##### 用于C/C++包管理
@@ -1097,3 +1152,5 @@ pip install --index-url https://<gitea用户名>:<gitea用户密码>@<giteaurl>/
 [29]: {{site.url}}/img/in-post/gitea/release_with_artifact.png
 [30]: {{site.url}}/img/in-post/gitea/package_info.png
 [31]: {{site.url}}/img/in-post/gitea/package_link.png
+[32]: {{site.url}}/img/in-post/gitea/auth_token.png
+[33]: {{site.url}}/img/in-post/gitea/set_runner_key.png
