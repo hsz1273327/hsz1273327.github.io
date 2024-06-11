@@ -1095,9 +1095,24 @@ jobs:
 
 然后像正常一样使用`npm install`即可
 
+##### 用于go包管理
+
+我们并不需要使用package功能做包管理,git仓库本身就是现成的go包管理工具.限制仅仅是在`go.mod`中以`.git`作为`module`字段的结尾.
+
+使用它很简单,两个步骤
 
 
-<!-- ##### 用于go包管理
+1. 设置环境变量`GOPRIVATE="<你的gitea仓库host>"`
+2. 设置项目下的`.git/config`或用户级别`~/.gitconfig`中添加
+
+```txt
+[url "https://<你的用户名>:<你的密码>@<你的gitea仓库host>/"]
+        insteadOf = https://<你的gitea仓库host>/
+```
+
+之后就正常使用即可
+
+<!-- 
 
 
 ##### 用于C/C++包管理
