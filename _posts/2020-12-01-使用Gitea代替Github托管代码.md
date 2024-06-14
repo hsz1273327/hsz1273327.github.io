@@ -7,7 +7,7 @@ tags:
     - Git
     - DevOps
 header-img: "img/home-bg-o.jpg"
-update: 2024-05-27
+update: 2024-06-14
 series:
     get_along_well_with_github:
         index: 9
@@ -1112,12 +1112,106 @@ jobs:
 
 之后就正常使用即可
 
-<!-- 
-
-
 ##### 用于C/C++包管理
 
+package功能提供了C/C++包管理工具conan的支持.上传可以使用下面的action配置:
 
+```yaml
+name: Upload CXX Package
+on:
+    release:
+        types: [published]
+jobs:
+    test:
+        runs-on: ubuntu-latest
+        strategy:
+            matrix:
+                python-version: ["3.10"]
+        steps:
+            - uses: actions/checkout@v4
+            - name: Use Python ${{ matrix.python-version }}
+              uses: actions/setup-python@v5
+              with:
+                  python-version: ${{ matrix.python-version }}
+            - name: Get Cmake
+              uses: actions/get-cmake@latest  
+              with:
+                useLocalCache: true         # <--= Use the local cache (default is 'false').
+                useCloudCache: false        # <--= Ditch the cloud cache (default is
+                cmakeVersion: "~3.29.0"  # <--= optional, use most recent 3.25.x version
+                ninjaVersion: "^1.11.1"  # <--= optional, use most recent 1.x version
+
+            - name: Install devDependence
+              env:
+                  CONAN_USERNAME: ${{ secrets.PACKAGE_USERNAME }}
+                  CONAN_PASSWORD: ${{ secrets.PACKAGE_PASSWORD }}
+                  CONAN_REPOSITORY_URL: ${{ github.server_url }}/api/packages/${{ github.repository_owner }}/conan
+              run: |
+                  pip install conan
+                  conan profile detect
+                  conan remote add ${{ github.repository_owner }} ${CONAN_REPOSITORY_URL}
+                  conan remote login  -p ${CONAN_PASSWORD} ${{ github.repository_owner }} ${CONAN_USERNAME}
+            - name: Build and Test
+              run: |
+                  conan create . --build=missing
+
+            - name: "Upload package"
+              env:
+                  REF_NAME: ${{github.ref_name}}
+              run: |
+                  export PACKAGE_VERSION=${REF_NAME#*v}
+                  conan upload --r ${{ github.repository_owner }} <你的项目名>/$PACKAGE_VERSION
+                
+```
+
+要使用这个包作为依赖的项目先要做好如下设置:
+
+1. 安装好gcc,cmake等编译工具
+2. 安装好conan并配置好profile
+3. 执行如下操作配置好conan本地仓库
+
+```bash
+conan remote add <仓库所在组织名> https://hszszgitea.ddnsto.com/api/packages/<仓库所在组织名>/conan
+conan remote login  -p <你的密码> <仓库所在组织名> <你的账户名>
+```
+
+之后正常安装即可
+
+```bash
+conan install . --output-folder=build --build=missing
+```
+
+## Usage
+
++ 在`conanfile.txt`中设置
+
+```txt
+[requires]
+<依赖的项目名>/0.0.1
+
+[generators]
+CMakeDeps
+CMakeToolchain
+```
+
++ 在`CmakeLists.txt`中设置
+
+```cmake
+find_package(<依赖的项目名> REQUIRED)
+...
+target_link_libraries(example <依赖的项目名>::<依赖的项目名>)
+```
+
+在`src`文件夹中写好你的程序后执行安装操作.执行完安装后进入`build`文件夹执行
+
+```bash
+cmake .. -DCMAKE_TOOLCHAIN_FILE=conan_toolchain.cmake -DCMAKE_BUILD_TYPE=Release
+cmake --build .
+```
+
+进行编译.编译的结果会在`build`文件夹中.
+
+<!--
 ##### 用于镜像管理 -->
 
 
