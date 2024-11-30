@@ -1,5 +1,5 @@
 ---
-title: "安全技术"
+title: "AIPC折腾记"
 series_name: "aipc_experiment"
 description: ""
 date: 2024-11-06
@@ -8,7 +8,6 @@ category: experiment
 tags:
     - AIPC
     - AI
-    - linux
 update: 2024-11-27
 ---
 
