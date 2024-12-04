@@ -360,15 +360,7 @@ deskmini这种小主机其实谈不上风道,都是下压散热器进风,外面�
 
 要用rocm,还要长时间不关机,自然得用linux系统.我使用的[Ubuntu 24.04.1](https://ubuntu.com/download/desktop/thank-you?version=24.04.1&architecture=amd64&lts=true),刷好usb安装盘后插上安装即可.在安装好后我又进行了如下几个步骤来设置使用环境
 
-### 更新系统
-### 安装驱动和rocm
-### 美化系统
-### 美化terminal
-### 安装监控工具
-### 安装常用软件
-### 安装docker
-### 安装常用开发环境
-### 安装游戏
+
 
  
 ## 后续
