@@ -156,6 +156,7 @@ sudo reboot
     sudo ldconfig
     ```
 
+4. 使用更新选项或环境模块Linux实用程序配置ROCm二进制文件的路径。ROCm安装过程将ROCm可执行文件添加到这些系统中，前提是它们已安装在系统上
 
 在安装好chongqi重启后
 
