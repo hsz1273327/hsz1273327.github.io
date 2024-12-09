@@ -93,7 +93,9 @@ sudo reboot
 
 #### amd显卡/apu核显
 
-对应的工具链叫[rocm](https://rocm.docs.amd.com/en/latest/),可以使用如下步骤安装:
+对应的工具链叫[rocm](https://rocm.docs.amd.com/en/latest/),需要注意目前rocm在同时存在amd独显和amd核显的情况下会有错误.因此如果你用的是amd独显需要在bios中禁用核显(amd的这个操作真的很神奇,因此一般推荐au配n卡).
+
+可以使用如下步骤安装:
 
 1. 安装安装器
 
@@ -105,7 +107,7 @@ sudo reboot
     sudo apt install ./amdgpu-install_6.3.60300-1_all.deb #安装rocm安装工具
     # sudo apt update # 更新软件包的索引或包列表
     # sudo apt install amdgpu-dkms rocm # 安装amdgpu-dkms(驱动) rocm(rocm包)
-    sudo reboot
+    sudo reboot #重启后生效
     ```
 
     上面的代码只是例子,我们安装的是rocm 6.3的安装器,具体版本可以查看[rocm发布页](https://rocm.docs.amd.com/en/latest/release/versions.html)
@@ -144,6 +146,8 @@ sudo reboot
     + `mlsdk`,包含`mllib`,额外附带MIOpen和Clang OpenCL的开发库
     + `asan`,支持ASAN(内存检测工具)的ROCm工具
 
+    正常情况下使用`amdgpu-install --usecase=rocm,graphics` 安装即可
+
 3. 设置系统连接
 
     也就是设置相关工具的查找位置
@@ -156,35 +160,240 @@ sudo reboot
     sudo ldconfig
     ```
 
-4. 使用更新选项或环境模块Linux实用程序配置ROCm二进制文件的路径。ROCm安装过程将ROCm可执行文件添加到这些系统中，前提是它们已安装在系统上
+4. 使用`update-alternatives`更新配置ROCm二进制文件的路径.
 
-在安装好chongqi重启后
+    ```bash
+    update-alternatives --list rocm
+    ```
 
-##### rocm版本和更新
+5. 设置环境变量
 
-更新
+    rocm安装好后会被放在`/opt/rocm-<ver>`目录:
+    + rocm的可执行文件会放在`/opt/rocm-<ver>/bin`目录.
+        如果无法使用rocm工具,可以将它的`bin`目录加入到PATH中
 
-#### Nvidia显卡
+        ```bash
+        export PATH=$PATH:/opt/rocm-6.3.0/bin
+        ```
 
-对应的工具链叫[cuda](),安装
+    + rocm的动态链接库会放在`/opt/rocm-<ver>/lib`目录.
+        如果要用到这些动态链接库,可以将它加入到`LD_LIBRARY_PATH`
 
+        ```bash
+        export LD_LIBRARY_PATH=/opt/rocm-6.3.0/lib
+        ```
 
-### 驱动的更新
+    + rocm的模块则会被放在`/opt/rocm-<ver>/lib/rocmmod`目录.
 
+6. 检查驱动是否正常
+
+    ```bash
+    dkms status
+    ```
+
+    这个命令会打印出显卡的状态
+
+7. 检查rocm是否正常安装
+
+    ```bash
+    rocminfo # 检查rocm状态
+    clinfo # 检查opencl状态
+    ```
+
+8. 检查包是否安装正常
+
+    ```bash
+    apt list --installed
+    ```
+
+##### rocm版本更新
+
+更新版本我们需要完全卸载已有的rocm,驱动,和rocm安装器
+
+```bash
+sudo amdgpu-install --uninstall # 卸载驱动和库
+sudo apt purge amdgpu-install # 卸载安装器
+sudo apt autoremove # 卸载对应依赖
+sudo reboot # 重启后生效
+```
+
+之后在下载新版本的安装器重新安装配置一次即可
+
+<!-- #### Nvidia显卡
+
+对应的工具链叫[cuda](),安装 -->
 
 ## 美化系统
 
-Linux桌面大致可以分为如下几个部分
+美化系统我们大致可以分为如下几个步骤
 
-+ 窗口管理器
-+ 窗口页面
-+ 登录管理器
-+ 插件系统
+1. 美化桌面
+2. 美化登录页面
+3. 添加实用插件
+4. 美化terminal
+5. 优化快捷键
+
+一般我也会按这个次序进行设置
+
+macos风格的Gnome桌面美化一般使用的是[vinceliuice/WhiteSur-gtk-theme](https://github.com/vinceliuice/WhiteSur-gtk-theme.git)这个项目.
+这个项目其实已经可以包办大部分的美化任务了.
+
+我们可以先找个地方(比如`~/workspace/beautify`)来安装它
+
+```bash
+sudo apt install git # 安装git
+mkdir -p workspace/beautify # 构造目录
+cd workspace/beautify
+git clone https://github.com/vinceliuice/WhiteSur-gtk-theme.git --depth=1
+```
+
+### 美化桌面
+
+对于美化桌面,其实也可以认为是3个任务
+
+#### 美化主题
+
+一个是主题美化,这是一个很复杂的问题,我们知道ubuntu最开始使用的是源自debian的`deb`软件分发,但最近几个版本他们搞了个`snap`.而且还存在一种`flatpak`应用,也就是说有三种gui应用.
+
++ `deb`软件
++ `snap`软件
++ `flatpak`软件
+
+主题美化不光是自带软件的美化,还得让各种gui应用都可以获得相应的美化.这就很难了.
+
+但对于我们这种要求不高的其实就很简单.直接执行`WhiteSur-gtk-theme`项目的`./install.sh`脚本即可
+
+```bash
+cd workspace/beautify/WhiteSur-gtk-theme
+./install.sh
+./install.sh -t all  # 安装指定颜色主题,如果要全部颜色可以使用`-t all`,要指定颜色则是类似`-t [purple/pink/red/orange/yellow/green/grey]`
+./install.sh -N mojave # 改变文件管理器分栏样式,可选为默认,`mojave`和`glassy`
+./install.sh -l  # 安装对`libadwaita`软件的适配,目前并不完美
+sudo flatpak override --filesystem=xdg-config/gtk-3.0 && sudo flatpak override --filesystem=xdg-config/gtk-4.0 # 适配非snap的flatpak应用
+```
+
+#### 美化壁纸
+
+另一个桌面的美化点就是壁纸,我们可以使用[vinceliuice/WhiteSur-wallpapers](https://github.com/vinceliuice/WhiteSur-wallpapers)项目提供的macos风格的壁纸.安装好然后去设置中替换即可.
+
+```bash
+cd workspace/beautify
+git clone https://github.com/vinceliuice/WhiteSur-wallpapers.git
+cd WhiteSur-wallpapers
+# 安装会根据时间变化的桌面壁纸,
+#可以使用`-t [whitesur|monterey|ventura]`指定壁纸,默认全装;
+#可以使用`-s [1080p|2k|4k]`指定分辨率,默认4k;
+sudo ./install-gnome-backgrounds.sh
+# 安装静态壁纸
+#可以使用`-t [whitesur|monterey|ventura]`指定壁纸,默认全装;
+#可以使用`-s [1080p|2k|4k]`指定分辨率,默认4k;
+#可以使用`-c [night|light|dark]`指定颜色风格,默认全装;
+#可以使用`-n [whitesur|monterey|ventura]`安装灰化壁纸,默认不灰化;
+./install-wallpapers.sh
+```
+
+#### 美化图标
+
+最后是美化图标.实话讲ubuntu的图标确实丑.我们可以使用[vinceliuice/WhiteSur-icon-theme](https://github.com/vinceliuice/WhiteSur-icon-theme)项目提供的图标来美化它,这个图标库就很还原macos了.
+
+```bash
+cd workspace/beautify
+git clone https://github.com/vinceliuice/WhiteSur-icon-theme.git
+cd WhiteSur-icon-theme
+./install.sh
+./install.sh -a # 安装macos风格的替换图标
+./install.sh -b # 安装右上角下拉菜单的图标
+```
+
+需要注意这个库对snap应用并不原生支持
+
+### 美化登录页面
+
+对于登录界面我们还是使用`vinceliuice/WhiteSur-gtk-theme`这个项目
+
+```bash
+cd workspace/beautify/WhiteSur-gtk-theme
+sudo ./tweaks.sh -g # 我们可以增加`-nd`(不将背景变暗)或`-nb`(不将背景变模糊)或`-b default`(默认,背景变暗变模糊)来设置效果.
+```
+
+这个登录页除了ubuntu字样外就完全果里果气了.
+
+### 添加实用插件
+
+Gnome支持插件.插件可以增加功能也可以增加动画效果等.而gnome的插件搜索和安装在ubuntu下我们一般依赖于firefox浏览器.那不妨我们就先优化下firefox浏览器的体验.
+
+#### firefox浏览器优化
+
+就像ie/edge之于windows,safari之于macos,firefox浏览器是ubuntu自带的默认浏览器.讲道理它和chrome一样很好用,甚至在chrome之前它是最好用的浏览器.但由于我个人chrome用的太久,要迁移太麻烦,所以我还是会将chrome作为主力浏览器.
+
+但即便为了Gnome插件,firefox也是值得优化下体验的.这个优化主要包括2个方面
+
+> 美化
+
+依然借助`vinceliuice/WhiteSur-gtk-theme`项目,这个项目提供了对firefox的专门优化
+
+```bash
+cd workspace/beautify/WhiteSur-gtk-theme
+./tweaks.sh -f monterey # 可选flat和monterey,monterey比较紧凑
+```
+
+> 墙
+
+处理墙的问题我们只要安装[zeroomega](https://github.com/zero-peak/ZeroOmega)即可.进去网页<https://addons.mozilla.org/en-US/firefox/addon/zeroomega/>点击安装就可以了,剩下的就是设置ip和端口.
+
+#### 安装gnome浏览器插件
+
+虽然是个浏览器插件,但我们得用apt安装.
+
+```bash
+sudo apt-get install gnome-browser-connector
+```
+
+安装好后firefox的右上角插件栏中就会有一个脚印一样的图标,它就是gnome的浏览器插件,点击它就可以进入插件搜索页面.
+
+#### gnome插件安装
+
+安装gnome插件很简单,用firefox的gnome浏览器插件进入到gnome插件页面后点击插件名后面的开关到开的状态即可.
+
+当安装好后我们可以在`扩展`应用中对插件进行开关和设置,而已经安装了哪些插件可以在[installed extentions页面中查看](https://extensions.gnome.org/local/)
+
+下面是我认为比较有必要的gnome插件汇总
+
+| 插件                                                                                                          | 推荐等级    | 用途                              | 补充说明                           |
+| ------------------------------------------------------------------------------------------------------------- | ----------- | --------------------------------- | ---------------------------------- |
+| [user-themes](https://extensions.gnome.org/extension/19/user-themes/)                                         | 高          | 管理用户主题                      | ---                                |
+| [Dash to Dock](https://extensions.gnome.org/extension/307/dash-to-dock/)                                      | 高          | 一个对主题更友好的dash            | 关闭`Ubuntu Docker`,功能重复了     |
+| [Blur my Shell](https://extensions.gnome.org/extension/3193/blur-my-shell/)                                   | 高          | 一个提供桌面模糊的插件            | 建议修改`Dash to Dock`中的拐角半径 |
+| [Clipboard Indicator](https://extensions.gnome.org/extension/779/clipboard-indicator/)                        | 高          | 剪切板功能,可以保存近期的复制内容 | ---                                |
+| [Compiz alike magic lamp effect](https://extensions.gnome.org/extension/3740/compiz-alike-magic-lamp-effect/) | 中          | 仿macos的最小化动画               | ---                                |
+| [Lock Keys](https://extensions.gnome.org/extension/1532/lock-keys/)                                           | 高          | 大小写锁定提示                    | ---                                |
+| [Removable Drive Menu](https://extensions.gnome.org/extension/7/removable-drive-menu/)                        | 高          | 顶栏的移动存储操作工具            | ---                                |
+| [Bluetooth Quick Connect](https://extensions.gnome.org/extension/1401/bluetooth-quick-connect/)               | 高          | 右侧顶部下拉菜单快速连接蓝牙      | ---                                |
+| [Screenshot Tool](https://extensions.gnome.org/extension/1112/screenshot-tool/)                               | 中          | 顶栏截图工具                      | ---                                |
+| [Tray Icons: Reloaded](https://extensions.gnome.org/extension/2890/tray-icons-reloaded/)                      | 中          | docker打开的应用会移动到顶栏      |
+| [Audio output selector](https://extensions.gnome.org/extension/1400/audio-output-selector/)                   | 高 (待验证) | 右侧顶部下拉菜单音频输出设备选择  | ---                                |
+| [No overview at start-up](https://extensions.gnome.org/extension/4099/no-overview/)                           | 高          | 取消开机时自动进入overview        | ---                                |
+| [No Titlebar When Maximized](https://extensions.gnome.org/extension/4630/no-titlebar-when-maximized/)         | 低          | 应用全屏时取消标题栏              | ---                                |
+| [OpenWeather](https://extensions.gnome.org/extension/750/openweather/)                                        | 低          | 天气插件                          | ---                                |
+| [Vitals](https://extensions.gnome.org/extension/1460/vitals/)                                                 | 中          | 顶栏系统监控                      | ---                                |
 
 
 
-## 美化terminal
+除此之外,我个人推荐对系统默认插件做如下处理
+
++ 禁用Desktop Icons,这个插件会让桌面有图标(默认会有你的home目录文件夹)
+
+### 美化terminal
+
+
+### 优化快捷键
+
+我们可以安装[](https://github.com/rbreaves/kinto)这个项目来获得不同风格且统一的快捷键布局
+
+
 ## 安装监控工具
+
+
 ## 安装常用软件
 
 mpv
