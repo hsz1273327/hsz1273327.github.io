@@ -27,7 +27,6 @@ update: 2024-12-04
 + 可以的话增加一些window下的优秀交互工具
 + 尽量少折腾
 
-
 选哪个发行版答案就呼之欲出了--标题上的ubuntu.
 
 这篇文章虽然来自于折腾aipc,但本身并不涉及具体的配置和软件,因此可以看做通用美化和设置教程来使用.
@@ -52,8 +51,6 @@ GNOME桌面的结构如下图,
 比如你有一个工作区就专门用来编程,一个工作区就专门用来打游戏.拿来编程的工作区开一个vscode,开一个浏览器查资料,开一个pdf阅读器看文档,那在编程时你就只需要在这个工作区内切窗口就好了.而如果你想打游戏了,直接切工作区到打游戏的哪个工作区就行了.
 
 当然了我们想像macos一样基于应用使用也没啥问题.这只是使用习惯问题.
-
-
 
 ## 更新系统
 
@@ -369,12 +366,9 @@ sudo apt-get install gnome-browser-connector
 | [Lock Keys](https://extensions.gnome.org/extension/1532/lock-keys/)                                           | 高          | 大小写锁定提示                    | ---                                |
 | [Removable Drive Menu](https://extensions.gnome.org/extension/7/removable-drive-menu/)                        | 高          | 顶栏的移动存储操作工具            | ---                                |
 | [Bluetooth Quick Connect](https://extensions.gnome.org/extension/1401/bluetooth-quick-connect/)               | 高          | 右侧顶部下拉菜单快速连接蓝牙      | ---                                |
-| [Screenshot Tool](https://extensions.gnome.org/extension/1112/screenshot-tool/)                               | 中          | 顶栏截图工具                      | ---                                |
-| [Tray Icons: Reloaded](https://extensions.gnome.org/extension/2890/tray-icons-reloaded/)                      | 中          | docker打开的应用会移动到顶栏      |
+| [Screenshort-cut](https://extensions.gnome.org/extension/6868/screenshort-cut/)                               | 中          | 顶栏截图工具                      | ---                                |
 | [Audio output selector](https://extensions.gnome.org/extension/1400/audio-output-selector/)                   | 高 (待验证) | 右侧顶部下拉菜单音频输出设备选择  | ---                                |
-| [No overview at start-up](https://extensions.gnome.org/extension/4099/no-overview/)                           | 高          | 取消开机时自动进入overview        | ---                                |
-| [No Titlebar When Maximized](https://extensions.gnome.org/extension/4630/no-titlebar-when-maximized/)         | 低          | 应用全屏时取消标题栏              | ---                                |
-| [OpenWeather](https://extensions.gnome.org/extension/750/openweather/)                                        | 低          | 天气插件                          | ---                                |
+| [No overview at start-up](https://extensions.gnome.org/extension/4099/no-overview/)                           | 高          | 取消开机时自动进入overview        | ---                                |---                                |                    
 | [Vitals](https://extensions.gnome.org/extension/1460/vitals/)                                                 | 中          | 顶栏系统监控                      | ---                                |
 
 
