@@ -228,7 +228,6 @@ sudo reboot # 重启后生效
 2. 美化登录页面
 3. 添加实用插件
 4. 美化terminal
-5. 优化快捷键
 
 一般我也会按这个次序进行设置
 
@@ -323,7 +322,7 @@ Gnome支持插件.插件可以增加功能也可以增加动画效果等.而gnom
 
 就像ie/edge之于windows,safari之于macos,firefox浏览器是ubuntu自带的默认浏览器.讲道理它和chrome一样很好用,甚至在chrome之前它是最好用的浏览器.但由于我个人chrome用的太久,要迁移太麻烦,所以我还是会将chrome作为主力浏览器.
 
-但即便为了Gnome插件,firefox也是值得优化下体验的.这个优化主要包括2个方面
+但即便为了Gnome插件,firefox也是值得优化下体验的.这个优化主要包括3个方面
 
 > 美化
 
@@ -337,6 +336,10 @@ cd workspace/beautify/WhiteSur-gtk-theme
 > 墙
 
 处理墙的问题我们只要安装[zeroomega](https://github.com/zero-peak/ZeroOmega)即可.进去网页<https://addons.mozilla.org/en-US/firefox/addon/zeroomega/>点击安装就可以了,剩下的就是设置ip和端口.
+
+> 内建翻译
+
+firefox有内建翻译,但不支持中文,我们可以安装插件[划词翻译](https://addons.mozilla.org/zh-CN/firefox/addon/hcfy/?utm_source=addons.mozilla.org&utm_medium=referral&utm_content=search)借助谷歌百度等的翻译来实现和chrome中的相同效果
 
 #### 安装gnome浏览器插件
 
@@ -352,26 +355,31 @@ sudo apt-get install gnome-browser-connector
 
 安装gnome插件很简单,用firefox的gnome浏览器插件进入到gnome插件页面后点击插件名后面的开关到开的状态即可.
 
-当安装好后我们可以在`扩展`应用中对插件进行开关和设置,而已经安装了哪些插件可以在[installed extentions页面中查看](https://extensions.gnome.org/local/)
+当安装好后我们可以在`扩展`应用中对插件进行开关和设置,而已经安装了哪些插件可以在[installed extentions页面中查看](https://extensions.gnome.org/local/).
+
+需要注意我们的系统`ubuntu 2024.04`使用的是`Gnome 46`,插件需要支持这个版本才能安装.
 
 下面是我认为比较有必要的gnome插件汇总
 
-| 插件                                                                                                          | 推荐等级    | 用途                              | 补充说明                           |
-| ------------------------------------------------------------------------------------------------------------- | ----------- | --------------------------------- | ---------------------------------- |
-| [user-themes](https://extensions.gnome.org/extension/19/user-themes/)                                         | 高          | 管理用户主题                      | ---                                |
-| [Dash to Dock](https://extensions.gnome.org/extension/307/dash-to-dock/)                                      | 高          | 一个对主题更友好的dash            | 关闭`Ubuntu Docker`,功能重复了     |
-| [Blur my Shell](https://extensions.gnome.org/extension/3193/blur-my-shell/)                                   | 高          | 一个提供桌面模糊的插件            | 建议修改`Dash to Dock`中的拐角半径 |
-| [Clipboard Indicator](https://extensions.gnome.org/extension/779/clipboard-indicator/)                        | 高          | 剪切板功能,可以保存近期的复制内容 | ---                                |
-| [Compiz alike magic lamp effect](https://extensions.gnome.org/extension/3740/compiz-alike-magic-lamp-effect/) | 中          | 仿macos的最小化动画               | ---                                |
-| [Lock Keys](https://extensions.gnome.org/extension/1532/lock-keys/)                                           | 高          | 大小写锁定提示                    | ---                                |
-| [Removable Drive Menu](https://extensions.gnome.org/extension/7/removable-drive-menu/)                        | 高          | 顶栏的移动存储操作工具            | ---                                |
-| [Bluetooth Quick Connect](https://extensions.gnome.org/extension/1401/bluetooth-quick-connect/)               | 高          | 右侧顶部下拉菜单快速连接蓝牙      | ---                                |
-| [Screenshort-cut](https://extensions.gnome.org/extension/6868/screenshort-cut/)                               | 中          | 顶栏截图工具                      | ---                                |
-| [Audio output selector](https://extensions.gnome.org/extension/1400/audio-output-selector/)                   | 高 (待验证) | 右侧顶部下拉菜单音频输出设备选择  | ---                                |
-| [No overview at start-up](https://extensions.gnome.org/extension/4099/no-overview/)                           | 高          | 取消开机时自动进入overview        | ---                                |---                                |                    
-| [Vitals](https://extensions.gnome.org/extension/1460/vitals/)                                                 | 中          | 顶栏系统监控                      | ---                                |
-
-
+| 插件                                                                                                          | 推荐等级 | 用途                              | 补充说明                           |
+| ------------------------------------------------------------------------------------------------------------- | -------- | --------------------------------- | ---------------------------------- |
+| [user-themes](https://extensions.gnome.org/extension/19/user-themes/)                                         | 高       | 管理用户主题                      | ---                                |
+| [Dash to Dock](https://extensions.gnome.org/extension/307/dash-to-dock/)                                      | 高       | 一个对主题更友好的dash            | 关闭`Ubuntu Docker`,功能重复了     |
+| [Blur my Shell](https://extensions.gnome.org/extension/3193/blur-my-shell/)                                   | 高       | 一个提供桌面模糊的插件            | 建议修改`Dash to Dock`中的拐角半径 |
+| [Clipboard Indicator](https://extensions.gnome.org/extension/779/clipboard-indicator/)                        | 高       | 剪切板功能,可以保存近期的复制内容 | ---                                |
+| [Lock Keys](https://extensions.gnome.org/extension/1532/lock-keys/)                                           | 高       | 大小写锁定提示                    | ---                                |
+| [Removable Drive Menu](https://extensions.gnome.org/extension/7/removable-drive-menu/)                        | 高       | 顶栏的移动存储操作工具            | ---                                |
+| [Screenshort-cut](https://extensions.gnome.org/extension/6868/screenshort-cut/)                               | 中       | 顶栏截图工具                      | ---                                |
+| [Vitals](https://extensions.gnome.org/extension/1460/vitals/)                                                 | 中       | 顶栏系统监控                      | ---                                |
+| [GSConnect](https://extensions.gnome.org/extension/1319/gsconnect/)                                           | 高       | 快速连接移动端设备                | ---                                |
+| [Todoit](https://extensions.gnome.org/extension/7538/todo-list/)                                              | 低       | 顶部todolist                      | ---                                |
+| [Lunar Calendar 农历](https://extensions.gnome.org/extension/675/lunar-calendar/)                             | 中       | 日历改为农历                      | ---                                |
+| [Compiz alike magic lamp effect](https://extensions.gnome.org/extension/3740/compiz-alike-magic-lamp-effect/) | 中       | 仿macos的最小化动画               | ---                                |
+| [No overview at start-up](https://extensions.gnome.org/extension/4099/no-overview/)                           | 高       | 取消开机时自动进入overview        | ---                                |
+| [gTile](https://extensions.gnome.org/extension/28/gtile/)                                                     | 高       | 多应用划分窗口                    | ---                                |
+| [Input Method Panel](https://extensions.gnome.org/extension/261/kimpanel/)                                    | 低       | 输入法栏优化                      | ---                                |
+| [Click to close overview](https://extensions.gnome.org/extension/3826/click-to-close-overview/)               | 中       | 点击空白处关闭预览                | ---                                |
+[Hide Top Bar](https://extensions.gnome.org/extension/545/hide-top-bar/)|低|自动隐藏顶部工具栏
 
 除此之外,我个人推荐对系统默认插件做如下处理
 
@@ -379,11 +387,38 @@ sudo apt-get install gnome-browser-connector
 
 ### 美化terminal
 
+ubuntu默认就是zsh,美化terminal其实也分成两个部分:
+
+#### terminal本体的美化
+
+
+#### zsh的美化
+
+
+## 系统优化
+
+ubuntu默认状态下是很原始的,我们需要做如下操作才能让它用起来舒服些
+
+### 优化蓝牙连接
+
+
 
 ### 优化快捷键
 
-我们可以安装[](https://github.com/rbreaves/kinto)这个项目来获得不同风格且统一的快捷键布局
+快捷键优化我们需要分为在桌面环境和在terminal中,
 
+下面是我列出的比较核心的几个快捷键操作
+
+操作|按键组合|
+---|---
+
+如果你不在于wayland,可以接受桌面环境运行在x11上,那我们也可以安装[kinto](https://github.com/rbreaves/kinto)这个项目来获得不同风格且统一的快捷键布局.
+
+
+
+### 优化输入法
+
+https://www.debuggerx.com/2023/09/20/fcitx5-customizer/
 
 ## 安装监控工具
 
@@ -393,5 +428,7 @@ sudo apt-get install gnome-browser-connector
 mpv
 
 ## 安装docker
+
+
 ## 安装常用开发环境
 ## 安装steam
