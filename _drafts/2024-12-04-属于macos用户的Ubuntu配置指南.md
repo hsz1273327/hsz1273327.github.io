@@ -391,9 +391,89 @@ ubuntu默认就是zsh,美化terminal其实也分成两个部分:
 
 #### terminal本体的美化
 
-
 #### zsh的美化
 
+> 安装`oh-my-zsh`
+
+```bash
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+```
+
+> zsh的经典插件安装
+
++ autojump
+
+    ```bash
+    sudo apt install autojump
+    ```
+
++ zsh-autosuggestions
+
+    ```bash
+    git clone https://github.com/zsh-users/zsh-autosuggestions $ZSH_CUSTOM/plugins/zsh-autosuggestions
+    ```
+
++ `zsh-syntax-highlighting`
+
+    ```bash
+    git clone https://github.com/zsh-users/zsh-syntax-highlighting $ZSH_CUSTOM/plugins/zsh-syntax-highlighting
+    ```
+
+在`~/.zshrc`中配置启用这些插件:
+
+```txt
+...
+plugins=(git autojump zsh-autosuggestions zsh-syntax-highlighting)
+...
+```
+
+> 安装主题
+
+我们使用`powerlevel10k`这个主题
+
+```bash
+git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k
+```
+
+在`~/.zshrc`中配置启用新的主题
+
+```txt
+ZSH_THEME="powerlevel10k/powerlevel10k"
+```
+
+关闭后重启终端,会有几个问题:
+
+```bash
+# 这看起来像菱形吗？
+Does this look like a diamond (rotated square)?
+
+# 这看起来像一个锁吗？
+Does this look like a lock?
+
+# 这看起来像一个向上的箭头吗？
+Does this look like an upwards arrow?
+
+# 这些图标都正常显示放在 x 之间，没有重叠吗？
+Do all these icons fit between the crosses?
+```
+
+回答好后就选择终端前面的提示样式.下面是推荐的样式
+
+项目|推荐选择|说明
+---|---|---
+Prompt Style|Rainbow|选择提示样式
+Character Set| Unicode| 选择字符集
+Show current time?|24-hour format| 选择提示时间样式
+Prompt Separators| Round|提示分隔符的样式
+Prompt Heads| Round |选择提示箭头的样式
+Prompt Tails| Slanted| 选择提示尾样式
+Prompt Height| Two line| 提示是否独立一行显示
+Prompt Spacing| Sparse|行间距离
+Icons | Many icons| 是否开启图标
+Prompt Flow| Concise|提示细节
+Enable Transient Prompt| Yes |是否启用瞬时提示
+
+就行了,要重置可以执行`p10k configure`再来一遍
 
 ## 系统优化
 
@@ -429,6 +509,9 @@ mpv
 
 ## 安装docker
 
+## 安装android环境
+
+## 安装steam
 
 ## 安装常用开发环境
-## 安装steam
+
