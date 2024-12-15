@@ -265,6 +265,7 @@ cd workspace/beautify/WhiteSur-gtk-theme
 ./install.sh -t all  # 安装指定颜色主题,如果要全部颜色可以使用`-t all`,要指定颜色则是类似`-t [purple/pink/red/orange/yellow/green/grey]`
 ./install.sh -N mojave # 改变文件管理器分栏样式,可选为默认,`mojave`和`glassy`
 ./install.sh -l  # 安装对`libadwaita`软件的适配,目前并不完美
+sudo apt install flatpak
 sudo flatpak override --filesystem=xdg-config/gtk-3.0 && sudo flatpak override --filesystem=xdg-config/gtk-4.0 # 适配非snap的flatpak应用
 ```
 
@@ -373,12 +374,12 @@ sudo apt-get install gnome-browser-connector
 | [Vitals](https://extensions.gnome.org/extension/1460/vitals/)                                                 | 中       | 顶栏系统监控                      | ---                                |
 | [GSConnect](https://extensions.gnome.org/extension/1319/gsconnect/)                                           | 高       | 快速连接移动端设备                | ---                                |
 | [Todoit](https://extensions.gnome.org/extension/7538/todo-list/)                                              | 低       | 顶部todolist                      | ---                                |
-| [Lunar Calendar 农历](https://extensions.gnome.org/extension/675/lunar-calendar/)                             | 中       | 日历改为农历                      | ---                                |
+| [Lunar Calendar 农历](https://extensions.gnome.org/extension/675/lunar-calendar/)                             | 中       | 日历改为农历                      | 需要先额外安装[Nei/ChineseCalendar](https://gitlab.gnome.org/Nei/ChineseCalendar/-/archive/20240107/ChineseCalendar-20240107.tar.gz)                              |
 | [Compiz alike magic lamp effect](https://extensions.gnome.org/extension/3740/compiz-alike-magic-lamp-effect/) | 中       | 仿macos的最小化动画               | ---                                |
 | [No overview at start-up](https://extensions.gnome.org/extension/4099/no-overview/)                           | 高       | 取消开机时自动进入overview        | ---                                |
 | [gTile](https://extensions.gnome.org/extension/28/gtile/)                                                     | 高       | 多应用划分窗口                    | ---                                |
-| [Input Method Panel](https://extensions.gnome.org/extension/261/kimpanel/)                                    | 低       | 输入法栏优化                      | ---                                |
-| [Click to close overview](https://extensions.gnome.org/extension/3826/click-to-close-overview/)               | 中       | 点击空白处关闭预览                | ---                                |
+| [Input Method Panel](https://extensions.gnome.org/extension/261/kimpanel/)                                    |高      | 输入法相关                    | ---                                |
+| [Click to close overview](https://extensions.gnome.org/extension/3826/click-to-close-overview/)               | 低       | 点击空白处关闭预览                | ---                                |
 [Hide Top Bar](https://extensions.gnome.org/extension/545/hide-top-bar/)|低|自动隐藏顶部工具栏
 
 除此之外,我个人推荐对系统默认插件做如下处理
@@ -392,6 +393,16 @@ ubuntu默认就是zsh,美化terminal其实也分成两个部分:
 #### terminal本体的美化
 
 #### zsh的美化
+
+我们还是把bash环境替换为zsh,毕竟确实更好用.
+
+```bash
+# 安装 zsh
+sudo apt install zsh
+
+# 更改默认shell为zsh
+chsh -s /bin/zsh
+```
 
 > 安装`oh-my-zsh`
 
@@ -465,10 +476,13 @@ Prompt Style|Rainbow|选择提示样式
 Character Set| Unicode| 选择字符集
 Show current time?|24-hour format| 选择提示时间样式
 Prompt Separators| Round|提示分隔符的样式
-Prompt Heads| Round |选择提示箭头的样式
-Prompt Tails| Slanted| 选择提示尾样式
+Prompt Heads| Blurred |选择提示箭头的样式
+Prompt Tails| Flat| 选择提示尾样式
 Prompt Height| Two line| 提示是否独立一行显示
-Prompt Spacing| Sparse|行间距离
+Prompt Connection|Disconnected|头尾连接样式
+Prompt Frame| Left| 两行间的联系提示样式
+Frame Color| Light| 两行间的联系提示颜色
+Prompt Spacing| Compact|行间距离
 Icons | Many icons| 是否开启图标
 Prompt Flow| Concise|提示细节
 Enable Transient Prompt| Yes |是否启用瞬时提示
@@ -479,9 +493,62 @@ Enable Transient Prompt| Yes |是否启用瞬时提示
 
 ubuntu默认状态下是很原始的,我们需要做如下操作才能让它用起来舒服些
 
+## 安装监控工具
+
+对于cpu,gpu这类常规设备来说,监控就很简单,用系统自带的`系统监视器`即可.但对于gpu,系统监视器就无能为力了.
+
+### amd显卡的监控
+
+amdGPU状态的监控使用[AMD GPU TOP](https://github.com/Umio-Yasuno/amdgpu_top).我们可以直接在项目的release中下载`.deb`文件,双击安装即可
+
+这个工具同样可以监控核显
+
+<!-- ### Nvidia显卡的监控
+
+nvidia-smi -->
+
 ### 优化蓝牙连接
 
+ubuntu中蓝牙设备在机器长期不用后会自动断开连接.这对于一般的设备来说挺好,毕竟还省电了.但对于鼠标那就尴尬了.
 
+为了让蓝牙设备不丢失,可以这样设置
+
+1. 从terminal中进入蓝牙的设置文件`cd /etc/bluetooth`
+2. 找到其中的`main.conf`,在`[LE]`块下修改`Autoconnecttimeout=0`
+
+### 优化输入法
+
+在linux桌面环境下输入法似乎是一个比较麻烦的问题.在Linux系统上常见的输入法框架(Keyboard input method system)有三种:
+
++ IBus(Intelligent Input Bus),也是ubuntu的默认输入法
++ Fcitx(FlexibleInput Method Framework),谷歌搜狗等用的框架,
++ XIM(X Input Method).一般没啥用
+
+上面的3种输入法框架Ubuntu 24.04都自带,但相对而言Fcitx可能是更智能的选择,因为字库比较多.
+
+我们可以用如下步骤设置出一个相对好用的中文输入环境(参考自[大佬DebuggerX的这篇博客](https://www.debuggerx.com/2023/09/20/fcitx5-customizer/))
+
+1. 在`设置->系统->区域与语言`中设置中文环境.
+2. 在`语言支持`中选择默认的输入法框架为`Fcitx 5`
+3. 挂着全局代理执行如下命令
+
+    ```bash
+    curl -sSL https://www.debuggerx.com/fcitx5_customizer/fcitx5_customizer.sh | bash -s -- recommend
+    ```
+
+4. 之后除了去掉`搜狗词库`外都按推荐的来即可
+
+5. 在`.zshrc`中设置环境变量
+
+    ```bash
+    export XMODIFIERS=@im=fcitx
+    export QT_IM_MODULE=fcitx
+    export GTK_IM_MODULE=fcitx
+    ```
+
+6. 安装Gnome插件`Input Method Panel`
+
+重启过后就ok了
 
 ### 优化快捷键
 
@@ -495,12 +562,6 @@ ubuntu默认状态下是很原始的,我们需要做如下操作才能让它用�
 如果你不在于wayland,可以接受桌面环境运行在x11上,那我们也可以安装[kinto](https://github.com/rbreaves/kinto)这个项目来获得不同风格且统一的快捷键布局.
 
 
-
-### 优化输入法
-
-https://www.debuggerx.com/2023/09/20/fcitx5-customizer/
-
-## 安装监控工具
 
 
 ## 安装常用软件
