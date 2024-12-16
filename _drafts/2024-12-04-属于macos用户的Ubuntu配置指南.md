@@ -234,12 +234,12 @@ sudo reboot # 重启后生效
 macos风格的Gnome桌面美化一般使用的是[vinceliuice/WhiteSur-gtk-theme](https://github.com/vinceliuice/WhiteSur-gtk-theme.git)这个项目.
 这个项目其实已经可以包办大部分的美化任务了.
 
-我们可以先找个地方(比如`~/workspace/beautify`)来安装它
+我们可以先找个地方(比如`~/workspace/init_s'o'u'r'c'e`)来安装它
 
 ```bash
 sudo apt install git # 安装git
-mkdir -p workspace/beautify # 构造目录
-cd workspace/beautify
+mkdir -p workspace/init_source # 构造目录
+cd workspace/init_source
 git clone https://github.com/vinceliuice/WhiteSur-gtk-theme.git --depth=1
 ```
 
@@ -260,7 +260,7 @@ git clone https://github.com/vinceliuice/WhiteSur-gtk-theme.git --depth=1
 但对于我们这种要求不高的其实就很简单.直接执行`WhiteSur-gtk-theme`项目的`./install.sh`脚本即可
 
 ```bash
-cd workspace/beautify/WhiteSur-gtk-theme
+cd workspace/init_source/WhiteSur-gtk-theme
 ./install.sh
 ./install.sh -t all  # 安装指定颜色主题,如果要全部颜色可以使用`-t all`,要指定颜色则是类似`-t [purple/pink/red/orange/yellow/green/grey]`
 ./install.sh -N mojave # 改变文件管理器分栏样式,可选为默认,`mojave`和`glassy`
@@ -274,7 +274,7 @@ sudo flatpak override --filesystem=xdg-config/gtk-3.0 && sudo flatpak override -
 另一个桌面的美化点就是壁纸,我们可以使用[vinceliuice/WhiteSur-wallpapers](https://github.com/vinceliuice/WhiteSur-wallpapers)项目提供的macos风格的壁纸.安装好然后去设置中替换即可.
 
 ```bash
-cd workspace/beautify
+cd workspace/init_source
 git clone https://github.com/vinceliuice/WhiteSur-wallpapers.git
 cd WhiteSur-wallpapers
 # 安装会根据时间变化的桌面壁纸,
@@ -294,7 +294,7 @@ sudo ./install-gnome-backgrounds.sh
 最后是美化图标.实话讲ubuntu的图标确实丑.我们可以使用[vinceliuice/WhiteSur-icon-theme](https://github.com/vinceliuice/WhiteSur-icon-theme)项目提供的图标来美化它,这个图标库就很还原macos了.
 
 ```bash
-cd workspace/beautify
+cd workspace/init_source
 git clone https://github.com/vinceliuice/WhiteSur-icon-theme.git
 cd WhiteSur-icon-theme
 ./install.sh
@@ -309,7 +309,7 @@ cd WhiteSur-icon-theme
 对于登录界面我们还是使用`vinceliuice/WhiteSur-gtk-theme`这个项目
 
 ```bash
-cd workspace/beautify/WhiteSur-gtk-theme
+cd workspace/init_source/WhiteSur-gtk-theme
 sudo ./tweaks.sh -g # 我们可以增加`-nd`(不将背景变暗)或`-nb`(不将背景变模糊)或`-b default`(默认,背景变暗变模糊)来设置效果.
 ```
 
@@ -330,7 +330,7 @@ Gnome支持插件.插件可以增加功能也可以增加动画效果等.而gnom
 依然借助`vinceliuice/WhiteSur-gtk-theme`项目,这个项目提供了对firefox的专门优化
 
 ```bash
-cd workspace/beautify/WhiteSur-gtk-theme
+cd workspace/i'n'i't/WhiteSur-gtk-theme
 ./tweaks.sh -f monterey # 可选flat和monterey,monterey比较紧凑
 ```
 
@@ -362,33 +362,41 @@ sudo apt-get install gnome-browser-connector
 
 下面是我认为比较有必要的gnome插件汇总
 
-| 插件                                                                                                          | 推荐等级 | 用途                              | 补充说明                           |
-| ------------------------------------------------------------------------------------------------------------- | -------- | --------------------------------- | ---------------------------------- |
-| [user-themes](https://extensions.gnome.org/extension/19/user-themes/)                                         | 高       | 管理用户主题                      | ---                                |
-| [Dash to Dock](https://extensions.gnome.org/extension/307/dash-to-dock/)                                      | 高       | 一个对主题更友好的dash            | 关闭`Ubuntu Docker`,功能重复了     |
-| [Blur my Shell](https://extensions.gnome.org/extension/3193/blur-my-shell/)                                   | 高       | 一个提供桌面模糊的插件            | 建议修改`Dash to Dock`中的拐角半径 |
-| [Clipboard Indicator](https://extensions.gnome.org/extension/779/clipboard-indicator/)                        | 高       | 剪切板功能,可以保存近期的复制内容 | ---                                |
-| [Lock Keys](https://extensions.gnome.org/extension/1532/lock-keys/)                                           | 高       | 大小写锁定提示                    | ---                                |
-| [Removable Drive Menu](https://extensions.gnome.org/extension/7/removable-drive-menu/)                        | 高       | 顶栏的移动存储操作工具            | ---                                |
-| [Screenshort-cut](https://extensions.gnome.org/extension/6868/screenshort-cut/)                               | 中       | 顶栏截图工具                      | ---                                |
-| [Vitals](https://extensions.gnome.org/extension/1460/vitals/)                                                 | 中       | 顶栏系统监控                      | ---                                |
-| [GSConnect](https://extensions.gnome.org/extension/1319/gsconnect/)                                           | 高       | 快速连接移动端设备                | ---                                |
-| [Todoit](https://extensions.gnome.org/extension/7538/todo-list/)                                              | 低       | 顶部todolist                      | ---                                |
-| [Lunar Calendar 农历](https://extensions.gnome.org/extension/675/lunar-calendar/)                             | 中       | 日历改为农历                      | 需要先额外安装[Nei/ChineseCalendar](https://gitlab.gnome.org/Nei/ChineseCalendar/-/archive/20240107/ChineseCalendar-20240107.tar.gz)                              |
-| [Compiz alike magic lamp effect](https://extensions.gnome.org/extension/3740/compiz-alike-magic-lamp-effect/) | 中       | 仿macos的最小化动画               | ---                                |
-| [No overview at start-up](https://extensions.gnome.org/extension/4099/no-overview/)                           | 高       | 取消开机时自动进入overview        | ---                                |
-| [gTile](https://extensions.gnome.org/extension/28/gtile/)                                                     | 高       | 多应用划分窗口                    | ---                                |
-| [Input Method Panel](https://extensions.gnome.org/extension/261/kimpanel/)                                    |高      | 输入法相关                    | ---                                |
-| [Click to close overview](https://extensions.gnome.org/extension/3826/click-to-close-overview/)               | 低       | 点击空白处关闭预览                | ---                                |
-[Hide Top Bar](https://extensions.gnome.org/extension/545/hide-top-bar/)|低|自动隐藏顶部工具栏
+| 插件                                                                                                          | 推荐等级 | 用途                              | 补充说明                                                                                                                             |
+| ------------------------------------------------------------------------------------------------------------- | -------- | --------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
+| [user-themes](https://extensions.gnome.org/extension/19/user-themes/)                                         | 高       | 管理用户主题                      | ---                                                                                                                                  |
+| [Dash to Dock](https://extensions.gnome.org/extension/307/dash-to-dock/)                                      | 高       | 一个对主题更友好的dash            | 关闭`Ubuntu Docker`,功能重复了                                                                                                       |
+| [Blur my Shell](https://extensions.gnome.org/extension/3193/blur-my-shell/)                                   | 高       | 一个提供桌面模糊的插件            | 建议修改`Dash to Dock`中的拐角半径                                                                                                   |
+| [Clipboard Indicator](https://extensions.gnome.org/extension/779/clipboard-indicator/)                        | 高       | 剪切板功能,可以保存近期的复制内容 | ---                                                                                                                                  |
+| [Lock Keys](https://extensions.gnome.org/extension/1532/lock-keys/)                                           | 高       | 大小写锁定提示                    | ---                                                                                                                                  |
+| [Removable Drive Menu](https://extensions.gnome.org/extension/7/removable-drive-menu/)                        | 高       | 顶栏的移动存储操作工具            | ---                                                                                                                                  |
+| [Screenshort-cut](https://extensions.gnome.org/extension/6868/screenshort-cut/)                               | 中       | 顶栏截图工具                      | ---                                                                                                                                  |
+| [Vitals](https://extensions.gnome.org/extension/1460/vitals/)                                                 | 中       | 顶栏系统监控                      | ---                                                                                                                                  |
+| [GSConnect](https://extensions.gnome.org/extension/1319/gsconnect/)                                           | 高       | 快速连接移动端设备                | 需要配合app`kde connect`                                                                                                             |
+| [Todoit](https://extensions.gnome.org/extension/7538/todo-list/)                                              | 低       | 顶部todolist                      | ---                                                                                                                                  |
+| [Lunar Calendar 农历](https://extensions.gnome.org/extension/675/lunar-calendar/)                             | 中       | 日历改为农历                      | 需要先额外安装[Nei/ChineseCalendar](https://gitlab.gnome.org/Nei/ChineseCalendar/-/archive/20240107/ChineseCalendar-20240107.tar.gz) |
+| [Compiz alike magic lamp effect](https://extensions.gnome.org/extension/3740/compiz-alike-magic-lamp-effect/) | 中       | 仿macos的最小化动画               | ---                                                                                                                                  |
+| [No overview at start-up](https://extensions.gnome.org/extension/4099/no-overview/)                           | 高       | 取消开机时自动进入overview        | ---                                                                                                                                  |
+| [gTile](https://extensions.gnome.org/extension/28/gtile/)                                                     | 高       | 多应用划分窗口                    | ---                                                                                                                                  |
+| [Input Method Panel](https://extensions.gnome.org/extension/261/kimpanel/)                                    | 高       | 输入法相关                        | ---                                                                                                                                  |
+| [Click to close overview](https://extensions.gnome.org/extension/3826/click-to-close-overview/)               | 低       | 点击空白处关闭预览                | ---                                                                                                                                  |
+| [Hide Top Bar](https://extensions.gnome.org/extension/545/hide-top-bar/)                                      | 低       | 自动隐藏顶部工具栏                | ---                                                                                                                                  |
 
 除此之外,我个人推荐对系统默认插件做如下处理
 
 + 禁用Desktop Icons,这个插件会让桌面有图标(默认会有你的home目录文件夹)
 
+### 增加空格键预览功能
+
+mac下一个经典操作就是选中目标后按空格键
+
+```bash
+sudo apt-get install gnome-sushi unoconv
+```
+
 ### 美化terminal
 
-ubuntu默认就是zsh,美化terminal其实也分成两个部分:
+ubuntu默认就是zsh,美化terminal其实也分成两个部分
 
 #### terminal本体的美化
 
@@ -470,22 +478,22 @@ Do all these icons fit between the crosses?
 
 回答好后就选择终端前面的提示样式.下面是推荐的样式
 
-项目|推荐选择|说明
----|---|---
-Prompt Style|Rainbow|选择提示样式
-Character Set| Unicode| 选择字符集
-Show current time?|24-hour format| 选择提示时间样式
-Prompt Separators| Round|提示分隔符的样式
-Prompt Heads| Blurred |选择提示箭头的样式
-Prompt Tails| Flat| 选择提示尾样式
-Prompt Height| Two line| 提示是否独立一行显示
-Prompt Connection|Disconnected|头尾连接样式
-Prompt Frame| Left| 两行间的联系提示样式
-Frame Color| Light| 两行间的联系提示颜色
-Prompt Spacing| Compact|行间距离
-Icons | Many icons| 是否开启图标
-Prompt Flow| Concise|提示细节
-Enable Transient Prompt| Yes |是否启用瞬时提示
+| 项目                    | 推荐选择       | 说明                 |
+| ----------------------- | -------------- | -------------------- |
+| Prompt Style            | Rainbow        | 选择提示样式         |
+| Character Set           | Unicode        | 选择字符集           |
+| Show current time?      | 24-hour format | 选择提示时间样式     |
+| Prompt Separators       | Round          | 提示分隔符的样式     |
+| Prompt Heads            | Blurred        | 选择提示箭头的样式   |
+| Prompt Tails            | Flat           | 选择提示尾样式       |
+| Prompt Height           | Two line       | 提示是否独立一行显示 |
+| Prompt Connection       | Disconnected   | 头尾连接样式         |
+| Prompt Frame            | Left           | 两行间的联系提示样式 |
+| Frame Color             | Light          | 两行间的联系提示颜色 |
+| Prompt Spacing          | Compact        | 行间距离             |
+| Icons                   | Many icons     | 是否开启图标         |
+| Prompt Flow             | Concise        | 提示细节             |
+| Enable Transient Prompt | Yes            | 是否启用瞬时提示     |
 
 就行了,要重置可以执行`p10k configure`再来一遍
 
@@ -552,27 +560,146 @@ ubuntu中蓝牙设备在机器长期不用后会自动断开连接.这对于一�
 
 ### 优化快捷键
 
-快捷键优化我们需要分为在桌面环境和在terminal中,
+快捷键优化我们需要分为在桌面环境和在terminal中,在ubuntu中主要的快捷键逻辑还是跟随的windows,这就有点尴尬了.我个人会对快捷键做出如下设置
 
-下面是我列出的比较核心的几个快捷键操作
+1. 左侧contrl和win键互换映射
 
-操作|按键组合|
----|---
+2. 重新设置一些系统级快捷键
+
+| 操作       | 按键组合 | 需要修改的位置 |
+| ---------- | -------- | -------------- |
+| 搜索       | cmd + C  | 系统,terminal  |
+| 输入法切换 | cmd + V  | 系统,terminal  |
+
+
+3. 重新设置一些terminal快捷键
+
+| 操作 | 按键组合 | 需要修改的位置 |
+| ---- | -------- | -------------- |
+| 复制 | cmd + C  | 系统,terminal  |
+| 黏贴 | cmd + V  | 系统,terminal  |
+| 保存 |
+
+4. 设置截图
+
+| 操作 | 按键组合 | 需要修改的位置 |
+| ---- | -------- | -------------- |
+| 复制 | cmd + C  | 系统,terminal  |
+| 黏贴 | cmd + V  | 系统,terminal  |
+| 保存 |
 
 如果你不在于wayland,可以接受桌面环境运行在x11上,那我们也可以安装[kinto](https://github.com/rbreaves/kinto)这个项目来获得不同风格且统一的快捷键布局.
 
+## 远程桌面
 
+远程桌面分为本地开放远程桌面给远端连接和本地连接远端远程桌面.
 
+ubuntu自带远程桌面服务,我们打开来就可以了
 
-## 安装常用软件
+1. 打开`设置`,找到共享,点击`远程桌面`
+2. 启用`远程桌面`,不要钩选vnc
+3. 启用`远程控制`
+4. 在`如何连接`中将设备名设置为你的机器名,地址设置为`ms-rd://<设备名>.local`
+5. 在登录验证中设置用户名和密码
 
-mpv
+这样在本地的设置就好了,之后我们在ddnsto中进行设置
 
-## 安装docker
+1. 进入`我的设备`,选择`远程应用`,点`+`
+2. 选择`远程rdp`
+3. 设置应用名(随便写);ip为上面开启远程桌面的机器在内网中的ip;端口不变;用户名和密码就是你再上面设置的对应值,NLA认证设置为True即可.
 
-## 安装android环境
-
-## 安装steam
+之后要远程使用的时候就点击这个远程应用即可
 
 ## 安装常用开发环境
 
+## 安装常用软件
+
+linux下我会尽量推荐开源工具.开源配开源嘛,他好我也好.
+
+下面是一些常用软件的安装信息
+
+| 分类       | 软件                            | 渠道                                                                                       | 说明                                                         |
+| ---------- | ------------------------------- | ------------------------------------------------------------------------------------------ | ------------------------------------------------------------ |
+| 平台       | steam                           | 应用商店                                                                                   | 必装,很多windows下的软件可以靠它在linux下运行,并不仅仅是游戏 |
+| 平台       | docker                          | [官网指导](https://docs.docker.com/engine/install/ubuntu/)                                 | 必装,linux下开发神器                                         |
+| 平台       | [Waydroid](https://waydro.id/)  | [官网指导](https://docs.waydro.id/usage/install-on-desktops#ubuntu-debian-and-derivatives) | android模拟器                                                |
+| 生产力工具 | gimp                            | 应用商店                                                                                   | 开源的图像编辑软件,ps平替                                    |
+| 生产力工具 | opencad                         | 应用商店                                                                                   | 开源的工程制图,autocad平替                                   |
+| 生产力工具 | blender                         | steam                                                                                      | 开源的3d建模渲染工具,maya平替                                |
+| 生产力工具 | godot                           | steam                                                                                      | 开源的轻量级游戏引擎                                         |
+| 生产力工具 | unrealengine5                   | [官网下载](https://www.unrealengine.com/zh-CN/download)                                    | 大名鼎鼎的虚幻引擎,                                          |
+| 生产力工具 | [shotcut](https://shotcut.org/) | 应用商店                                                                                   | 轻量级的开源视频剪辑工具                                     |
+| 生产力工具 | DaVinci Resolve                 | [官网下载](http://www.blackmagicdesign.com/cn/products/davinciresolve)                     | 大名鼎鼎的生产级视频剪辑工具达芬奇,有免费的社区版            |
+| 生产力工具 | 飞书                            | [官网下载](https://www.feishu.cn/download)                                                 | 知名的办公协作工具                                           |
+| 生产力工具 | 微信                            | [官网下载](https://linux.weixin.qq.com/)                                                   | 知名的聊天工具                                               |
+| 生产力工具 | wps                             | [官网下载](https://www.wps.cn/product/wpslinux)                                            | 知名的office套件                                             |
+| 生产力工具 | obs                             | [官网下载](https://obsproject.com/)                                                        | 知名的开源直播录屏工具                                       |
+| 娱乐工具   | mpv                             | [官网指导](https://mpv.io/installation/)                                                   | 知名的开源视频播放器                                         |
+| 娱乐工具   | YesPlayMusic                    | [官网下载](https://github.com/qier222/YesPlayMusic)                                        | 网易云音乐的开源第三方客户端                                 |
+
+### Waydroid环境的补充
+
+安装waydroid我们可以简单的使用如下命令
+
+```bash
+# 导入 repo 源头、
+curl https://repo.waydro.id | sudo bash
+
+# 安装 waydroid
+sudo apt install waydroid -y
+```
+
+在安装好后我们可以适当优化下界面
+
+```bash
+waydroid prop set persist.waydroid.width 480
+waydroid prop set persist.waydroid.height 900
+
+waydroid session stop
+```
+
+这个模拟器虽然很丝滑,但是默认情况下是没法跑ARM的APK.而国内很少有原生的x86 APP,所以还是有必要安装一下ARM相关的转译依赖.
+
+```bash
+cd workspace/init_source
+git clone https://github.com/casualsnek/waydroid_script
+cd waydroid_script
+python -m venv env # 给项目构造虚拟环境并执行设置脚本
+source env/bin/activate
+python -m pip install --upgrade pip -i https://mirrors.tuna.tsinghua.edu.cn/pypi/web/simple 
+python -m pip install -r requirements.txt -i https://mirrors.tuna.tsinghua.edu.cn/pypi/web/simple
+python main.py
+```
+
+进入到命令行图形化界面后我们选择
+
++ 安卓版本: android 11
++ action: Install
++ app:
+    + microg
+    + libndk
+    + magisk
+    + fdroidpriv
+    + libhoudini
+    + widevine
+
+安装完毕后重启
+
+```bash
+# 当前会话关机
+waydroid session stop
+# 重启 waydroid 服务
+sudo systemctl restart waydroid-container.service
+```
+
+这样后续app就可以正常安装android软件了
+
+```bash
+waydroid app install <app>.apk
+```
+
+我们也可以给waydroid模拟器设置多窗口模式
+
+```bash
+waydroid prop set persist.waydroid.multi_windows true
+```
