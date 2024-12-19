@@ -220,6 +220,40 @@ sudo reboot # 重启后生效
 
 对应的工具链叫[cuda](),安装 -->
 
+## git的安装设置
+
+```bash
+sudo apt install git # 安装git
+sudo apt-get install git-lfs
+```
+
+
++ `.gitconfig`
+
+```txt
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
+[user]
+	name = HUANG SIZHE
+	email = hsz1273327@gmail.com
+[http]
+	postBuffer = 157286400
+	version = HTTP/1.1
+
+[core] 
+    packedGitLimit = 512m 
+    packedGitWindowSize = 512m 
+[pack] 
+    deltaCacheSize = 2047m 
+    packSizeLimit = 2047m 
+    windowMemory = 2047m
+```
+
+## 配置代理
+
 ## 美化系统
 
 美化系统我们大致可以分为如下几个步骤
@@ -237,7 +271,7 @@ macos风格的Gnome桌面美化一般使用的是[vinceliuice/WhiteSur-gtk-theme
 我们可以先找个地方(比如`~/workspace/init_s'o'u'r'c'e`)来安装它
 
 ```bash
-sudo apt install git # 安装git
+
 mkdir -p workspace/init_source # 构造目录
 cd workspace/init_source
 git clone https://github.com/vinceliuice/WhiteSur-gtk-theme.git --depth=1
@@ -511,32 +545,29 @@ ubuntu默认状态下是很原始的,我们需要做如下操作才能让它用�
 
 ### 常用软件预加载
 
-[preload](https://www.fosslinux.com/135006/how-to-use-preload-to-speedup-app-launches-in-ubuntu.htm)
+[preload](https://www.fosslinux.com/135006/how-to-use-preload-to-speedup-app-launches-in-ubuntu.htm)是一个空间换时间的应用预加载工具.
+它会根据用户行为预先加载常用软件进内存.对于拥有大内存的机器这个工具可以大幅提高应用的打开速度.
+
+我们可以使用如下命令在terminal中安装
 
 ```bash
 sudo apt-get install preload
 systemctl status preload
 ```
 
-### 时间快照
+### 系统快照
 
-[timeshift-gtk](https://github.com/linuxmint/timeshift)
+类似macos的time machine,我们也可以通过系统快照锁定系统当前状态的切片以随时回退.这个操作通常使用[timeshift-gtk](https://github.com/linuxmint/timeshift)工具
+
+安装只需要在terminal中使用如下命令
 
 ```bash
 sudo apt install timeshift
 ```
 
+这个工具做快照目前只支持使用本地的linux文件系统,这也就意味着我们需要自备一块空的U盘专门做系统快照.个人建议这块u盘可以就一直插在机器上面,第一次完整装完系统后做一份快照,之后设置定时每半年做一份快照.
+
 ### 浏览器中激活显卡渲染
-
-> firefox:
-
-硬件加速:
-
-layers.acceleration.force-enabled true
-
-gpu加速:
-gfx.webrender.all
-gfx.webrender.software
 
 > chrome:
 
@@ -550,14 +581,16 @@ gpu加速:
 在地址栏输入`chrome://flags/#disable-accelerated-video-decode`,找到其中的
 
 + `Hardware-accelerated video decode`硬件解码设置,确保置为`已启用`
-+ `Hardware-accelerated video encode`硬件编码设置,确保置为`已启用`
-
 
 ### 全面的编解码器支持
 
+ubuntu受限于版权并不能直接提供全部的编解码支持,但我们可以安装`ubuntu-restricted-extras`来或者这一能力
+
 ```bash
-sudo apt install ubuntu-restricted
+sudo apt install ubuntu-restricted-extras
 ```
+
+安装好后市面上大部分的音频视频格式我们就都可以使用了
 
 ### amd显卡的监控
 
@@ -571,18 +604,24 @@ nvidia-smi -->
 
 ### 安装防火墙
 
+linux只是用的人少,并不是就没有安全隐患.我们还是应该装个防火墙来保护下
+
+```bash
 sudo apt install gufw
 sudo ufw enable
-
+```
 
 ### 应用管理器优化
 
-管理deb软件包.
+Ubuntu现在在主推snap应用,应用中心也只能管理snap软件,这显然是不够的,毕竟ubnutu更多的还是deb应用.管理deb软件包我们可以安装`synaptic`.
 
+```bash
 sudo apt install synaptic
-
+```
 
 ### 安装系统清理工具
+
+linux上也是会产生垃圾文件的,所以一样的我们也应该定期清理,清理系统可以使用`bleachbit`
 
 ```bash
 sudo apt install bleachbit
@@ -639,51 +678,72 @@ ubuntu中蓝牙设备在机器长期不用后会自动断开连接.这对于一�
 
 1. 重新设置一些系统级快捷键
 
-    | 操作       | 按键组合 | 需要修改的位置 |
-    | ---------- | -------- | -------------- |
-    | 搜索       | cmd + C  | 系统,terminal  |
-    | 输入法切换 | cmd + V  | 系统,terminal  |
+    我们可以进入`设置->键盘->键盘快捷键->查看及自定义快捷键`
+
+    | 分类   | 操作             | 按键组合              |
+    | ------ | ---------------- | --------------------- |
+    | 启动器 | 启动终端         | `Control + Alt + T`   |
+    | 启动器 | 全局搜索         | `Super+ Space`        |
+    | 导航   | 切换应用         | `Control+ Tab`        |
+    | 截图   | 全屏截图         | `Shift + Control + 2` |
+    | 截图   | 窗口截图         | `Shift + Control + 3` |
+    | 截图   | 截图             | `Shift + Control + 4` |
+    | 截图   | 录屏             | `Shift + Control + 5` |
+    | 窗口   | 全屏模式切换     | `Super + Control + F` |
+    | 窗口   | 最大化模式切换   | `Alt + Control + F`   |
+    | 窗口   | 隐藏窗口(最小化) | `Control + M`         |
+    | 窗口   | 关闭应用         | `Control + Q`         |
+    | 系统   | 锁定屏幕         | `Control + Super + Q` |
+
 
 2. 重新设置一些terminal快捷键
 
-    | 操作 | 按键组合 | 需要修改的位置 |
-    | ---- | -------- | -------------- |
-    | 复制 | cmd + C  | 系统,terminal  |
-    | 黏贴 | cmd + V  | 系统,terminal  |
-    | 保存 |
+    右键terminal,点击`首选项`,在`快捷键`中进行如下修改
 
-3. 设置截图
+    | 操作       | 按键组合      |
+    | ---------- | ------------- |
+    | 复制       | `Control + C` |
+    | 黏贴       | `Control + V` |
+    | 编辑器全选 | `Control + A` |
+    | 关闭窗口   | `Control + Q` |
 
-    | 操作 | 按键组合 | 需要修改的位置 |
-    | ---- | -------- | -------------- |
-    | 复制 | cmd + C  | 系统,terminal  |
-    | 黏贴 | cmd + V  | 系统,terminal  |
-    | 保存 |
+3. 设置vscode.
 
-4. 左侧`Control`和`Win`键(Linux下`Super`键,Mac下`Command`键)互换映射.这样操作起来就和mac中一样了.如果你的键盘是机械键盘,你也可以将`Contrl`和`Win`键互换位置
+    进入`文件->首选项->键盘快捷方式`通过搜索关键字替换快捷键
+
+    | 操作       | 按键组合          | 冲突                                                |
+    | ---------- | ----------------- | --------------------------------------------------- |
+    | 格式化文档 | `Shift + Alt + F` | 会有两个冲突,分别设置为`Alt + F` 和`Shift + F` 即可 |
+
+4. 左侧`Control`和`Win`键(Linux下`Super`键,Mac下`Command`键)互换映射.
+
+    点击`显示应用`,打开`工具->优化`,选择`键盘->布局->其他布局`,勾选`Ctrl位置->交换左win左ctrl`
+
+    这样操作起来就和mac中一样了.如果你的键盘是机械键盘,你也可以将`Contrl`和`Win`键互换位置
 
 这样我们就可以将整机的快捷键统一为如下,需要注意现在你的键盘`Win`键和`Control`已经互换了位置:
 
-| 操作         | 按键组合              |
-| ------------ | --------------------- |
-| 复制         | `Control + C`         |
-| 黏贴         | `Control + V`         |
-| 切换输入法   | `Super + Space`       |
-| 全局搜索     | `Control + Space`     |
-| 全屏截图     | `Shift + Control + 3` |
-| 截图         | `Shift + Control + 4` |
-| 自带录屏     | `Shift + Control + 5` |
-| 应用全屏     | `Super + Control + F` |
-| 应用最小化   | `Control + M`         |
-| 关闭应用     | `Control + Q`         |
-| 切换应用     | `Control+ Tab`        |
-| 锁屏         | `Control + Super + Q` |
-| 编辑器格式化 | `Shift + Alt + F`     |
-| 编辑器搜索   | `Control + F`         |
-| 存储文件     | `Control + S`         |
-| 编辑器全选   | `Control + A`         |
-| 编辑器撤销   | `Control + Z`         |
-| 编辑器注释   | `Control + /`         |
+| 操作           | 按键组合              |
+| -------------- | --------------------- |
+| 复制           | `Control + C`         |
+| 黏贴           | `Control + V`         |
+| 切换输入法     | `Control + Space`     |
+| 全局搜索       | `Super+ Space`        |
+| 全屏截图       | `Shift + Control + 3` |
+| 截图           | `Shift + Control + 4` |
+| 录屏           | `Shift + Control + 5` |
+| 全屏模式切换   | `Super + Control + F` |
+| 最大化模式切换 | `Alt + Control + F`   |
+| 应用最小化     | `Control + M`         |
+| 关闭应用       | `Control + Q`         |
+| 切换应用       | `Control+ Tab`        |
+| 锁屏           | `Control + Super + Q` |
+| 编辑器格式化   | `Shift + Alt + F`     |
+| 编辑器搜索     | `Control + F`         |
+| 存储文件       | `Control + S`         |
+| 编辑器全选     | `Control + A`         |
+| 编辑器撤销     | `Control + Z`         |
+| 编辑器注释     | `Control + /`         |
 
 ubuntu特有操作
 
@@ -691,6 +751,7 @@ ubuntu特有操作
 | ---------------------------- | -------------------------- |
 | 快速启动terminal             | `Control + Alt + T`        |
 | workspace管理                | `Super`                    |
+| 切换窗口                     | `Alt + Tab`                |
 | 移动到左边的工作空间         | `Super + PageUp`           |
 | 移动到右边的工作空间         | `Super + PageDown`         |
 | 将窗口向左移动一个工作空间   | `Shift + Super + PageUp`   |
@@ -724,7 +785,6 @@ ubuntu自带远程桌面服务,我们打开来就可以了
 
 之后要远程使用的时候就点击这个远程应用即可 -->
 
-
 ## 安装常用开发环境
 
 我个人比较习惯借助vscode的`Dev Containers`插件,在完全独立的容器中做开发.但即便是这样,本地的开发环境还是必不可少的,毕竟vscode还要用对应语言的生态做编程辅助.而且也难免会需要本地的轻量级开发
@@ -745,6 +805,8 @@ ubuntu自带远程桌面服务,我们打开来就可以了
 
 
 ### node.js环境
+
+### latex环境
 
 ## 安装常用软件
 
@@ -800,6 +862,9 @@ steam在其他操作系统中只是一个游戏平台,但在linux下它是必备
 安装waydroid我们可以简单的使用如下命令
 
 ```bash
+# sudo免密码
+sudo su
+exit
 # 导入 repo 源头、
 curl https://repo.waydro.id | sudo bash
 
@@ -810,19 +875,22 @@ sudo apt install waydroid -y
 在安装好后我们可以适当优化下界面
 
 ```bash
+sudo waydroid init
 waydroid prop set persist.waydroid.width 480
 waydroid prop set persist.waydroid.height 900
 
-waydroid session stop
+# waydroid session stop
 ```
 
 这个模拟器虽然很丝滑,但是默认情况下是没法跑ARM的APK.而国内很少有原生的x86 APP,所以还是有必要安装一下ARM相关的转译依赖.
 
 ```bash
+sudo apt install python3.12-venv
 cd workspace/init_source
 git clone https://github.com/casualsnek/waydroid_script
 cd waydroid_script
 python -m venv env # 给项目构造虚拟环境并执行设置脚本
+sudo su # 需要root用户
 source env/bin/activate
 python -m pip install --upgrade pip -i https://mirrors.tuna.tsinghua.edu.cn/pypi/web/simple 
 python -m pip install -r requirements.txt -i https://mirrors.tuna.tsinghua.edu.cn/pypi/web/simple
@@ -840,6 +908,8 @@ python main.py
     + fdroidpriv
     + libhoudini
     + widevine
++ MicroG:
+    + standard
 
 安装完毕后重启
 
