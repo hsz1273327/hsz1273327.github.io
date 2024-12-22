@@ -222,37 +222,53 @@ sudo reboot # 重启后生效
 
 ## git的安装设置
 
-```bash
-sudo apt install git # 安装git
-sudo apt-get install git-lfs
-```
+git工具我们需要好好设置下,毕竟ubuntu下很多东西,尤其是大文件的项目都需要git下载
 
+1. 安装`git`,ubuntu并不会默认安装git工具,因此我们需要先安装git
+        
+    ```bash
+    sudo apt install git # 安装git
+    sudo apt-get install git-lfs
+    ```
+
+2.设置以支持大文件传输
 
 + `.gitconfig`
 
-```txt
-[filter "lfs"]
-	clean = git-lfs clean -- %f
-	smudge = git-lfs smudge -- %f
-	process = git-lfs filter-process
-	required = true
-[user]
-	name = HUANG SIZHE
-	email = hsz1273327@gmail.com
-[http]
-	postBuffer = 157286400
-	version = HTTP/1.1
+    ```txt
+    [filter "lfs"]
+        clean = git-lfs clean -- %f
+        smudge = git-lfs smudge -- %f
+        process = git-lfs filter-process
+        required = true
+    [user]
+        name = HUANG SIZHE
+        email = hsz1273327@gmail.com
+    [http]
+        postBuffer = 157286400
+        version = HTTP/1.1
 
-[core] 
-    packedGitLimit = 512m 
-    packedGitWindowSize = 512m 
-[pack] 
-    deltaCacheSize = 2047m 
-    packSizeLimit = 2047m 
-    windowMemory = 2047m
-```
+    [core] 
+        packedGitLimit = 512m 
+        packedGitWindowSize = 512m 
+    [pack] 
+        deltaCacheSize = 2047m 
+        packSizeLimit = 2047m 
+        windowMemory = 2047m
+    ```
 
 ## 配置代理
+
+和在macos上一样,我们可以在`.zshrc`或其他shell的配置文件中像这样配置代理
+
+```bash
+# 设置使用本机代理
+alias setproxy="export https_proxy=http://127.0.0.1:7897 http_proxy=http://127.0.0.1:7897 all_proxy=socks5://127.0.0.1:7897"
+# 设置使用本地局域网代理
+alias setlocalproxy="export https_proxy=http://192.168.50.177:7890 http_proxy=http://192.168.50.177:7890 all_proxy=socks5://192.168.50.177:7890"
+# 清空代理配置
+alias unsetproxy="unset https_proxy;unset http_proxy;unset all_proxy"
+```
 
 ## 美化系统
 
@@ -262,13 +278,14 @@ sudo apt-get install git-lfs
 2. 美化登录页面
 3. 添加实用插件
 4. 美化terminal
+5. 美化字体
 
 一般我也会按这个次序进行设置
 
 macos风格的Gnome桌面美化一般使用的是[vinceliuice/WhiteSur-gtk-theme](https://github.com/vinceliuice/WhiteSur-gtk-theme.git)这个项目.
 这个项目其实已经可以包办大部分的美化任务了.
 
-我们可以先找个地方(比如`~/workspace/init_s'o'u'r'c'e`)来安装它
+我们可以先找个地方(比如`~/workspace/init_source`)来安装它
 
 ```bash
 
@@ -338,6 +355,29 @@ cd WhiteSur-icon-theme
 
 需要注意这个库对snap应用并不原生支持
 
+在安装好后我们还需要设置激活
+
+在`显示应用->工具->优化`中选中`外观`然后设置.我个人习惯用如下设置
+
++ `图标`: `WhiteSur-light`
++ `shell`:  `WhiteSur-light-solid`
++ `过时应用程序`: `WhiteSur-light-solid`
+
+#### 美化鼠标
+
+这也属于不优化也没什么大不了的项目,但如果能优化下确实体验是能更好些.
+
+美化鼠标可以使用项目[ful1e5/apple_cursor](https://github.com/ful1e5/apple_cursor)这个项目,去它最新的release中下载`macOS.tar.xz`
+,然后解压,可以获得两个文件夹`macOS`和`macOS-White`,将他们都移动到`/usr/share/icons`目录后重启就安装完成了.
+
+```bash
+cd macOS
+sudo mv macOS* /usr/share/icons/ 
+sudo reboot
+```
+
+之后在`显示应用->工具->优化`中选中`外观`然后设置`光标`为`macOS`即可.
+
 ### 美化登录页面
 
 对于登录界面我们还是使用`vinceliuice/WhiteSur-gtk-theme`这个项目
@@ -364,7 +404,7 @@ Gnome支持插件.插件可以增加功能也可以增加动画效果等.而gnom
 依然借助`vinceliuice/WhiteSur-gtk-theme`项目,这个项目提供了对firefox的专门优化
 
 ```bash
-cd workspace/i'n'i't/WhiteSur-gtk-theme
+cd workspace/init_source/WhiteSur-gtk-theme
 ./tweaks.sh -f monterey # 可选flat和monterey,monterey比较紧凑
 ```
 
@@ -484,11 +524,12 @@ plugins=(git autojump zsh-autosuggestions zsh-syntax-highlighting)
 ...
 ```
 
-> 安装主题
+> 安装主题[可选]
 
-我们使用`powerlevel10k`这个主题
+我们可以使用`powerlevel10k`这个主题
 
 ```bash
+cd workspace/init_source
 git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k
 ```
 
@@ -534,6 +575,21 @@ Do all these icons fit between the crosses?
 | Enable Transient Prompt | Yes            | 是否启用瞬时提示     |
 
 就行了,要重置可以执行`p10k configure`再来一遍
+
+### 美化字体
+
+ubuntu中的默认字体其实还行,但我更喜欢用[nerd-fonts](https://github.com/ryanoasis/nerd-fonts)
+
+```bash
+cd workspace/init_source
+git clone https://github.com/ryanoasis/nerd-fonts.git --depth 1
+```
+
+之后进入`显示应用`->`工具`->`优化`.选中`字体`,我个人习惯设置成如下:
+
++ `界面文本`: `AnonymicePro Nerd Font`
++ `文档文本`: `UbuntuMono Nerd Font`
++ `等宽文本`: `Ubuntu San Font`
 
 ## 系统优化
 
@@ -818,7 +874,6 @@ linux下我会尽量推荐开源工具.开源配开源嘛,他好我也好.
 | ---------- | ------------------------------- | ------------------------------------------------------------------------------------------ | ------------------------------------------------------------ |
 | 平台       | steam                           | 应用商店                                                                                   | 必装,很多windows下的软件可以靠它在linux下运行,并不仅仅是游戏 |
 | 平台       | docker                          | [官网指导](https://docs.docker.com/engine/install/ubuntu/)                                 | 必装,linux下开发神器                                         |
-| 平台       | [Waydroid](https://waydro.id/)  | [官网指导](https://docs.waydro.id/usage/install-on-desktops#ubuntu-debian-and-derivatives) | android模拟器                                                |
 | 生产力工具 | gimp                            | 应用商店                                                                                   | 开源的图像编辑软件,ps平替                                    |
 | 生产力工具 | freecad                         | 应用商店                                                                                   | 开源的工程制图,autocad平替                                   |
 | 生产力工具 | blender                         | steam                                                                                      | 开源的3d建模渲染工具,maya平替                                |
@@ -856,7 +911,7 @@ steam在其他操作系统中只是一个游戏平台,但在linux下它是必备
 2. 失去调用显卡的能力
 
 那是用原生的docker engine还是用docker desktop,这个取舍就需要根据需求自己来做了.
-
+<!-- 
 ### Waydroid环境的补充
 
 安装waydroid我们可以简单的使用如下命令
@@ -892,6 +947,8 @@ cd waydroid_script
 python -m venv env # 给项目构造虚拟环境并执行设置脚本
 sudo su # 需要root用户
 source env/bin/activate
+# 必须挂代理
+export https_proxy=http://127.0.0.1:7897 http_proxy=http://127.0.0.1:7897 all_proxy=socks5://127.0.0.1:7897
 python -m pip install --upgrade pip -i https://mirrors.tuna.tsinghua.edu.cn/pypi/web/simple 
 python -m pip install -r requirements.txt -i https://mirrors.tuna.tsinghua.edu.cn/pypi/web/simple
 python main.py
@@ -930,4 +987,4 @@ waydroid app install <app>.apk
 
 ```bash
 waydroid prop set persist.waydroid.multi_windows true
-```
+``` -->
