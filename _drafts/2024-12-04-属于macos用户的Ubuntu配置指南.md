@@ -302,9 +302,9 @@ git clone https://github.com/vinceliuice/WhiteSur-gtk-theme.git --depth=1
 
 一个是主题美化,这是一个很复杂的问题,我们知道ubuntu最开始使用的是源自debian的`deb`软件分发,但最近几个版本他们搞了个`snap`.而且还存在一种`flatpak`应用,也就是说有三种gui应用.
 
-+ `deb`软件
-+ `snap`软件
-+ `flatpak`软件
++ `deb`软件,debian的软件包格式,最轻量,也最多.`apt`工具安装的就是这种
++ `flatpak`软件,可以在[flathub](https://flathub.org/)中下载并安装.一种完全开源的,面向跨发行版分发的软件包格式.我们的美化主题需要额外设置以适配
++ `snap`软件,ubuntu主推的软件包格式,也是为了跨发行版分发而推出的,但由于其服务端并不开源,不太受开源社区待见.
 
 主题美化不光是自带软件的美化,还得让各种gui应用都可以获得相应的美化.这就很难了.
 
@@ -648,7 +648,7 @@ sudo apt install ubuntu-restricted-extras
 
 安装好后市面上大部分的音频视频格式我们就都可以使用了
 
-### amd显卡的监控
+<!-- ### amd显卡的监控
 
 amdGPU状态的监控使用[AMD GPU TOP](https://github.com/Umio-Yasuno/amdgpu_top).我们可以直接在项目的release中下载`.deb`文件,双击安装即可
 
@@ -656,7 +656,13 @@ amdGPU状态的监控使用[AMD GPU TOP](https://github.com/Umio-Yasuno/amdgpu_t
 
 <!-- ### Nvidia显卡的监控
 
-nvidia-smi -->
+nvidia-smi --> -->
+
+### 安装资源监控工具
+
+https://missioncenter.io/
+
+https://thetumultuousunicornofdarkness.github.io/CPU-X/
 
 ### 安装防火墙
 
@@ -892,11 +898,17 @@ linux下我会尽量推荐开源工具.开源配开源嘛,他好我也好.
 | 娱乐工具   | mpv                             | [官网指导](https://mpv.io/installation/)                                                   | 知名的开源视频播放器                                         |
 | 娱乐工具   | YesPlayMusic                    | [官网下载](https://github.com/qier222/YesPlayMusic)                                        | 网易云音乐的开源第三方客户端                                 |
 
+
+https://www.mapeditor.org/
+ https://itch.io/game-assets/free/tag-tilemap
+
 ### steam环境补充
 
 steam在其他操作系统中只是一个游戏平台,但在linux下它是必备软件,因为它提供了转译层[proton](https://github.com/ValveSoftware/Proton).这太伟大了,直接让linux下可以正常跑大部分windows平台的游戏,还顺便让其他windows软件也可以借助steam进行管理运行.
 
+https://github.com/flightlessmango/MangoHud
 
+https://www.bilibili.com/video/BV1zD4y1b7Jj?vd_source=08b668b29d50d7b81093d4adee9dfde0&spm_id_from=333.788.videopod.sections
 
 ### docker环境补充
 
