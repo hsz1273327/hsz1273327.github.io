@@ -220,12 +220,16 @@ sudo reboot # 重启后生效
 
 对应的工具链叫[cuda](),安装 -->
 
-## git的安装设置
+## 基础设置
+
+在开始其他设置之前,我们还需要做如下设置
+
+### git的安装设置
 
 git工具我们需要好好设置下,毕竟ubuntu下很多东西,尤其是大文件的项目都需要git下载
 
 1. 安装`git`,ubuntu并不会默认安装git工具,因此我们需要先安装git
-        
+
     ```bash
     sudo apt install git # 安装git
     sudo apt-get install git-lfs
@@ -257,7 +261,9 @@ git工具我们需要好好设置下,毕竟ubuntu下很多东西,尤其是大文
         windowMemory = 2047m
     ```
 
-## 配置代理
+### 配置代理
+
+作为一个写代码的,代理几乎波不可少.作为一台主力办公机,没道理不按一个clash客户端.[clashverge](https://github.com/clash-verge-rev/clash-verge-rev/releases/tag/v1.7.7)自然是ubuntu下的首选,安装也只是下载下来,先安装依赖再安装本体即可.
 
 和在macos上一样,我们可以在`.zshrc`或其他shell的配置文件中像这样配置代理
 
@@ -268,6 +274,41 @@ alias setproxy="export https_proxy=http://127.0.0.1:7897 http_proxy=http://127.0
 alias setlocalproxy="export https_proxy=http://192.168.50.177:7890 http_proxy=http://192.168.50.177:7890 all_proxy=socks5://192.168.50.177:7890"
 # 清空代理配置
 alias unsetproxy="unset https_proxy;unset http_proxy;unset all_proxy"
+```
+
+### 应用管理器优化
+
+Ubuntu现在在主推snap应用,应用中心也只能管理snap软件,这显然是不够的,毕竟ubnutu更多的还是deb应用.管理deb软件包我们可以安装`synaptic`.
+
+```bash
+sudo apt install synaptic
+```
+
+然后是`Flatpak`支持.我们先安装`Flatpak`工具
+
+```bash
+sudo apt install flatpak
+```
+
+然后安装gnome的flatpak插件
+
+```bash
+sudo apt install gnome-software-plugin-flatpak
+```
+
+最后将`flathub`添加到仓库并重启即可
+
+```bash
+flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+sudo reboot
+```
+
+为了更好的管理flatpak应用,我们最好安装[Warehouse](https://flathub.org/apps/io.github.flattool.Warehouse)来统一管理.
+
+安装方式也很简单,在网页上点击`Install`按钮下载安装文件,然后双击就可以安装了.不过我更喜欢用命令来安装
+
+```bash
+flatpak install flathub io.github.flattool.Warehouse
 ```
 
 ## 美化系统
@@ -316,7 +357,6 @@ cd workspace/init_source/WhiteSur-gtk-theme
 ./install.sh -t all  # 安装指定颜色主题,如果要全部颜色可以使用`-t all`,要指定颜色则是类似`-t [purple/pink/red/orange/yellow/green/grey]`
 ./install.sh -N mojave # 改变文件管理器分栏样式,可选为默认,`mojave`和`glassy`
 ./install.sh -l  # 安装对`libadwaita`软件的适配,目前并不完美
-sudo apt install flatpak
 sudo flatpak override --filesystem=xdg-config/gtk-3.0 && sudo flatpak override --filesystem=xdg-config/gtk-4.0 # 适配非snap的flatpak应用
 ```
 
@@ -660,9 +700,24 @@ nvidia-smi --> -->
 
 ### 安装资源监控工具
 
-https://missioncenter.io/
+[missioncenter](https://missioncenter.io/)是一个有着window上资源管理器风格的综合性资源监控软件,除了直观外,它最大的优势是可以监控GPU的资源占用.
+我们可以使用如下命令安装它
 
-https://thetumultuousunicornofdarkness.github.io/CPU-X/
+```bash
+flatpak install flathub io.missioncenter.MissionCenter
+```
+
+[CPU-X](https://thetumultuousunicornofdarkness.github.io/CPU-X/)是windows上cpu-z在linux上的平替.他的主要作用是查看硬件资源的基础信息.
+我们可以像下面这样安装它.
+
+```bash
+apt install cpu-x
+```
+
+如果我们希望可以观察amdGPU更详细的状态,可以使用[AMD GPU TOP](https://github.com/Umio-Yasuno/amdgpu_top).我们可以直接在项目的release中下载`.deb`文件,双击安装即可
+
+这个工具同样可以监控核显
+
 
 ### 安装防火墙
 
@@ -671,14 +726,6 @@ linux只是用的人少,并不是就没有安全隐患.我们还是应该装个�
 ```bash
 sudo apt install gufw
 sudo ufw enable
-```
-
-### 应用管理器优化
-
-Ubuntu现在在主推snap应用,应用中心也只能管理snap软件,这显然是不够的,毕竟ubnutu更多的还是deb应用.管理deb软件包我们可以安装`synaptic`.
-
-```bash
-sudo apt install synaptic
 ```
 
 ### 安装系统清理工具
@@ -885,30 +932,37 @@ linux下我会尽量推荐开源工具.开源配开源嘛,他好我也好.
 | 生产力工具 | blender                         | steam                                                                                      | 开源的3d建模渲染工具,maya平替                                |
 | 生产力工具 | godot                           | steam                                                                                      | 开源的轻量级游戏引擎                                         |
 | 生产力工具 | unrealengine5                   | [官网下载](https://www.unrealengine.com/zh-CN/download)                                    | 大名鼎鼎的虚幻引擎,                                          |
-| 生产力工具 | [shotcut](https://shotcut.org/) | 应用商店                                                                                   | 轻量级的开源视频剪辑工具                                     |
+| 生产力工具 | [shotcut](https://shotcut.org/) | flathub                                                                                 | 轻量级的开源视频剪辑工具                                     |
 | 生产力工具 | DaVinci Resolve                 | [官网下载](http://www.blackmagicdesign.com/cn/products/davinciresolve)                     | 大名鼎鼎的生产级视频剪辑工具达芬奇,有免费的社区版            |
 | 生产力工具 | 飞书                            | [官网下载](https://www.feishu.cn/download)                                                 | 知名的办公协作工具                                           |
 | 生产力工具 | 微信                            | [官网下载](https://linux.weixin.qq.com/)                                                   | 知名的聊天工具                                               |
 | 生产力工具 | wps                             | [官网下载](https://www.wps.cn/product/wpslinux)                                            | 知名的office套件                                             |
-| 生产力工具 | obs                             | [官网下载](https://obsproject.com/)                                                        | 知名的开源直播录屏工具                                       |
+| 生产力工具 | [obs](https://obsproject.com/)                             |flathub                                                       | 知名的开源直播录屏工具                                       |
 | 生产力工具 | vscode                          | 应用商店                                                                                   | 文本编辑器                                                   |
 | 生产力工具 | github desktop                  | [fork版本下载](https://github.com/shiftkey/desktop)                                        | github desktop的第三方linux fork                             |
-| 生产力工具 | clashverge                      | [github下载](https://github.com/clash-verge-rev/clash-verge-rev/releases/tag/v1.7.7)       | clash的客户端,方便离开有公共代理的换进时使用                 |
 | 生产力工具 | balenaEtcher                    | [官网下载](https://etcher.balena.io/)                                                      | 镜像写入工具                                                 |
-| 娱乐工具   | mpv                             | [官网指导](https://mpv.io/installation/)                                                   | 知名的开源视频播放器                                         |
+| 娱乐工具   | [mpv](https://mpv.io)                             | [flathub](https://flathub.org/apps/io.mpv.Mpv)                                                   | 知名的开源视频播放器                                         |
 | 娱乐工具   | YesPlayMusic                    | [官网下载](https://github.com/qier222/YesPlayMusic)                                        | 网易云音乐的开源第三方客户端                                 |
 
 
 https://www.mapeditor.org/
  https://itch.io/game-assets/free/tag-tilemap
 
+### vscode额外设置
+
+vscode默认会将标题栏和工具栏分开,非常的丑也非常的不紧凑.我们可以进入`文件->首选项->设置`,在其中搜索`window.titleBarStyle`,将其设置为`custom`.这样标题栏就会和工具栏合并,好看很多.
+
 ### steam环境补充
 
 steam在其他操作系统中只是一个游戏平台,但在linux下它是必备软件,因为它提供了转译层[proton](https://github.com/ValveSoftware/Proton).这太伟大了,直接让linux下可以正常跑大部分windows平台的游戏,还顺便让其他windows软件也可以借助steam进行管理运行.
 
+#### 游戏相关优化
+
 https://github.com/flightlessmango/MangoHud
 
 https://www.bilibili.com/video/BV1zD4y1b7Jj?vd_source=08b668b29d50d7b81093d4adee9dfde0&spm_id_from=333.788.videopod.sections
+
+#### 作为转译工具
 
 ### docker环境补充
 
