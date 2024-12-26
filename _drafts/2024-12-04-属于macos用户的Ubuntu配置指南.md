@@ -276,13 +276,22 @@ alias setlocalproxy="export https_proxy=http://192.168.50.177:7890 http_proxy=ht
 alias unsetproxy="unset https_proxy;unset http_proxy;unset all_proxy"
 ```
 
-### 应用管理器优化
+### 应用管理优化
 
-Ubuntu现在在主推snap应用,应用中心也只能管理snap软件,这显然是不够的,毕竟ubnutu更多的还是deb应用.管理deb软件包我们可以安装`synaptic`.
+linux上目前应用的分发是相当碎片化的,为了可以安装管理各种渠道的应用我们就得做对应的优化.
+
+#### deb
+
+,毕竟ubnutu更多的还是deb应用.管理deb软件包我们可以安装`synaptic`.
 
 ```bash
 sudo apt install synaptic
 ```
+#### snap
+
+Ubuntu现在在主推`snap`应用,应用中心也只能管理`snap`软件,这显然是不够的
+
+#### Flatpak
 
 然后是`Flatpak`支持.我们先安装`Flatpak`工具
 
@@ -310,6 +319,39 @@ sudo reboot
 ```bash
 flatpak install flathub io.github.flattool.Warehouse
 ```
+
+#### AppImage
+
+
+https://www.appimagehub.com/
+https://github.com/TheAssassin/AppImageLauncher
+
+
+#### 总结
+
+在ubuntu中可以顺利使用的应用分发方式我做了如下总结
+
+| 对比项目       | `独立静态可执行文件` | `deb`      | `AppImage`    | `Flatpak`   | `snap`         |
+| -------------- | -------------------- | ---------- | ------------- | ----------- | -------------- |
+| 发行版支持     | 跨发行版             | 仅debian系 | 跨发行版      | 跨发行版    | 跨发行版       |
+| 是否独立执行   | 是                   | 否         | 是            | 是          | 是             |
+| 是否沙盒运行   | 否                   | 否         | 否            | 是          | 是             |
+| 性能损失       | 无损失               | 无损失     | 无损失        | 损失较小    | 损失小         |
+| 空间占用       | 大                   | 最小       | 大            | 小          | 较大           |
+| 资源平台       | 应用官网             | `apt`      | `appimagehub` | `flathub`   | ubuntu应用商店 |
+| 平台资源数量   | 少                   | 多         | 少            | 较多        | 中             |
+| 平台版本活跃度 | 高                   | 中         | 低            | 高          | 高             |
+| 维护工具       | 无                   | `synaptic` | 无            | `Warehouse` | 系统应用商店   |
+| 安装难度       | 大                   | 小         | 小            | 小          | 小             |
+| 维护难度       | 大                   | 小         | 大            | 小          | 小             |
+
+可以看到如果这些平台都各有利弊.我们应该针对不同需求使用不同的平台.
+
++ 对性能要求比较高的应用
+    + 优先使用`独立静态可执行文件`
+    + 如果更希望可以自动更新,不太在乎版本新旧,则选`deb`安装
+    + 如果实在是又要自动更新又想要新版本,可以牺牲一些性能就`Flatpak`版本安装.
++ 对于不太在意性能的应用,无脑`Flatpak`即可
 
 ## 美化系统
 
@@ -894,7 +936,7 @@ ubuntu自带远程桌面服务,我们打开来就可以了
 
 之后要远程使用的时候就点击这个远程应用即可 -->
 
-## 安装常用开发环境
+## 安装常用环境
 
 我个人比较习惯借助vscode的`Dev Containers`插件,在完全独立的容器中做开发.但即便是这样,本地的开发环境还是必不可少的,毕竟vscode还要用对应语言的生态做编程辅助.而且也难免会需要本地的轻量级开发
 
@@ -917,42 +959,7 @@ ubuntu自带远程桌面服务,我们打开来就可以了
 
 ### latex环境
 
-## 安装常用软件
-
-linux下我会尽量推荐开源工具.开源配开源嘛,他好我也好.
-
-下面是一些常用软件的安装信息
-
-| 分类       | 软件                            | 渠道                                                                                       | 说明                                                         |
-| ---------- | ------------------------------- | ------------------------------------------------------------------------------------------ | ------------------------------------------------------------ |
-| 平台       | steam                           | 应用商店                                                                                   | 必装,很多windows下的软件可以靠它在linux下运行,并不仅仅是游戏 |
-| 平台       | docker                          | [官网指导](https://docs.docker.com/engine/install/ubuntu/)                                 | 必装,linux下开发神器                                         |
-| 生产力工具 | gimp                            | 应用商店                                                                                   | 开源的图像编辑软件,ps平替                                    |
-| 生产力工具 | freecad                         | 应用商店                                                                                   | 开源的工程制图,autocad平替                                   |
-| 生产力工具 | blender                         | steam                                                                                      | 开源的3d建模渲染工具,maya平替                                |
-| 生产力工具 | godot                           | steam                                                                                      | 开源的轻量级游戏引擎                                         |
-| 生产力工具 | unrealengine5                   | [官网下载](https://www.unrealengine.com/zh-CN/download)                                    | 大名鼎鼎的虚幻引擎,                                          |
-| 生产力工具 | [shotcut](https://shotcut.org/) | flathub                                                                                 | 轻量级的开源视频剪辑工具                                     |
-| 生产力工具 | DaVinci Resolve                 | [官网下载](http://www.blackmagicdesign.com/cn/products/davinciresolve)                     | 大名鼎鼎的生产级视频剪辑工具达芬奇,有免费的社区版            |
-| 生产力工具 | 飞书                            | [官网下载](https://www.feishu.cn/download)                                                 | 知名的办公协作工具                                           |
-| 生产力工具 | 微信                            | [官网下载](https://linux.weixin.qq.com/)                                                   | 知名的聊天工具                                               |
-| 生产力工具 | wps                             | [官网下载](https://www.wps.cn/product/wpslinux)                                            | 知名的office套件                                             |
-| 生产力工具 | [obs](https://obsproject.com/)                             |flathub                                                       | 知名的开源直播录屏工具                                       |
-| 生产力工具 | vscode                          | 应用商店                                                                                   | 文本编辑器                                                   |
-| 生产力工具 | github desktop                  | [fork版本下载](https://github.com/shiftkey/desktop)                                        | github desktop的第三方linux fork                             |
-| 生产力工具 | balenaEtcher                    | [官网下载](https://etcher.balena.io/)                                                      | 镜像写入工具                                                 |
-| 娱乐工具   | [mpv](https://mpv.io)                             | [flathub](https://flathub.org/apps/io.mpv.Mpv)                                                   | 知名的开源视频播放器                                         |
-| 娱乐工具   | YesPlayMusic                    | [官网下载](https://github.com/qier222/YesPlayMusic)                                        | 网易云音乐的开源第三方客户端                                 |
-
-
-https://www.mapeditor.org/
- https://itch.io/game-assets/free/tag-tilemap
-
-### vscode额外设置
-
-vscode默认会将标题栏和工具栏分开,非常的丑也非常的不紧凑.我们可以进入`文件->首选项->设置`,在其中搜索`window.titleBarStyle`,将其设置为`custom`.这样标题栏就会和工具栏合并,好看很多.
-
-### steam环境补充
+### steam环境
 
 steam在其他操作系统中只是一个游戏平台,但在linux下它是必备软件,因为它提供了转译层[proton](https://github.com/ValveSoftware/Proton).这太伟大了,直接让linux下可以正常跑大部分windows平台的游戏,还顺便让其他windows软件也可以借助steam进行管理运行.
 
@@ -962,9 +969,14 @@ https://github.com/flightlessmango/MangoHud
 
 https://www.bilibili.com/video/BV1zD4y1b7Jj?vd_source=08b668b29d50d7b81093d4adee9dfde0&spm_id_from=333.788.videopod.sections
 
+
+https://www.mapeditor.org/
+ https://itch.io/game-assets/free/tag-tilemap
+
+
 #### 作为转译工具
 
-### docker环境补充
+### docker环境
 
 如果希望有个图形界面用于管理docker,可以安装[docker desktop](https://docs.docker.com/desktop/setup/install/linux/)代替原生docker.但需要注意,docker desktop以及其管理的所有容器都运行在虚拟机中.这带来的的好处是
 
@@ -976,7 +988,47 @@ https://www.bilibili.com/video/BV1zD4y1b7Jj?vd_source=08b668b29d50d7b81093d4adee
 1. 性能损失
 2. 失去调用显卡的能力
 
-那是用原生的docker engine还是用docker desktop,这个取舍就需要根据需求自己来做了.
+那是用原生的docker engine还是用docker desktop,这个取舍就需要根据需求自己来做了.反正我是推荐用原生的docker engine.
+
+#### windows虚拟机
+
+#### macos虚拟机
+
+
+
+## 安装常用软件
+
+linux下我会尽量推荐开源工具.开源配开源嘛,他好我也好.
+
+下面是一些常用软件的安装信息
+
+| 分类       | 软件                            | 渠道                                                                   | 说明                                              |
+| ---------- | ------------------------------- | ---------------------------------------------------------------------- | ------------------------------------------------- |
+| 生产力工具 | gimp                            | [flathub](https://flathub.org/apps/org.gimp.GIMP)                      | 开源的图像编辑软件,ps平替                         |
+| 生产力工具 | freecad                         | [flathub](https://flathub.org/apps/org.freecad.FreeCAD)                | 开源的工程制图,autocad平替                        |
+| 生产力工具 | blender                         | [flathub](https://flathub.org/apps/org.blender.Blender)                | 开源的3d建模渲染工具,maya平替                     |
+| 生产力工具 | godot                           | [flathub](https://flathub.org/apps/org.godotengine.Godot)              | 开源的轻量级游戏引擎                              |
+| 生产力工具 | unrealengine5                   | [官网下载](https://www.unrealengine.com/zh-CN/download)                | 大名鼎鼎的虚幻引擎,                               |
+| 生产力工具 | [shotcut](https://shotcut.org/) | [flathub](https://flathub.org/apps/org.shotcut.Shotcut)                | 轻量级的开源视频剪辑工具                          |
+| 生产力工具 | DaVinci Resolve                 | [官网下载](http://www.blackmagicdesign.com/cn/products/davinciresolve) | 大名鼎鼎的生产级视频剪辑工具达芬奇,有免费的社区版 |
+| 生产力工具 | 飞书                            | [官网下载](https://www.feishu.cn/download)                             | 知名的办公协作工具                                |
+| 生产力工具 | 微信                            | [官网下载](https://linux.weixin.qq.com/)                               | 知名的聊天工具                                    |
+| 生产力工具 | wps                             | [官网下载](https://www.wps.cn/product/wpslinux)                        | 知名的office套件                                  |
+| 生产力工具 | [obs](https://obsproject.com/)  | [flathub](https://flathub.org/apps/com.obsproject.Studio)              | 知名的开源直播录屏工具                            |
+| 生产力工具 | vscode                          | [官网下载](https://code.visualstudio.com/Download)                     | 文本编辑器                                        |
+| 生产力工具 | github desktop                  | [fork版本下载](https://github.com/shiftkey/desktop)                    | github desktop的第三方linux fork                  |
+| 生产力工具 | balenaEtcher                    | [官网下载](https://etcher.balena.io/)                                  | 镜像写入工具                                      |
+| 娱乐工具   | [mpv](https://mpv.io)           | [flathub](https://flathub.org/apps/io.mpv.Mpv)                         | 知名的开源视频播放器                              |
+| 娱乐工具   | YesPlayMusic                    | [官网下载](https://github.com/qier222/YesPlayMusic)                    | 网易云音乐的开源第三方客户端                      |
+| 娱乐工具   | sunshine                        | [flathub](https://flathub.org/apps/dev.lizardbyte.app.Sunshine)        | 串流服务端                                        |
+
+
+
+### vscode额外设置
+
+vscode默认会将标题栏和工具栏分开,非常的丑也非常的不紧凑.我们可以进入`文件->首选项->设置`,在其中搜索`window.titleBarStyle`,将其设置为`custom`.这样标题栏就会和工具栏合并,好看很多.
+
+
 <!-- 
 ### Waydroid环境的补充
 
