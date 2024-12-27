@@ -280,19 +280,141 @@ alias unsetproxy="unset https_proxy;unset http_proxy;unset all_proxy"
 
 linux上目前应用的分发是相当碎片化的,为了可以安装管理各种渠道的应用我们就得做对应的优化.
 
-#### deb
+根据是否使用容器技术,我们可以将应用分为原生应用和容器化应用者两种.
 
-,毕竟ubnutu更多的还是deb应用.管理deb软件包我们可以安装`synaptic`.
+#### 原生应用
+
+原生应用直接运行在裸机上,提供了最大程度灵活性和最大程度资源利用,但问题就在于安全性. 由于直接接触系统,原生应用之间可能会相互影响,造成依赖冲突等问题,一个不小心甚至可能将系统整崩溃.
+
+##### deb
+
+ubnutu是从debian发展而来的,继承了其deb应用的生态.我们可以使用`apt`工具很轻易的安装库或者应用,而这些都是使用`deb`分发的.
+
+由于apt工具会处理依赖,`deb`包往往大量相互依赖而本体非常小.
+
+管理deb软件包我们可以安装`synaptic`.
 
 ```bash
 sudo apt install synaptic
 ```
 
-#### snap
+它可以帮我们用gui的方式管理源,管理,卸载已经安装的`deb`程序.而Ubuntu的系统更新工具也会统一提示`deb`程序的更新提醒.
+
+大多数支持linux的知名老牌应用都会提供`deb`安装包,在unbuntu中我们只要下载下来双击安装即可.
+
+在ubuntu上`deb`方式最大的问题就是安全问题,因为apt维护的是**系统级**的lib,一出错就是整个系统出问题.这也是为啥debian的仓库偏保守的原因.
+
+##### PORTABLE LINUX APPS
+
+所谓`PORTABLE LINUX APPS`是在GNU/Linux上可以独立运行(理论上)的应用程序,这种应用程序可以在任何地方运行甚至在U盘上都可以.
+
+这些应用程序可以是`AppImage应用`,也可以是独立归档应用(比如`Firefox`,`Blender`,`Thunderbird`).
+
+> 独立归档应用
+
+`独立归档应用`本质上是一个文件夹,它里面包含了应用需要的所有资源,从静态资源到依赖包,而其中的可执行文件可以不依赖系统本身的lib或仅依赖`glibc`就可以执行.
+
+这种应用可以在大部分(除了alpine)linux发行版中直接使用的.
+
+一般`独立归档应用`并不多见不多,只有重型应用像上面例子里的firefox,blender才会支持这样分发.
+
+一般如果我们用的是开源软件,可以在github上找找,看看它的`release`中是否有给linux使用的非source压缩包,如果有一般就是`独立归档应用`,下载下来解压出来根据文档设置就可以正常使用了.
+
+> AppImage应用
+
+[AppImage应用](https://appimage.org/)是独立归档应用更进一步的产物,它提供了一套规范将一个完整的包含所有依赖的应用打包成了一个文件.这个文件除了可以提取出应用所需的文件外还可以直接赋予可执行权限后直接执行.
+
+这个分发方式就像windows上的`绿色软件`和macos中应用的结合,可以说相当创新.但很可惜似乎从2019年开始发展就慢下来了.不过我个人依然推荐如果要开发linux下的应用,可以将这种方式作为一个分发选项.
+
+一般如果我们用的是开源软件,可以在github上找找,看看它的`release`中是否有以`.AppImage`为后缀的文件.有的话就是了,下载下来就可以直接使用了.
+
+>> 直接执行`AppImage应用`
+
+直接执行`AppImage`文件的原理很简单,`AppImage`文件里面有个[SquashFS](https://docs.kernel.org/filesystems/squashfs.html)的文件系统,运行的时候会借助[libfuse](https://github.com/libfuse/libfuse)挂在到一个临时的endpoint,里面的内容类似`独立归档应用`,有所有只读的文件,包括可执行文件,库文件,静态数据等.除此之外都和普通的软件运行环境是一样.也就是说直接运行`AppImage`文件相当于挂载了一块只读盘执行其中的可执行文件.
+
+我们要直接执行`AppImage`文件需要确保系统中有`libfuse`.很遗憾ubuntu中是没有的,我们可以使用apt进行安装.以我所用的`Ubuntu 24.04`为例,使用如下语句
+
+```bash
+sudo add-apt-repository universe
+sudo apt install libfuse2t64
+```
+
+在满足这个条件后,安装`AppImage应用`就很简单了
+
+1. 下载`.AppImage`为后缀的文件
+2. `chmod +x 文件名.AppImage`给`AppImage应用`服务可执行权限
+3. 双击或者进terminal输入文件名就可以使用了
+
+需要注意现在很多应用是`electron`开发的,他们底层是`Chromium`,对于这类应用我们需要执行是增加参数`--no-sandbox`,否则会报错,这是`Chromium`的限制
+
+>> 提取`AppImage应用`后当做`独立归档应用`处理
+
+`AppImage应用`自带的运行时支持使用flage`--appimage-extract`将其中的内容解包成一个文件夹([AppDir](https://docs.appimage.org/reference/appdir.html))放到路径`squashfs-root`下.
+提取出来以后我们完全可以将它当做`独立归档应用`处理
+
+> 系统集成
+
+光是能执行并不够,我们希望在操作系统中可以方便的找到这些`PORTABLE LINUX APPS`.这就需要手动将他们集成到桌面系统已方便打开,怎么注册呢?通常我们用如下方式:
+
+1. 下载软件压缩包,并解药到`~/Applications`目录
+2. 进入`~/.local/share/applications`目录,创建`xxx.desktop`并编辑
+
+    ```toml
+    [Desktop Entry]
+    Version=<应用版本>
+    Type=Application
+    Encoding=UTF-8
+    Name=<应用名>
+    Comment=<应用说明>
+    Icon=<应用图标路径>
+    Exec=<应用可执行文件路径> %U
+    Terminal=false
+    Categories=Application;
+    ```
+
+    其中
+    + `Version`: 应用版本
+    + `Type`: 指定快捷方式类型
+    + `Encoding`: 指定编码格式
+    + `Name`: 快捷方式的名称
+    + `Comment`: 快捷方式的简短描述
+    + `Icon`: 快捷方式的图标路径,一般解压后都有
+    + `Exec`: 要执行的命令. 是一个占位符如果快捷方式是通过文件管理器启动的,则使用`%U`这个占位符指定文件将被作为参数传递给命令.
+    + `Terminal`: 如果程序需要在终端中运行,则设置为true;否则设置为false
+    + `Categories`: 用于帮助应用程序菜单对快捷方式进行分类
+
+    其他字段可以参考[desktop-entry-spec相关规定](https://specifications.freedesktop.org/desktop-entry-spec/latest/recognized-keys.html)
+
+3. 为这个`.desktop`文件赋予可执行权限
+
+    ```bash
+    chmod +x ~/Desktop/gedit.desktop
+    ```
+
+> `PORTABLE LINUX APPS`管理工具
+
+
+https://github.com/ivan-hc/AM
+
+
+
+<!-- https://www.appimagehub.com/
+https://github.com/TheAssassin/AppImageLauncher -->
+
+
+
+<!-- 
+curl https://raw.githubusercontent.com/srevinsaju/zap/main/install.sh | bash -s          
+zap install --github --from=mltframework/shotcut shotcut -->
+
+
+#### 容器化应用
+
+##### snap
 
 Ubuntu现在在主推`snap`应用,应用中心也只能管理`snap`软件,这显然是不够的
 
-#### Flatpak
+##### Flatpak
 
 然后是`Flatpak`支持.我们先安装`Flatpak`工具
 
@@ -321,40 +443,25 @@ sudo reboot
 flatpak install flathub io.github.flattool.Warehouse
 ```
 
-#### AppImage
-
-
-https://www.appimagehub.com/
-https://github.com/TheAssassin/AppImageLauncher
-
-```bash
-sudo add-apt-repository universe
-sudo apt install libfuse2t64
-```
-
-
-curl https://raw.githubusercontent.com/srevinsaju/zap/main/install.sh | bash -s          
-zap install --github --from=mltframework/shotcut shotcut
-
 
 
 #### 总结
 
 在ubuntu中可以顺利使用的应用分发方式我做了如下总结
 
-| 对比项目       | `独立静态可执行文件` | `deb`                     | `AppImage`                                                       | `Flatpak`   | `snap`         |
-| -------------- | -------------------- | ------------------------- | ---------------------------------------------------------------- | ----------- | -------------- |
-| 发行版支持     | 跨发行版             | 仅debian系                | 跨发行版                                                         | 跨发行版    | 跨发行版       |
-| 是否独立执行   | 是                   | 否                        | 是                                                               | 是          | 是             |
-| 是否沙盒运行   | 否                   | 否                        | 否                                                               | 是          | 是             |
-| 性能损失       | 无损失               | 无损失                    | 无损失                                                           | 损失较小    | 损失小         |
-| 空间占用       | 大                   | 最小                      | 大                                                               | 小          | 较大           |
-| 资源平台       | 应用官网             | `apt`</br>`github release` | `AppImage Catalog`</br>`AppImage catalog v2`</br>`github release` | `flathub`   | ubuntu应用商店 |
-| 平台资源数量   | 少                   | 多                        | 较少                                                             | 较多        | 中             |
-| 平台版本活跃度 | 高                   | 取决于渠道                | 取决于渠道                                                       | 高          | 高             |
-| 维护工具       | 无                   | `synaptic`                | 无                                                               | `Warehouse` | 系统应用商店   |
-| 安装难度       | 大                   | 小                        | 小                                                               | 小          | 小             |
-| 维护难度       | 大                   | 小                        | 大                                                               | 小          | 小             |
+| 对比项目       | `独立静态可执行文件` | `deb`                      | `AppImage`                                                        | `Flatpak`           | `snap`         |
+| -------------- | -------------------- | -------------------------- | ----------------------------------------------------------------- | ------------------- | -------------- |
+| 发行版支持     | 跨发行版             | 仅debian系                 | 跨发行版                                                          | 跨发行版            | 跨发行版       |
+| 是否独立执行   | 是                   | 否                         | 是                                                                | 是                  | 是             |
+| 是否沙盒运行   | 否                   | 否                         | 否                                                                | 是                  | 是             |
+| 性能损失       | 无损失               | 无损失                     | 无损失                                                            | 损失较小            | 损失小         |
+| 空间占用       | 大                   | 最小                       | 较大                                                              | 本体较小,算上依赖大 | 最大           |
+| 资源平台       | 应用官网             | `apt`</br>`github release` | `AppImage Catalog`</br>`AppImage catalog v2`</br>`github release` | `flathub`           | ubuntu应用商店 |
+| 平台资源数量   | 少                   | 多                         | 较少                                                              | 较多                | 中             |
+| 平台版本活跃度 | 高                   | 取决于渠道                 | 取决于渠道                                                        | 高                  | 高             |
+| 维护工具       | 无                   | `synaptic`                 | 无                                                                | `Warehouse`         | 系统应用商店   |
+| 安装难度       | 大                   | 小                         | 小                                                                | 小                  | 小             |
+| 维护难度       | 大                   | 小                         | 大                                                                | 小                  | 小             |
 
 可以看到如果这些平台都各有利弊.我们应该针对不同需求使用不同的平台.
 
