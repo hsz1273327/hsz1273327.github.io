@@ -582,18 +582,33 @@ Do all these icons fit between the crosses?
 
 ### 美化字体
 
-ubuntu中的默认字体其实还行,但我更喜欢用[nerd-fonts](https://github.com/ryanoasis/nerd-fonts)
+ubuntu中字体分为`界面字体`,`文档字体`,`等宽字体`.所谓`界面字体`就是gui界面上展示的字体,比如应用title,菜单栏的字体;所谓`文档字体`就是打字时的字体;`等宽字体`则是每个字符固定宽度的字体,在一些特殊位置会用到.
 
-```bash
-cd workspace/init_source
-git clone https://github.com/ryanoasis/nerd-fonts.git --depth 1
-```
+在中文环境中,我们对字体的要求自然是对中问支持良好,而作为编程写文档为主用途来说,字体优雅辨识度高就是重中之重. 下面是我推荐的几种字体
 
-之后进入`显示应用`->`工具`->`优化`.选中`字体`,我个人习惯设置成如下:
++ [思源宋体/黑体](https://github.com/notofonts/noto-cjk),思源宋体/黑体是由Adobe和Google两家公司合作开发的中文字体,具有良好的字形结构和视觉效果.该字体支持的字符编码达到了GB18030字符集的完整覆盖,在Linux系统中运行稳定且无需进行额外的配置,舒适自然,适用于流畅的中英文混排场景.这个字体适合用作`界面字体`或者`文档字体`
 
-+ `界面文本`: `AnonymicePro Nerd Font`
-+ `文档文本`: `UbuntuMono Nerd Font`
+    ```bash
+    # `noto sans cjk sc`为黑体,`noto serif cjk sc`为宋体
+    sudo apt-get install fonts-noto-cjk
+    ```
+
++ [nerd-fonts](https://github.com/ryanoasis/nerd-fonts),是一套专门为编程设计的字体,适合给terminal用
+
+    ```bash
+    cd workspace/init_source
+    git clone https://github.com/ryanoasis/nerd-fonts.git --depth 1
+    ```
+
+#### 设置字体
+
+设置全局字体在`显示应用`->`工具`->`优化`.选中`字体`这个位置,我个人习惯设置成如下:
+
++ `界面文本`: `Noto Sans CJK SC Meduim`
++ `文档文本`: `Noto Serif CJK SC Meduim`
 + `等宽文本`: `Ubuntu San Font`
+
+之后我们可以进terminal,在`首选项`->`default`->`自定义字体`中选择`Ubuntu Normal Nerd Font`.
 
 ## 系统优化
 
@@ -974,7 +989,6 @@ zap install --github --from=mltframework/shotcut shotcut -->
 
 ### 沙盒化应用
 
-
 应对应用的安全性问题,`PORTABLE LINUX APPS`这种"独立自主"路线固然是一个方案,但显然并不是唯一方案,沙盒化应用就是另一个方案.显然沙盒化方案在厂商看来更有优势,所以目前的三个主流沙盒化方案中有两个由厂商主导,剩下的一个也有厂商背书,而国产的统信系统使用的应用管理工具也是这个路线.
 
 沙盒化应用大多可以理解为更轻量的docker.最基础的就是通过Linux的容器技术(`namespace`)隔离应用与操作系统,再单独为应用提供一套统一的lib作为runtime.不同的方案可能还会隔离应用的静态文件,做额外的权限控制等等.
@@ -1050,6 +1064,8 @@ flatpak install flathub io.github.flattool.Warehouse
 而这个`steam-linux-runtime`实际上就是一个通用的轻量级沙盒,包含了一个统一的库环境并用namespace与操作系统隔离.一些游戏开发相关的开源应用比如`blender`,`godot`,原生支持linux的游戏比如`dota`也都可以使用这种方式运行.
 
 由于这个环境也是用namespace做抽象的,所以性能损失也是有的,只是没那么多.
+
+
 
 ### 选择应用安装方式的总结
 
