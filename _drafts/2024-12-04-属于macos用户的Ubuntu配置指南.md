@@ -640,16 +640,6 @@ sudo apt install ubuntu-restricted-extras
 
 安装好后市面上大部分的音频视频格式我们就都可以使用了
 
-<!-- ### amd显卡的监控
-
-amdGPU状态的监控使用[AMD GPU TOP](https://github.com/Umio-Yasuno/amdgpu_top).我们可以直接在项目的release中下载`.deb`文件,双击安装即可
-
-这个工具同样可以监控核显
-
-<!-- ### Nvidia显卡的监控
-
-nvidia-smi --> -->
-
 ### 优化蓝牙连接
 
 ubuntu中蓝牙设备在机器长期不用后会自动断开连接.这对于一般的设备来说挺好,毕竟还省电了.但对于鼠标那就尴尬了.
@@ -717,7 +707,6 @@ ubuntu中蓝牙设备在机器长期不用后会自动断开连接.这对于一�
     | 窗口   | 隐藏窗口(最小化) | `Control + M`         |
     | 窗口   | 关闭应用         | `Control + Q`         |
     | 系统   | 锁定屏幕         | `Control + Super + Q` |
-
 
 2. 重新设置一些terminal快捷键
 
@@ -814,22 +803,54 @@ ubuntu自带远程桌面服务,我们打开来就可以了
 
 ### C/C++环境
 
+```bash
+sudo apt install build-essential cmake bazel
+```
+
 
 ### Golang环境
 
+```bash
+rm -rf /usr/local/go && tar -C /usr/local -xzf go1.23.4.linux-amd64.tar.gz
+export PATH=$PATH:/usr/local/go/bin
+```
 
-### android开发环境
-
-
-### protobuffer编译环境
 
 
 ### python环境
 
+```bash
+"${SHELL}" <(curl -L micro.mamba.pm/install.sh)
+```
+
 
 ### node.js环境
 
+```bash
+# Download and install nvm:
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh | bash
+
+# Download and install Node.js:
+nvm install 23
+
+# Verify the Node.js version:
+node -v # Should print "v23.5.0".
+nvm current # Should print "v23.5.0".
+
+# Verify npm version:
+npm -v # Should print "10.9.2".
+
+```
+
 ### latex环境
+
+<!-- ### android开发环境
+ -->
+
+### protobuffer编译环境
+
+
+
 
 ### docker环境
 
@@ -844,6 +865,21 @@ ubuntu自带远程桌面服务,我们打开来就可以了
 2. 失去调用显卡的能力
 
 那是用原生的docker engine还是用docker desktop,这个取舍就需要根据需求自己来做了.反正我是推荐用原生的docker engine.
+
+
+```bash
+sudo nano /etc/docker/daemon.json
+```
+
+```json
+{
+    "registry-mirrors":[
+        "https://registry.docker-cn.com",
+        "https://hub-mirror.c.163.com",
+        "https://docker.mirrors.ustc.edu.cn/"
+    ]
+}
+```
 
 #### windows虚拟机
 
