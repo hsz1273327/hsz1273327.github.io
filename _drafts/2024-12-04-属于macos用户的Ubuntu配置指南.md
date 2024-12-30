@@ -441,28 +441,32 @@ sudo apt-get install gnome-browser-connector
 
 下面是我认为比较有必要的gnome插件汇总
 
-| 插件                                                                                                          | 推荐等级 | 用途                              | 补充说明                                                                                                                             |
-| ------------------------------------------------------------------------------------------------------------- | -------- | --------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
-| [user-themes](https://extensions.gnome.org/extension/19/user-themes/)                                         | 高       | 管理用户主题                      | ---                                                                                                                                  |
-| [Dash to Dock](https://extensions.gnome.org/extension/307/dash-to-dock/)                                      | 高       | 一个对主题更友好的dash            | 关闭`Ubuntu Docker`,功能重复了                                                                                                       |
-| [Blur my Shell](https://extensions.gnome.org/extension/3193/blur-my-shell/)                                   | 高       | 一个提供桌面模糊的插件            | 建议修改`Dash to Dock`中的拐角半径                                                                                                   |
-| [Clipboard Indicator](https://extensions.gnome.org/extension/779/clipboard-indicator/)                        | 高       | 剪切板功能,可以保存近期的复制内容 | ---                                                                                                                                  |
-| [Lock Keys](https://extensions.gnome.org/extension/1532/lock-keys/)                                           | 高       | 大小写锁定提示                    | ---                                                                                                                                  |
-| [Removable Drive Menu](https://extensions.gnome.org/extension/7/removable-drive-menu/)                        | 高       | 顶栏的移动存储操作工具            | ---                                                                                                                                  |
-| [Screenshort-cut](https://extensions.gnome.org/extension/6868/screenshort-cut/)                               | 中       | 顶栏截图工具                      | ---                                                                                                                                  |
-| [Vitals](https://extensions.gnome.org/extension/1460/vitals/)                                                 | 中       | 顶栏系统监控                      | ---                                                                                                                                  |
-| [GSConnect](https://extensions.gnome.org/extension/1319/gsconnect/)                                           | 高       | 快速连接移动端设备                | 需要配合app`kde connect`                                                                                                             |
-| [Todoit](https://extensions.gnome.org/extension/7538/todo-list/)                                              | 低       | 顶部todolist                      | ---                                                                                                                                  |
-| [Lunar Calendar 农历](https://extensions.gnome.org/extension/675/lunar-calendar/)                             | 中       | 日历改为农历                      | 需要先额外安装[Nei/ChineseCalendar](https://gitlab.gnome.org/Nei/ChineseCalendar/-/archive/20240107/ChineseCalendar-20240107.tar.gz) |
-| [Compiz alike magic lamp effect](https://extensions.gnome.org/extension/3740/compiz-alike-magic-lamp-effect/) | 中       | 仿macos的最小化动画               | ---                                                                                                                                  |
-| [gTile](https://extensions.gnome.org/extension/28/gtile/)                                                     | 高       | 多应用划分窗口                    | ---                                                                                                                                  |
-| [Input Method Panel](https://extensions.gnome.org/extension/261/kimpanel/)                                    | 高       | 输入法相关                        | ---                                                                                                                                  |
-| [Click to close overview](https://extensions.gnome.org/extension/3826/click-to-close-overview/)               | 低       | 点击空白处关闭预览                | ---                                                                                                                                  |
-| [Hide Top Bar](https://extensions.gnome.org/extension/545/hide-top-bar/)                                      | 低       | 自动隐藏顶部工具栏                | ---                                                                                                                                  |
+| 插件                                                                                                          | 推荐等级 | 用途                               | 补充说明                                                                                                                             |
+| ------------------------------------------------------------------------------------------------------------- | -------- | ---------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
+| [user-themes](https://extensions.gnome.org/extension/19/user-themes/)                                         | 高       | 管理用户主题                       | ---                                                                                                                                  |
+| [Dash to Dock](https://extensions.gnome.org/extension/307/dash-to-dock/)                                      | 高       | 一个对主题更友好的dash             | 关闭`Ubuntu Docker`,功能重复了                                                                                                       |
+| [Blur my Shell](https://extensions.gnome.org/extension/3193/blur-my-shell/)                                   | 高       | 一个提供桌面模糊的插件             | 建议修改`Dash to Dock`中的拐角半径                                                                                                   |
+| [Clipboard Indicator](https://extensions.gnome.org/extension/779/clipboard-indicator/)                        | 高       | 剪切板功能,可以保存近期的复制内容  | ---                                                                                                                                  |
+| [Lock Keys](https://extensions.gnome.org/extension/1532/lock-keys/)                                           | 高       | 大小写锁定提示                     | ---                                                                                                                                  |
+| [Removable Drive Menu](https://extensions.gnome.org/extension/7/removable-drive-menu/)                        | 高       | 顶栏的移动存储操作工具             | ---                                                                                                                                  |
+| [Screenshort-cut](https://extensions.gnome.org/extension/6868/screenshort-cut/)                               | 中       | 顶栏截图工具                       | ---                                                                                                                                  |
+| [Vitals](https://extensions.gnome.org/extension/1460/vitals/)                                                 | 中       | 顶栏系统监控                       | ---                                                                                                                                  |
+| [GSConnect](https://extensions.gnome.org/extension/1319/gsconnect/)                                           | 高       | 快速连接移动端设备                 | 需要配合app`kde connect`                                                                                                             |
+| [Todoit](https://extensions.gnome.org/extension/7538/todo-list/)                                              | 低       | 顶部todolist                       | ---                                                                                                                                  |
+| [Lunar Calendar 农历](https://extensions.gnome.org/extension/675/lunar-calendar/)                             | 中       | 日历改为农历                       | 需要先额外安装[Nei/ChineseCalendar](https://gitlab.gnome.org/Nei/ChineseCalendar/-/archive/20240107/ChineseCalendar-20240107.tar.gz) |
+| [Compiz alike magic lamp effect](https://extensions.gnome.org/extension/3740/compiz-alike-magic-lamp-effect/) | 中       | 仿macos的最小化动画                | ---                                                                                                                                  |
+| [gTile](https://extensions.gnome.org/extension/28/gtile/)                                                     | 高       | 多应用划分窗口                     | ---                                                                                                                                  |
+| [Input Method Panel](https://extensions.gnome.org/extension/261/kimpanel/)                                    | 高       | 输入法相关                         | ---                                                                                                                                  |
+| [Click to close overview](https://extensions.gnome.org/extension/3826/click-to-close-overview/)               | 低       | 点击空白处关闭预览                 | ---                                                                                                                                  |
+| [Hide Top Bar](https://extensions.gnome.org/extension/545/hide-top-bar/)                                      | 低       | 自动隐藏顶部工具栏                 | ---                                                                                                                                  |
+| [desktop-lyric](https://extensions.gnome.org/extension/4006/desktop-lyric/)                                   | 中       | 桌面歌词                           |
+| [applications-menu](https://extensions.gnome.org/extension/6/applications-menu/)                              | 高       | 顶部提供应用的归类入口             |
+| [https://extensions.gnome.org/extension/5660/weather-or-not/]                                                 | 低       | 顶部天气插件,需要有`gnome weahter` |
 
 除此之外,我个人推荐对系统默认插件做如下处理
 
 + 禁用Desktop Icons,这个插件会让桌面有图标(默认会有你的home目录文件夹)
++ 在全部配置完成后dash to dock插件中关闭`显示应用程序`
 
 ### 增加空格键预览功能
 
@@ -827,23 +831,6 @@ ubuntu自带远程桌面服务,我们打开来就可以了
 
 ### latex环境
 
-### steam环境
-
-steam在其他操作系统中只是一个游戏平台,但在linux下它是必备软件,因为它提供了转译层[proton](https://github.com/ValveSoftware/Proton).这太伟大了,直接让linux下可以正常跑大部分windows平台的游戏,还顺便让其他windows软件也可以借助steam进行管理运行.
-
-#### 游戏相关优化
-
-https://github.com/flightlessmango/MangoHud
-
-https://www.bilibili.com/video/BV1zD4y1b7Jj?vd_source=08b668b29d50d7b81093d4adee9dfde0&spm_id_from=333.788.videopod.sections
-
-
-https://www.mapeditor.org/
- https://itch.io/game-assets/free/tag-tilemap
-
-
-#### 作为转译工具
-
 ### docker环境
 
 如果希望有个图形界面用于管理docker,可以安装[docker desktop](https://docs.docker.com/desktop/setup/install/linux/)代替原生docker.但需要注意,docker desktop以及其管理的所有容器都运行在虚拟机中.这带来的的好处是
@@ -862,29 +849,105 @@ https://www.mapeditor.org/
 
 #### macos虚拟机
 
-
 ## 安装和管理应用
 
 linux上目前应用的分发是相当碎片化的,为了可以安装管理各种渠道的应用我们就得做对应的优化.不考虑虚拟机中使用应用,我们可以将应用分为原生应用,沙盒化应用,转译应用者三种.
 
+### 沙盒化应用
+
+应对应用的安全性问题,盒化方案在厂商看来更有优势,所以目前的三个主流沙盒化方案中有两个由厂商主导,剩下的一个也有厂商背书,而国产的统信系统使用的应用管理工具`玲珑`也是这个路线.
+
+沙盒化应用大多可以理解为更轻量的docker.最基础的就是通过Linux的容器技术(`namespace`)隔离应用与操作系统,再单独为应用提供一套统一的lib作为runtime.不同的方案可能还会隔离应用的静态文件,做额外的权限控制等等.
+
+沙盒化由于都多少使用了容器技术,计算性能多少会受一些影响(io性能基本没啥影响),但优点在于环境统一,这样分发效率就高太多了.
+所有的沙盒化应用方案都是相似的结构: 服务端提供应用仓库;客户端提供命令行或gui的应用管理工具;再提供一套打包工具给开发者就齐活了.看看docker是不是似曾相识?就知道为啥厂商都爱这套方案了.
+
+#### Flatpak
+
+`Flatpak`是`Gnome`社区推的一套沙盒化应用方案,背后是老牌开源解决方案供应商`redhat`,主打的就是一个开源.也因为开源,linux社区普遍对它风评还不错.
+
+`Flatpak`没有`snap`那么严格,包的没那么多,但性能损失也和`snap`差不太多,在10%~15%的程度,只是相同的应用通常比`snap`少损失个1%左右.至于制成品包的大小,`Flatpak`算的是除去各种依赖层各种runtime后的大小,因此看起来会比`snap`小的多,但熟悉docker的都知道这只相当于docker镜像的最外面一层.因此一般装`Flatpak`应用它还会下一堆依赖runtime什么的,总体看时间差不多.
+
+> 安装和配置
+
+在ubuntu中我们要安装`Flatpak`应用需要先安装如下内容:
+
++ `Flatpak`客户端工具
+
+    ```bash
+    sudo apt install flatpak
+    ```
+
++ `Gnome`环境下的`Flatpak`支持插件
+
+    ```bash
+    sudo apt install gnome-software-plugin-flatpak
+    sudo reboot
+    ```
+
+> 设置`flatpak`仓库
+
+虽然`flatpak`号称去中心化完全开源,但也还是有一个社区维护的主仓库的,这就是[flathub](https://flathub.org).
+`flathub`基本就是一个网页版的`flatpak`应用中心,不想用命令行安装`flatpak`应用,我们可以直接上去搜索找到要装的应用,点击`Install`按钮下载安装文件,然后双击就可以安装了.
+
+如果要用命令行工具`flatpak`安装,则还需要做如下设置将`flathub`添加到仓库索引:
+
+```bash
+flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+sudo reboot
+```
+
+`flathub`明显是一个境外网站,因此网速往往尴尬,尤其它很多运行时源用的是github,因此很多时候
+
+> 管理`Flatpak应用`
+
+为了更好的管理flatpak应用,我们最好安装[Warehouse](https://flathub.org/apps/io.github.flattool.Warehouse)来统一管理.
+
+安装方式也很简单,在网页上点击`Install`按钮下载安装文件,然后双击就可以安装了.不过我更喜欢用命令来安装
+
+```bash
+flatpak install flathub io.github.flattool.Warehouse
+```
+
+#### snap
+
+`Ubuntu`的开发公司`Canonical`搞出来的一套沙盒化应用方案,也是`Ubuntu`现在主推的标准,目前`Ubuntu`的应用中心也只能管理`snap`软件.
+
+`snap`有最严格的权限管理,而且它的包仓库是`Canonical`自己维护的并不开源,也就是说你也没办法自己部署一个`snap`的私有仓库,这在开源精神泛滥的linux社区中那是触了逆鳞了,这也是`snap`最不受人待见的一点.
+
+然后就是性能损失.由于`snap`包的最多,性能损失也是最严重的,相比原生版本一般有10%~15%的性能(计算性能)损失,而它的打包方式也类似docker,是包含完整runtime的,因此制成品包也是最大的.
+
+虽然说了这么多缺点,但它作为`Ubuntu`默认的应用分发模式体验其实还算不错--开箱即用,下载速度也还不错,个人认为没啥必要黑它.
+
+#### steam runtime
+
+如果游戏也算应用的话steam在linux上可能是最大的应用分发渠道了.steam通过[steam-linux-runtime](https://github.com/ValveSoftware/steam-runtime)支持原生linux应用.
+
+而这个`steam-linux-runtime`实际上就是一个通用的轻量级沙盒,包含了一个统一的库环境并用namespace与操作系统隔离.一些游戏开发相关的开源应用比如`blender`,`godot`,原生支持linux的游戏比如`dota`也都可以使用这种方式运行.
+
+由于这个环境也是用namespace做抽象的,所以性能损失也是有的,只是没那么多.
+
+话虽如此,我个人还是不太推荐用`steam`管理除游戏以外的linux原生应用的,一方面这种应用太少,另一方面这类应用都往往是对计算性能要求比较高的类型,白白损失性能还是太可惜了.
+
 ### 原生应用
 
-原生应用直接运行在裸机上,提供了最大程度灵活性和最大程度资源利用,但问题就在于安全性. 由于直接接触系统,原生应用之间可能会相互影响,造成依赖冲突等问题,一个不小心甚至可能将系统整崩溃.
+原生应用直接运行在裸机上,提供了最大程度灵活性和最大程度资源利用,但问题就在于安全性.由于直接接触系统,原生应用之间可能会相互影响,造成依赖冲突等问题,一个不小心甚至可能将系统整崩溃.
 
 #### deb
 
 ubnutu是从debian发展而来的,继承了其deb应用的生态.我们可以使用`apt`工具很轻易的安装库或者应用,而这些都是使用`deb`分发的.
 
-由于apt工具会处理依赖,`deb`包往往大量相互依赖而本体非常小.
+由于apt工具会处理依赖,`deb`包往往大量相互依赖而本体非常小.但请注意,如果不是万不得已,用户级别的应用我是不推荐用deb安装的,因为一旦依赖出了问题那就很难修复,想要重回干净的系统基本只能重装系统了,而python用户应该都清楚依赖冲突问题是多么容易发生.
 
 管理deb软件包我们可以安装`synaptic`.
 
 ```bash
-sudo apt install synaptic### 安装资源监控工具
+sudo apt install synaptic ### 安装资源监控工具
 ```
 
 #### PORTABLE LINUX APPS
 
+`PORTABLE LINUX APPS`这种"独立自主"路线固然是一个方案,但显然并不是唯一方案,沙盒化应用就是另一个方案.显然沙
 所谓`PORTABLE LINUX APPS`是在GNU/Linux上可以独立运行(理论上)的应用程序,这种应用程序可以在任何地方运行甚至在U盘上都可以.
 
 这些应用程序可以是`AppImage应用`,也可以是独立归档应用(比如`Firefox`,`Blender`,`Thunderbird`).
@@ -906,6 +969,8 @@ sudo apt install synaptic### 安装资源监控工具
 这个分发方式就像windows上的`绿色软件`和macos中应用的结合,可以说相当创新.但很可惜似乎从2019年开始发展就慢下来了.不过我个人依然推荐如果要开发linux下的应用,可以将这种方式作为一个分发选项.
 
 一般如果我们用的是开源软件,可以在github上找找,看看它的`release`中是否有以`.AppImage`为后缀的文件.有的话就是了,下载下来就可以直接使用了.
+
+注意`AppImage`实际有两个版本,版本1基本已经废弃,只会在一些已经停止维护的古早软件上有机会看到,这里讨论的都是版本2的`AppImage应用`
 
 >> 直接执行`AppImage应用`
 
@@ -930,6 +995,12 @@ sudo apt install libfuse2t64
 
 `AppImage应用`自带的运行时支持使用flage`--appimage-extract`将其中的内容解包成一个文件夹([AppDir](https://docs.appimage.org/reference/appdir.html))放到路径`squashfs-root`下.
 提取出来以后我们完全可以将它当做`独立归档应用`处理
+
+> `AppImage应用`的兼容性问题
+
+没错,`AppImage`实际上并没有完全解决兼容性问题,因为不同的linux发行版甚至同意linux发行版的不同版本,他们的`glibc`都不一定版本一样,而很多应用即便封装成了`AppImage`也并没有将`glibc`封装进去.这就造成了一些`AppImage应用`有兼容性问题.毕竟`AppImage`这套方案并没有任何审核,也没有任何强制手段,怎么封装全靠开发者自觉,这也是开源去中心化的代价.
+
+如果碰到用不了的`AppImage应用`,我们基本只能放弃,看看有没有其他方案的可以用了.
 
 > 系统集成
 
@@ -967,103 +1038,97 @@ sudo apt install libfuse2t64
 3. 为这个`.desktop`文件赋予可执行权限
 
     ```bash
-    chmod +x ~/Desktop/gedit.desktop
+    chmod +x ~/Desktop/xxx.desktop
     ```
 
 > `PORTABLE LINUX APPS`管理工具
 
-https://flathub.org/apps/it.mijorus.gearlever
+`PORTABLE LINUX APPS`可以说是真正的去中心化,社区驱动,以至于时至今日已经有点驱动不下去了的感觉.
 
-https://github.com/ivan-hc/AM
+但不管怎样`PORTABLE LINUX APPS`也是一类重要的解决方案.这类应用的维护相对麻烦些,工具简陋,维护相对不上心,我们能做的就是多一些手动介入让他们在系统中相对更简洁好维护而已.
+
+为了做到这一点,我个人会给`PORTABLE LINUX APPS`的部署做如下限制
+
++ 限制`PORTABLE LINUX APPS`仅用户级安装
++ 限制`PORTABLE LINUX APPS`的应用全部安装在`~/Applications`目录下,且一个应用一个文件夹或一个`.appimage`文件不做嵌套
+
+说回到管理工具,`PORTABLE LINUX APPS`的管理工具其实也是有的,但一样也是相当的"去中心化"而且完成度相对低.我体验的相对靠谱的是[ivan-hc/AM](https://github.com/ivan-hc/AM)这套工具.
+这套的缺点是只有命令行工具没有带gui的管理应用.但相对的index整理的算比较全的,而且提供了一个轻量级沙盒功能可以进一步隔离应用和操作系统.
+
+我更加推荐安装它的非root版本[ivan-hc/AppMan](https://github.com/ivan-hc/AppMan),他们功能一样,只是appman是用户级而非系统级.
+
+>> 安装`appman`
+
+安装`appman`可以通过如下命令实现
+
+```bash
+wget -q https://raw.githubusercontent.com/ivan-hc/AM/main/AM-INSTALLER && chmod a+x ./AM-INSTALLER && ./AM-INSTALLER
+```
+
+注意由于数据在github上,最好先挂上代理再执行上面的命令.
+
+执行好后会让你选安装`am`还是`appman`,选`2`就是`appman`.
+
+安装完成后会有如下几个位置有相关文件
+
++ 执行命令的目录下会有安装脚本`AM-INSTALLER`,可以删掉
++ `~/.local/bin`下会有可执行文件`appman`
++ `~/Applications`下会有文件夹`appman`
+
+要卸载`appman`时先将`appman`安装的应用都卸载了,然后直接将这些文件,文件夹删除即可
+
+>> 使用`appman`安装应用
+
+`appman`安装的应用可以有两个来源
+
+1. <https://portable-linux-apps.github.io/apps.html>中维护的应用索引涵盖的应用,使用
+
+    ```bash
+    app -i <应用名>
+    ```
+
+    安装即可.如果希望安装`AppImage`而不是`独立归档应用`,可以添加flag`-a`
+
+    ```bash
+    app -ia <应用名>
+    ```
+
+2. 来自github的应用
+
+
+>> 使用`appman`更新应用
+
+>> 使用`appman`卸载应用
+
+
 
 
 
 <!-- https://www.appimagehub.com/
 https://github.com/TheAssassin/AppImageLauncher -->
 
-
+<!-- https://flathub.org/apps/it.mijorus.gearlever -->
 
 <!-- 
 curl https://raw.githubusercontent.com/srevinsaju/zap/main/install.sh | bash -s          
 zap install --github --from=mltframework/shotcut shotcut -->
 
-### 沙盒化应用
+### steam环境
 
-应对应用的安全性问题,`PORTABLE LINUX APPS`这种"独立自主"路线固然是一个方案,但显然并不是唯一方案,沙盒化应用就是另一个方案.显然沙盒化方案在厂商看来更有优势,所以目前的三个主流沙盒化方案中有两个由厂商主导,剩下的一个也有厂商背书,而国产的统信系统使用的应用管理工具也是这个路线.
+steam在其他操作系统中只是一个游戏平台,但在linux下它是必备软件,因为它提供了转译层[proton](https://github.com/ValveSoftware/Proton).这太伟大了,直接让linux下可以正常跑大部分windows平台的游戏,还顺便让其他windows软件也可以借助steam进行管理运行.
 
-沙盒化应用大多可以理解为更轻量的docker.最基础的就是通过Linux的容器技术(`namespace`)隔离应用与操作系统,再单独为应用提供一套统一的lib作为runtime.不同的方案可能还会隔离应用的静态文件,做额外的权限控制等等.
+#### 游戏相关优化
 
-沙盒化由于都多少使用了容器技术,计算性能多少会受一些影响(io性能基本没啥影响),但优点在于环境统一,这样分发效率就高太多了.
-所有的沙盒化应用方案都是相似的结构: 服务端提供应用仓库;客户端提供命令行或gui的应用管理工具;再提供一套打包工具给开发者就齐活了.看看docker是不是似曾相识?就知道为啥厂商都爱这套方案了.
+https://github.com/flightlessmango/MangoHud
 
-#### snap
+https://www.bilibili.com/video/BV1zD4y1b7Jj?vd_source=08b668b29d50d7b81093d4adee9dfde0&spm_id_from=333.788.videopod.sections
 
-`Ubuntu`的开发公司`Canonical`搞出来的一套沙盒化应用方案,也是`Ubuntu`现在主推的标准,目前`Ubuntu`的应用中心也只能管理`snap`软件.
 
-`snap`有最严格的权限管理,而且它的包仓库是`Canonical`自己维护的并不开源,也就是说你也没办法自己部署一个`snap`的私有仓库,这在开源精神泛滥的linux社区中那是触了逆鳞了,这也是`snap`最不受人待见的一点.
+https://www.mapeditor.org/
+ https://itch.io/game-assets/free/tag-tilemap
 
-然后就是性能损失.由于`snap`包的最多,性能损失也是最严重的,相比原生版本一般有10%~15%的性能(计算性能)损失,而它的打包方式也类似docker,是包含完整runtime的,因此制成品包也是最大的.
 
-虽然说了这么多缺点,但它作为`Ubuntu`默认的应用分发模式体验其实还算不错--开箱即用,下载速度也还不错,个人认为没啥必要黑它.
-
-#### Flatpak
-
-`Flatpak`是`Gnome`社区推的一套沙盒化应用方案,背后是老牌开源解决方案供应商`redhat`,主打的就是一个开源.也因为开源,linux社区普遍对它风评还不错.
-
-`Flatpak`没有`snap`那么严格,包的没那么多,但性能损失也和`snap`差不太多,在10%~15%的程度,只是相同的应用通常比`snap`少损失个1%左右.至于制成品包的大小,`Flatpak`算的是除去各种依赖层各种runtime后的大小,因此看起来会比`snap`小的多,但熟悉docker的都知道这只相当于docker镜像的最外面一层.因此一般装`Flatpak`应用它还会下一堆依赖runtime什么的,总体看时间差不多.
-
-> 安装和配置
-
-在ubuntu中我们要安装`Flatpak`应用需要先安装如下内容:
-
-+ `Flatpak`客户端工具
-
-    ```bash
-    sudo apt install flatpak
-    ```
-
-+ `Gnome`环境下的`Flatpak`支持插件
-
-    ```bash
-    sudo apt install gnome-software-plugin-flatpak
-    sudo reboot
-    ```
-
-> 设置`flatpak`仓库
-
-虽然`flatpak`号称去中心化完全开源,但也还是有一个社区维护的主仓库的,这就是[flathub](https://flathub.org).
-`flathub`基本就是一个网页版的`flatpak`应用中心,不想用命令行安装`flatpak`应用,我们可以直接上去搜索找到要装的应用,点击`Install`按钮下载安装文件,然后双击就可以安装了.
-
-如果要用命令行工具`flatpak`安装,则还需要做如下设置将`flathub`添加到仓库索引:
-
-```bash
-flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
-sudo reboot
-```
-
-> 管理`Flatpak应用`
-
-为了更好的管理flatpak应用,我们最好安装[Warehouse](https://flathub.org/apps/io.github.flattool.Warehouse)来统一管理.
-
-安装方式也很简单,在网页上点击`Install`按钮下载安装文件,然后双击就可以安装了.不过我更喜欢用命令来安装
-
-```bash
-flatpak install flathub io.github.flattool.Warehouse
-```
-
-<!-- #### 统信玲珑
-
-[玲珑](https://www.linglong.space/)是国产操作系统`deeping os`推出的沙盒化应用方案.这个方案官方宣称参考了`Flatpak`,并且实际上应该也参考了`AppImage`--它也可以单文件运行.
-
-这个仓库都统信了,自然主要作用就是安装国产软件 -->
-
-#### steam runtime
-
-如果游戏也算应用的话steam在linux上可能是最大的应用分发渠道了.steam通过[steam-linux-runtime](https://github.com/ValveSoftware/steam-runtime)支持原生linux应用.
-
-而这个`steam-linux-runtime`实际上就是一个通用的轻量级沙盒,包含了一个统一的库环境并用namespace与操作系统隔离.一些游戏开发相关的开源应用比如`blender`,`godot`,原生支持linux的游戏比如`dota`也都可以使用这种方式运行.
-
-由于这个环境也是用namespace做抽象的,所以性能损失也是有的,只是没那么多.
+#### 作为转译工具
 
 
 
@@ -1101,25 +1166,27 @@ linux下我会尽量推荐开源工具.开源配开源嘛,他好我也好.
 
 下面是一些常用软件的安装信息
 
-| 分类       | 软件                            | 渠道                                                                   | 说明                                              |
-| ---------- | ------------------------------- | ---------------------------------------------------------------------- | ------------------------------------------------- |
-| 生产力工具 | gimp                            | [flathub](https://flathub.org/apps/org.gimp.GIMP)                      | 开源的图像编辑软件,ps平替                         |
-| 生产力工具 | freecad                         | [flathub](https://flathub.org/apps/org.freecad.FreeCAD)                | 开源的工程制图,autocad平替                        |
-| 生产力工具 | blender                         | [flathub](https://flathub.org/apps/org.blender.Blender)                | 开源的3d建模渲染工具,maya平替                     |
-| 生产力工具 | godot                           | [flathub](https://flathub.org/apps/org.godotengine.Godot)              | 开源的轻量级游戏引擎                              |
-| 生产力工具 | unrealengine5                   | [官网下载](https://www.unrealengine.com/zh-CN/download)                | 大名鼎鼎的虚幻引擎,                               |
-| 生产力工具 | [shotcut](https://shotcut.org/) | [flathub](https://flathub.org/apps/org.shotcut.Shotcut)                | 轻量级的开源视频剪辑工具                          |
-| 生产力工具 | DaVinci Resolve                 | [官网下载](http://www.blackmagicdesign.com/cn/products/davinciresolve) | 大名鼎鼎的生产级视频剪辑工具达芬奇,有免费的社区版 |
-| 生产力工具 | 飞书                            | [官网下载](https://www.feishu.cn/download)                             | 知名的办公协作工具                                |
-| 生产力工具 | 微信                            | [官网下载](https://linux.weixin.qq.com/)                               | 知名的聊天工具                                    |
-| 生产力工具 | wps                             | [官网下载](https://www.wps.cn/product/wpslinux)                        | 知名的office套件                                  |
-| 生产力工具 | [obs](https://obsproject.com/)  | [flathub](https://flathub.org/apps/com.obsproject.Studio)              | 知名的开源直播录屏工具                            |
-| 生产力工具 | vscode                          | [官网下载](https://code.visualstudio.com/Download)                     | 文本编辑器                                        |
-| 生产力工具 | github desktop                  | [fork版本下载](https://github.com/shiftkey/desktop)                    | github desktop的第三方linux fork                  |
-| 生产力工具 | balenaEtcher                    | [官网下载](https://etcher.balena.io/)                                  | 镜像写入工具                                      |
-| 娱乐工具   | [mpv](https://mpv.io)           | [flathub](https://flathub.org/apps/io.mpv.Mpv)                         | 知名的开源视频播放器                              |
-| 娱乐工具   | YesPlayMusic                    | [官网下载](https://github.com/qier222/YesPlayMusic)                    | 网易云音乐的开源第三方客户端                      |
-| 娱乐工具   | sunshine                        | [flathub](https://flathub.org/apps/dev.lizardbyte.app.Sunshine)        | 串流服务端                                        |
+| 分类       | 软件                           | 渠道                                                                          | 说明                                                               |
+| ---------- | ------------------------------ | ----------------------------------------------------------------------------- | ------------------------------------------------------------------ |
+| 系统工具   | Disk Usage Analyzer            | [flathub](https://flathub.org/apps/org.gnome.baobab)                          | 查看硬盘使用情况的工具                                             |
+| 生产力工具 | Calculator                     | [flathub](https://flathub.org/apps/org.gnome.Calculator)                      | 基本的计算器工具                                                   |
+| 生产力工具 | gimp                           | [flathub](https://flathub.org/apps/org.gimp.GIMP)                             | 开源的图像编辑软件,ps平替                                          |
+| 生产力工具 | freecad                        | [flathub](https://flathub.org/apps/org.freecad.FreeCAD)                       | 开源的工程制图,autocad平替                                         |
+| 生产力工具 | blender                        | [独立归档应用](https://portable-linux-apps.github.io/apps/blender.html)       | 开源的3d建模渲染工具,maya平替                                      |
+| 生产力工具 | godot                          | [独立归档应用](https://portable-linux-apps.github.io/apps/godot.html)         | 开源的轻量级游戏引擎                                               |
+| 生产力工具 | unrealengine5                  | [官网下载](https://www.unrealengine.com/zh-CN/download)                       | 大名鼎鼎的虚幻引擎,                                                |
+| 生产力工具 | shotcut                        | [独立归档应用](https://portable-linux-apps.github.io/apps/shotcut.html)       | 轻量级的开源视频剪辑工具                                           |
+| 生产力工具 | DaVinci Resolve                | [官网下载](http://www.blackmagicdesign.com/cn/products/davinciresolve)        | 大名鼎鼎的生产级视频剪辑工具达芬奇,有免费的社区版                  |
+| 生产力工具 | 飞书                           | [官网下载deb](https://www.feishu.cn/download)                                 | 知名的办公协作工具,flathub版本无法后台挂载因此用官网版本           |
+| 生产力工具 | 微信                           | [官网下载deb](https://linux.weixin.qq.com/)                                   | 知名的聊天工具,由于flathub版本的后台功能有缺陷因此使用AppImage版本 |
+| 生产力工具 | wps                            | [官网下载deb](https://www.wps.cn/product/wpslinux)                            | 知名的office套件,flatpak版本过低                                   |
+| 生产力工具 | [obs](https://obsproject.com/) | [flathub](https://flathub.org/apps/com.obsproject.Studio)                     | 知名的开源直播录屏工具                                             |
+| 生产力工具 | vscode                         | [官网下载](https://code.visualstudio.com/Download)                            | 文本编辑器                                                         |
+| 生产力工具 | github desktop                 | [fork版本下载](https://github.com/shiftkey/desktop)                           | github desktop的第三方linux fork                                   |
+| 生产力工具 | balenaEtcher                   | [官网下载](https://etcher.balena.io/)                                         | 镜像写入工具                                                       |
+| 娱乐工具   | [mpv](https://mpv.io)          | [flathub](https://flathub.org/apps/io.mpv.Mpv)                                | 知名的开源视频播放器                                               |
+| 娱乐工具   | NetEase Cloud Music Gtk4       | [flathub](https://flathub.org/apps/com.github.gmg137.netease-cloud-music-gtk) | 网易云音乐的开源第三方客户端                                       |
+| 娱乐工具   | sunshine                       | [flathub](https://flathub.org/apps/dev.lizardbyte.app.Sunshine)               | 串流服务端                                                         |
 
 ### 浏览器中激活显卡渲染
 
