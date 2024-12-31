@@ -799,7 +799,7 @@ ubuntu自带远程桌面服务,我们打开来就可以了
 
 ## 安装常用环境
 
-我个人比较习惯借助vscode的`Dev Containers`插件,在完全独立的容器中做开发.但即便是这样,本地的开发环境还是必不可少的,毕竟vscode还要用对应语言的生态做编程辅助.而且也难免会需要本地的轻量级开发
+ubuntu的apt是最常用的环境安装工具,但apt工具安装
 
 ### C/C++环境
 
@@ -850,40 +850,66 @@ npm -v # Should print "10.9.2".
 ### protobuffer编译环境
 
 
+## docker环境
 
+可以这么说,原生的docker环境是linux系统最大的竞争力之一,docker自然是要装的,而且必须装原生docker!
 
-### docker环境
++ 添加docker源
 
-如果希望有个图形界面用于管理docker,可以安装[docker desktop](https://docs.docker.com/desktop/setup/install/linux/)代替原生docker.但需要注意,docker desktop以及其管理的所有容器都运行在虚拟机中.这带来的的好处是
+    ```bash
+    # Add Docker's official GPG key:
+    sudo apt-get update
+    sudo apt-get install ca-certificates curl
+    sudo install -m 0755 -d /etc/apt/keyrings
+    sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
+    sudo chmod a+r /etc/apt/keyrings/docker.asc
 
-1. 有和windows,mac os上基本一致的体验
-2. 更好的安全性
+    # Add the repository to Apt sources:
+    echo \
+    "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu \
+    $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
+    sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+    sudo apt-get update
+    ```
 
-但同时也带来了如下缺陷
++ 安装docker
 
-1. 性能损失
-2. 失去调用显卡的能力
+    ```bash
+    sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+    ```
 
-那是用原生的docker engine还是用docker desktop,这个取舍就需要根据需求自己来做了.反正我是推荐用原生的docker engine.
++ 设置非root权限使用docker
 
+    ```bash
+    sudo groupadd docker
+    sudo usermod -aG docker $USER
+    newgrp docker
+    ```
 
-```bash
-sudo nano /etc/docker/daemon.json
-```
++ 修改docker配置增加镜像站
 
-```json
-{
-    "registry-mirrors":[
-        "https://registry.docker-cn.com",
-        "https://hub-mirror.c.163.com",
-        "https://docker.mirrors.ustc.edu.cn/"
-    ]
-}
-```
+    ```bash
+    sudo nano /etc/docker/daemon.json
+    ```
 
-#### windows虚拟机
+    ```json
+    {
+        "registry-mirrors":[
+            "https://hub.geekery.cn",
+            "https://hub.littlediary.cn",
+            "https://registry.dockermirror.com"
+        ]
+    }
+    ```
 
-#### macos虚拟机
++ 安装轻量级docker监控工具[whaler](https://flathub.org/apps/com.github.sdv43.whaler),这个工具可以监控系统中的容器和compose-stack.已经相当够用.
+
++ 重启后生效,然后就可以使用了
+
+### windows虚拟机
+
+### macos虚拟机
+
 
 ## 安装和管理应用
 
