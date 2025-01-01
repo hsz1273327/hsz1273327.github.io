@@ -276,6 +276,22 @@ alias setlocalproxy="export https_proxy=http://192.168.50.177:7890 http_proxy=ht
 alias unsetproxy="unset https_proxy;unset http_proxy;unset all_proxy"
 ```
 
+### ssh客户端设置
+
++ `.ssh/config`
+
+    ```txt
+    ControlPersist 4h
+    ServerAliveInterval 30
+    ControlMaster auto
+    ControlPath /tmp/ssh_mux_%h_%p_%r
+    ForwardX11Trusted yes
+
+    HostKeyAlgorithms +ssh-rsa
+    PubkeyAcceptedKeyTypes +ssh-rsa
+
+    ```
+
 ## 美化系统
 
 美化系统我们大致可以分为如下几个步骤
@@ -449,7 +465,7 @@ sudo apt-get install gnome-browser-connector
 | [Clipboard Indicator](https://extensions.gnome.org/extension/779/clipboard-indicator/)                        | 高       | 剪切板功能,可以保存近期的复制内容  | ---                                                                                                                                  |
 | [Lock Keys](https://extensions.gnome.org/extension/1532/lock-keys/)                                           | 高       | 大小写锁定提示                     | ---                                                                                                                                  |
 | [Removable Drive Menu](https://extensions.gnome.org/extension/7/removable-drive-menu/)                        | 高       | 顶栏的移动存储操作工具             | ---                                                                                                                                  |
-| [Screenshort-cut](https://extensions.gnome.org/extension/6868/screenshort-cut/)                               | 中       | 顶栏截图工具                       | ---                                                                                                                                  |
+| [Screenshort-cut](https://extensions.gnome.org/extension/6868/screenshort-cut/)                               | 中       | 顶栏截图工具                       | 需要额外安装`sudo apt install gir1.2-gtop-2.0 lm-sensors`获取硬盘信息                                                                |
 | [Vitals](https://extensions.gnome.org/extension/1460/vitals/)                                                 | 中       | 顶栏系统监控                       | ---                                                                                                                                  |
 | [GSConnect](https://extensions.gnome.org/extension/1319/gsconnect/)                                           | 高       | 快速连接移动端设备                 | 需要配合app`kde connect`                                                                                                             |
 | [Todoit](https://extensions.gnome.org/extension/7538/todo-list/)                                              | 低       | 顶部todolist                       | ---                                                                                                                                  |
@@ -777,80 +793,8 @@ ubuntu特有操作
 
 如果你不在乎wayland,可以接受桌面环境运行在x11上,那我们也可以安装[kinto](https://github.com/rbreaves/kinto)这个项目来获得不同风格且统一的快捷键布局.
 
-<!-- ## 远程桌面
 
-远程桌面分为本地开放远程桌面给远端连接和本地连接远端远程桌面.
-
-ubuntu自带远程桌面服务,我们打开来就可以了
-
-1. 打开`设置`,找到``,点击`远程桌面`
-2. 启用`远程桌面`,不要钩选vnc
-3. 启用`远程控制`
-4. 在`如何连接`中将设备名设置为你的机器名,地址设置为`ms-rd://<设备名>.local`
-5. 在登录验证中设置用户名和密码
-
-这样在本地的设置就好了,之后我们在ddnsto中进行设置
-
-1. 进入`我的设备`,选择`远程应用`,点`+`
-2. 选择`远程rdp`
-3. 设置应用名(随便写);ip为上面开启远程桌面的机器在内网中的ip;端口不变;用户名和密码就是你再上面设置的对应值,NLA认证设置为True即可.
-
-之后要远程使用的时候就点击这个远程应用即可 -->
-
-## 安装常用环境
-
-ubuntu的apt是最常用的环境安装工具,但apt工具安装
-
-### C/C++环境
-
-```bash
-sudo apt install build-essential cmake bazel
-```
-
-
-### Golang环境
-
-```bash
-rm -rf /usr/local/go && tar -C /usr/local -xzf go1.23.4.linux-amd64.tar.gz
-export PATH=$PATH:/usr/local/go/bin
-```
-
-
-
-### python环境
-
-```bash
-"${SHELL}" <(curl -L micro.mamba.pm/install.sh)
-```
-
-
-### node.js环境
-
-```bash
-# Download and install nvm:
-curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh | bash
-
-# Download and install Node.js:
-nvm install 23
-
-# Verify the Node.js version:
-node -v # Should print "v23.5.0".
-nvm current # Should print "v23.5.0".
-
-# Verify npm version:
-npm -v # Should print "10.9.2".
-
-```
-
-### latex环境
-
-<!-- ### android开发环境
- -->
-
-### protobuffer编译环境
-
-
-## docker环境
+## 安装docker环境
 
 可以这么说,原生的docker环境是linux系统最大的竞争力之一,docker自然是要装的,而且必须装原生docker!
 
@@ -906,10 +850,43 @@ npm -v # Should print "10.9.2".
 
 + 重启后生效,然后就可以使用了
 
-### windows虚拟机
+## 安装常用环境
 
-### macos虚拟机
+ubuntu的apt是最常用的环境安装工具,但apt工具安装的包和应用都是系统级的,一旦出问题那就问题大了.因此遵循macos上的习惯,我们装[homebrew](https://docs.brew.sh/Installation).
 
+*注意*:
+
+1. `arm`和`x86`架构无法使用`homebrew`,只有`x86_amd64`才可以
+2. linux下无法使用`Homebrew Cask`
+
+```bash
+# 安装依赖
+sudo apt-get install build-essential procps curl file git
+
+# 安装homebrew
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+# 配置环境
+echo >> /home/hsz/.zshrc
+echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' >> /home/hsz/.zshrc
+eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+
+# 测试安装没问题
+brew install hello
+hello
+```
+
+`homebrew`会被安装在`linuxbrew`用户目录下(根目录为`/home/linuxbrew`),而安装的包都会被放在`/home/linuxbrew/.linuxbrew/Cellar`目录下
+
+安装好`homebrew`后我们自然也就需要安装`cmake,protobuf,go,node,python3.11,micromamba`等等这些基本环境了
+
+当然不要忘记设置环境变量
+
++ `.zshrc`
+
+<!-- todo -->
+```bash
+
+```
 
 ## 安装和管理应用
 
@@ -1119,6 +1096,8 @@ sudo apt install libfuse2t64
 
 我更加推荐安装它的非root版本[ivan-hc/AppMan](https://github.com/ivan-hc/AppMan),他们功能一样,只是appman是用户级而非系统级.
 
+`am`和`appman`共用一份[应用索引](https://portable-linux-apps.github.io/apps.html)作为应用仓库,
+
 >> 安装`appman`
 
 安装`appman`可以通过如下命令实现
@@ -1139,60 +1118,84 @@ wget -q https://raw.githubusercontent.com/ivan-hc/AM/main/AM-INSTALLER && chmod 
 
 要卸载`appman`时先将`appman`安装的应用都卸载了,然后直接将这些文件,文件夹删除即可
 
->> 使用`appman`安装应用
+>> 使用`appman`
 
-`appman`安装的应用可以有两个来源
-
-1. <https://portable-linux-apps.github.io/apps.html>中维护的应用索引涵盖的应用,使用
++ 搜索am数据库中索引的应用
 
     ```bash
-    app -i <应用名>
+    appman -q <关键字>
+    ```
+
++ 安装am数据库中索引的应用
+
+    ```bash
+    appman -i <应用名>
     ```
 
     安装即可.如果希望安装`AppImage`而不是`独立归档应用`,可以添加flag`-a`
 
     ```bash
-    app -ia <应用名>
+    appman -ia <应用名>
     ```
 
-2. 来自github的应用
+    如果希望安装的同时进行沙盒化,可以加个flag`-s`
 
+    ```bash
+    appman -is <应用名>
+    ```
 
->> 使用`appman`更新应用
+    `am`工具的沙盒化是使用的[Aisap](https://github.com/mgord9518/aisap).
 
->> 使用`appman`卸载应用
++ 安装来自github而am数据库中索引未收录的应用
 
+    如果我们希望让`apman`安装并管理未被收录的github上的`appimage`,则可以使用`-e`命令替代`-i`和`-ia`
 
+    ```bash
+    appman -e <github地址> <应用名> [关键字]
+    ```
 
+    如果这个地址中有不止一个`appimage`文件,可选的`关键字`可以用来指定实际需要的是哪个.而`<应用名>`则是这个安装好的`appimage`文件在系统内的命名.
 
++ 将本地已经下载好的`appimage`文件注册到`appman`并集成进系统
 
-<!-- https://www.appimagehub.com/
-https://github.com/TheAssassin/AppImageLauncher -->
+    ```bash
+    appman --launcher /path/to/File.AppImage
+    ```
 
-<!-- https://flathub.org/apps/it.mijorus.gearlever -->
++ 查看本地由`appman`维护的应用
 
-<!-- 
-curl https://raw.githubusercontent.com/srevinsaju/zap/main/install.sh | bash -s          
-zap install --github --from=mltframework/shotcut shotcut -->
+    ```bash
+    appman -f
+    ```
 
-### steam环境
++ 更新应用
 
-steam在其他操作系统中只是一个游戏平台,但在linux下它是必备软件,因为它提供了转译层[proton](https://github.com/ValveSoftware/Proton).这太伟大了,直接让linux下可以正常跑大部分windows平台的游戏,还顺便让其他windows软件也可以借助steam进行管理运行.
+    ```bash
+    appman -u <应用名>
+    ```
 
-#### 游戏相关优化
++ 卸载应用
 
-https://github.com/flightlessmango/MangoHud
+    ```bash
+    appman -R <应用名>
+    ```
 
-https://www.bilibili.com/video/BV1zD4y1b7Jj?vd_source=08b668b29d50d7b81093d4adee9dfde0&spm_id_from=333.788.videopod.sections
+### 转译应用
 
+其实很久之前就有一个开源项目[wine](https://github.com/wine-mirror/wine)致力于让linux和macos可以执行windows程序.起工作原理可以理解为将windows程序调用的各种系统依赖在linux/macos上重新实现一遍,然后让windows程序调用这些被转译的依赖以执行.这一套方案原理上逻辑上没啥问题,但一直以来支持并不好,主要原因是图形接口的转译跟不上.
 
-https://www.mapeditor.org/
- https://itch.io/game-assets/free/tag-tilemap
+1. 一方面是厂商不开源,让转译工作难以进行,
+2. 另一方面是开源的工具(`opengl`这类)性能拉胯.
+3. 最后就是项目是社区驱动的,没钱没资源,维护自然也跟不上
 
+而就在最近几年转译应用忽然就迎来了春天,主要取决于两点
 
-#### 作为转译工具
+1. 微软开始拥抱开源了,
+2. 阀门社开始做steam deck了.
 
+总而言之,阀门社搞了个开源的转译层项目[proton](https://github.com/ValveSoftware/Proton).这太伟大了,直接让linux下可以正常跑大部分windows平台的游戏,还顺便让其他windows软件也可以借助steam进行管理运行.
 
+我们就以steam为基准,介绍转译应用.
 
 ### 选择应用安装方式的总结
 
@@ -1228,31 +1231,59 @@ linux下我会尽量推荐开源工具.开源配开源嘛,他好我也好.
 
 下面是一些常用软件的安装信息
 
-| 分类       | 软件                           | 渠道                                                                          | 说明                                                               |
-| ---------- | ------------------------------ | ----------------------------------------------------------------------------- | ------------------------------------------------------------------ |
-| 系统工具   | Disk Usage Analyzer            | [flathub](https://flathub.org/apps/org.gnome.baobab)                          | 查看硬盘使用情况的工具                                             |
-| 生产力工具 | Calculator                     | [flathub](https://flathub.org/apps/org.gnome.Calculator)                      | 基本的计算器工具                                                   |
-| 生产力工具 | gimp                           | [flathub](https://flathub.org/apps/org.gimp.GIMP)                             | 开源的图像编辑软件,ps平替                                          |
-| 生产力工具 | freecad                        | [flathub](https://flathub.org/apps/org.freecad.FreeCAD)                       | 开源的工程制图,autocad平替                                         |
-| 生产力工具 | blender                        | [独立归档应用](https://portable-linux-apps.github.io/apps/blender.html)       | 开源的3d建模渲染工具,maya平替                                      |
-| 生产力工具 | godot                          | [独立归档应用](https://portable-linux-apps.github.io/apps/godot.html)         | 开源的轻量级游戏引擎                                               |
-| 生产力工具 | unrealengine5                  | [官网下载](https://www.unrealengine.com/zh-CN/download)                       | 大名鼎鼎的虚幻引擎,                                                |
-| 生产力工具 | shotcut                        | [独立归档应用](https://portable-linux-apps.github.io/apps/shotcut.html)       | 轻量级的开源视频剪辑工具                                           |
-| 生产力工具 | DaVinci Resolve                | [官网下载](http://www.blackmagicdesign.com/cn/products/davinciresolve)        | 大名鼎鼎的生产级视频剪辑工具达芬奇,有免费的社区版                  |
-| 生产力工具 | 飞书                           | [官网下载deb](https://www.feishu.cn/download)                                 | 知名的办公协作工具,flathub版本无法后台挂载因此用官网版本           |
-| 生产力工具 | 微信                           | [官网下载deb](https://linux.weixin.qq.com/)                                   | 知名的聊天工具,由于flathub版本的后台功能有缺陷因此使用AppImage版本 |
-| 生产力工具 | wps                            | [官网下载deb](https://www.wps.cn/product/wpslinux)                            | 知名的office套件,flatpak版本过低                                   |
-| 生产力工具 | [obs](https://obsproject.com/) | [flathub](https://flathub.org/apps/com.obsproject.Studio)                     | 知名的开源直播录屏工具                                             |
-| 生产力工具 | vscode                         | [官网下载](https://code.visualstudio.com/Download)                            | 文本编辑器                                                         |
-| 生产力工具 | github desktop                 | [fork版本下载](https://github.com/shiftkey/desktop)                           | github desktop的第三方linux fork                                   |
-| 生产力工具 | balenaEtcher                   | [官网下载](https://etcher.balena.io/)                                         | 镜像写入工具                                                       |
-| 娱乐工具   | [mpv](https://mpv.io)          | [flathub](https://flathub.org/apps/io.mpv.Mpv)                                | 知名的开源视频播放器                                               |
-| 娱乐工具   | NetEase Cloud Music Gtk4       | [flathub](https://flathub.org/apps/com.github.gmg137.netease-cloud-music-gtk) | 网易云音乐的开源第三方客户端                                       |
-| 娱乐工具   | sunshine                       | [flathub](https://flathub.org/apps/dev.lizardbyte.app.Sunshine)               | 串流服务端                                                         |
+#### 系统工具
 
-### 浏览器中激活显卡渲染
+| 软件                                                             | 渠道                                                               | 说明                                                             |
+| ---------------------------------------------------------------- | ------------------------------------------------------------------ | ---------------------------------------------------------------- |
+| Disk Usage Analyzer                                              | [flathub](https://flathub.org/apps/org.gnome.baobab)               | 查看硬盘使用情况的工具                                           |
+| whaler                                                           | [flathub](https://flathub.org/apps/com.github.sdv43.whaler)        | 轻量级docker容器监控工具                                         |
+| Remmina                                                          | [flathub](https://flathub.org/apps/org.remmina.Remmina)            | 远程桌面的连接客户端                                             |
+| timeshift                                                        | `sudo apt install timeshift`                                       | 系统快照,我们需要自备一块</br>空的U盘专门做快照,每半年做一份快照 |
+| [missioncenter](https://missioncenter.io/)                       | [flathub](https://flathub.org/apps/io.missioncenter.MissionCenter) | 有着window上资源管理器风格的综合性资源监控软件,可以监控GP        |
+| [CPU-X](https://thetumultuousunicornofdarkness.github.io/CPU-X/) | `sudo apt install cpu-x`                                           | windows上cpu-z在linux上的平替                                    |
+| [AMD GPU TOP](https://github.com/Umio-Yasuno/amdgpu_top)         | 官网下载deb                                                        | amdgpu的运行详细信息监控                                         |
+| bleachbit                                                        | `sudo apt install bleachbit`                                       | 系统清理工具                                                     |
+| gufw                                                             | `sudo apt install gufw`                                            | 防火墙工具,使用`sudo ufw enable`启动                             |
 
-> chrome:
+
+#### 生产力工具
+
+
+| 分类       | 软件                           | 渠道                                                                    | 说明                                                               |
+| ---------- | ------------------------------ | ----------------------------------------------------------------------- | ------------------------------------------------------------------ |
+| 生产力工具 | Calculator                     | [flathub](https://flathub.org/apps/org.gnome.Calculator)                | 基本的计算器工具                                                   |
+| 生产力工具 | gimp                           | [flathub](https://flathub.org/apps/org.gimp.GIMP)                       | 开源的图像编辑软件,ps平替                                          |
+| 生产力工具 | freecad                        | [flathub](https://flathub.org/apps/org.freecad.FreeCAD)                 | 开源的工程制图,autocad平替                                         |
+| 生产力工具 | blender                        | [独立归档应用](https://portable-linux-apps.github.io/apps/blender.html) | 开源的3d建模渲染工具,maya平替                                      |
+| 生产力工具 | godot                          | [独立归档应用](https://portable-linux-apps.github.io/apps/godot.html)   | 开源的轻量级游戏引擎                                               |
+| 生产力工具 | unrealengine5                  | [官网下载](https://www.unrealengine.com/zh-CN/download)                 | 大名鼎鼎的虚幻引擎,                                                |
+| 生产力工具 | shotcut                        | [独立归档应用](https://portable-linux-apps.github.io/apps/shotcut.html) | 轻量级的开源视频剪辑工具                                           |
+| 生产力工具 | DaVinci Resolve                | [官网下载](http://www.blackmagicdesign.com/cn/products/davinciresolve)  | 大名鼎鼎的生产级视频剪辑工具达芬奇,有免费的社区版                  |
+| 生产力工具 | 飞书                           | [官网下载deb](https://www.feishu.cn/download)                           | 知名的办公协作工具,flathub版本无法后台挂载因此用官网版本           |
+| 生产力工具 | 微信                           | [官网下载deb](https://linux.weixin.qq.com/)                             | 知名的聊天工具,由于flathub版本的后台功能有缺陷因此使用AppImage版本 |
+| 生产力工具 | wps                            | [官网下载deb](https://www.wps.cn/product/wpslinux)                      | 知名的office套件,flatpak版本过低                                   |
+| 生产力工具 | [obs](https://obsproject.com/) | [flathub](https://flathub.org/apps/com.obsproject.Studio)               | 知名的开源直播录屏工具                                             |
+| 生产力工具 | vscode                         | [官网下载](https://code.visualstudio.com/Download)                      | 文本编辑器                                                         |
+| 生产力工具 | github desktop                 | [fork版本下载](https://github.com/shiftkey/desktop)                     | github desktop的第三方linux fork                                   |
+| 生产力工具 | balenaEtcher                   | [官网下载](https://etcher.balena.io/)                                   | 镜像写入工具                                                       |
+
+
+##### 补充设置
+
+> vscode额外设置: vscode默认会将标题栏和工具栏分开,非常的丑也非常的不紧凑.我们可以进入`文件->首选项->设置`,在其中搜索`window.titleBarStyle`,将其设置为`custom`.这样标题栏就会和工具栏合并,好看很多.
+
+#### 娱乐工具
+
+| 分类     | 软件                     | 渠道                                                                          | 说明                         |
+| -------- | ------------------------ | ----------------------------------------------------------------------------- | ---------------------------- |
+| 娱乐工具 | [mpv](https://mpv.io)    | [flathub](https://flathub.org/apps/io.mpv.Mpv)                                | 知名的开源视频播放器         |
+| 娱乐工具 | NetEase Cloud Music Gtk4 | [flathub](https://flathub.org/apps/com.github.gmg137.netease-cloud-music-gtk) | 网易云音乐的开源第三方客户端 |
+| 娱乐工具 | sunshine                 | [flathub](https://flathub.org/apps/dev.lizardbyte.app.Sunshine)               | 串流服务端                   |
+
+
+##### 补充设置
+
+> chrome
 
 硬件加速:
 
@@ -1265,101 +1296,18 @@ gpu加速:
 
 + `Hardware-accelerated video decode`硬件解码设置,确保置为`已启用`
 
-### 系统快照
-
-类似macos的time machine,我们也可以通过系统快照锁定系统当前状态的切片以随时回退.这个操作通常使用[timeshift-gtk](https://github.com/linuxmint/timeshift)工具
-
-安装只需要在terminal中使用如下命令
-
-```bash
-sudo apt install timeshift
-```
-
-这个工具做快照目前只支持使用本地的linux文件系统,这也就意味着我们需要自备一块空的U盘专门做系统快照.个人建议这块u盘可以就一直插在机器上面,第一次完整装完系统后做一份快照,之后设置定时每半年做一份快照.
-
-### 安装资源监控工具
-
-[missioncenter](https://missioncenter.io/)是一个有着window上资源管理器风格的综合性资源监控软件,除了直观外,它最大的优势是可以监控GPU的资源占用.
-我们可以使用如下命令安装它
-
-```bash
-flatpak install flathub io.missioncenter.MissionCenter
-```
-
-[CPU-X](https://thetumultuousunicornofdarkness.github.io/CPU-X/)是windows上cpu-z在linux上的平替.他的主要作用是查看硬件资源的基础信息.
-我们可以像下面这样安装它.
-
-```bash
-apt install cpu-x
-```
-
-如果我们希望可以观察amdGPU更详细的状态,可以使用[AMD GPU TOP](https://github.com/Umio-Yasuno/amdgpu_top).我们可以直接在项目的release中下载`.deb`文件,双击安装即可
-
-这个工具同样可以监控核显
+> sunshine
 
 
-### 安装防火墙
+## Linux Steam游戏相关优化
 
-linux只是用的人少,并不是就没有安全隐患.我们还是应该装个防火墙来保护下
+https://github.com/flightlessmango/MangoHud
 
-```bash
-sudo apt install gufw
-sudo ufw enable
-```
-
-### 安装系统清理工具
-
-linux上也是会产生垃圾文件的,所以一样的我们也应该定期清理,清理系统可以使用`bleachbit`
-
-```bash
-sudo apt install bleachbit
-```
-
-[missioncenter](https://missioncenter.io/)是一个有着window上资源管理器风格的综合性资源监控软件,除了直观外,它最大的优势是可以监控GPU的资源占用.
-我们可以使用如下命令安装它
-
-```bash
-flatpak install flathub io.missioncenter.MissionCenter
-```
-
-[CPU-X](https://thetumultuousunicornofdarkness.github.io/CPU-X/)是windows上cpu-z在linux上的平替.他的主要作用是查看硬件资源的基础信息.
-我们可以像下面这样安装它.
-
-```bash
-apt install cpu-x
-```
-
-如果我们希望可以观察amdGPU更详细的状态,可以使用[AMD GPU TOP](https://github.com/Umio-Yasuno/amdgpu_top).我们可以直接在项目的release中下载`.deb`文件,双击安装即可
-
-这个工具同样可以监控核显
+https://www.bilibili.com/video/BV1zD4y1b7Jj?vd_source=08b668b29d50d7b81093d4adee9dfde0&spm_id_from=333.788.videopod.sections
 
 
-### 安装防火墙
-
-linux只是用的人少,并不是就没有安全隐患.我们还是应该装个防火墙来保护下
-
-```bash
-sudo apt install gufw
-sudo ufw enable
-```
-
-### 安装系统清理工具
-
-linux上也是会产生垃圾文件的,所以一样的我们也应该定期清理,清理系统可以使用`bleachbit`
-
-```bash
-sudo apt install bleachbit
-```
-
-它可以帮我们用gui的方式管理源,管理,卸载已经安装的`deb`程序.而Ubuntu的系统更新工具也会统一提示`deb`程序的更新提醒.
-
-大多数支持linux的知名老牌应用都会提供`deb`安装包,在unbuntu中我们只要下载下来双击安装即可.
-
-在ubuntu上`deb`方式最大的问题就是安全问题,因为apt维护的是**系统级**的lib,一出错就是整个系统出问题.这也是为啥debian的仓库偏保守的原因.
-
-#### 软件的补充设置
-
-+ vscode额外设置: vscode默认会将标题栏和工具栏分开,非常的丑也非常的不紧凑.我们可以进入`文件->首选项->设置`,在其中搜索`window.titleBarStyle`,将其设置为`custom`.这样标题栏就会和工具栏合并,好看很多.
+https://www.mapeditor.org/
+ https://itch.io/game-assets/free/tag-tilemap
 
 
 <!-- 
@@ -1439,3 +1387,29 @@ waydroid app install <app>.apk
 ```bash
 waydroid prop set persist.waydroid.multi_windows true
 ``` -->
+
+<!-- ## 远程桌面
+
+远程桌面分为本地开放远程桌面给远端连接和本地连接远端远程桌面.
+
+ubuntu自带远程桌面服务,我们打开来就可以了
+
+1. 打开`设置`,找到``,点击`远程桌面`
+2. 启用`远程桌面`,不要钩选vnc
+3. 启用`远程控制`
+4. 在`如何连接`中将设备名设置为你的机器名,地址设置为`ms-rd://<设备名>.local`
+5. 在登录验证中设置用户名和密码
+
+这样在本地的设置就好了,之后我们在ddnsto中进行设置
+
+1. 进入`我的设备`,选择`远程应用`,点`+`
+2. 选择`远程rdp`
+3. 设置应用名(随便写);ip为上面开启远程桌面的机器在内网中的ip;端口不变;用户名和密码就是你再上面设置的对应值,NLA认证设置为True即可.
+
+
+android: microsoft Remote Desktop
+ios: microsoft windows app mobile
+linux: Remmina
+
+
+之后要远程使用的时候就点击这个远程应用即可 -->
