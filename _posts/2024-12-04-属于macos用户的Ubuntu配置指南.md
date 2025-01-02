@@ -13,7 +13,7 @@ tags:
     - MacOs
     - 美化
 header-img: "img/home-bg-o.jpg"
-update: 2024-01-02
+update: 2025-01-02
 ---
 # 属于MacOs用户的Ubuntu配置指南
 
