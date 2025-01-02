@@ -13,7 +13,7 @@ tags:
     - MacOs
     - 美化
 header-img: "img/home-bg-o.jpg"
-update: 2024-12-04
+update: 2024-01-02
 ---
 # 属于MacOs用户的Ubuntu配置指南
 
@@ -877,20 +877,11 @@ hello
 
 `homebrew`会被安装在`linuxbrew`用户目录下(根目录为`/home/linuxbrew`),而安装的包都会被放在`/home/linuxbrew/.linuxbrew/Cellar`目录下
 
-安装好`homebrew`后我们自然也就需要安装`cmake,protobuf,go,node,python3.11,micromamba`等等这些基本环境了
+安装好`homebrew`后我们自然也就需要安装`cmake,protobuf,grpc,go,node,python3.11,micromamba`等等这些基本环境了.
 
-当然不要忘记设置环境变量
+## 安装和管理Linux应用
 
-+ `.zshrc`
-
-<!-- todo -->
-```bash
-
-```
-
-## 安装和管理应用
-
-linux上目前应用的分发是相当碎片化的,为了可以安装管理各种渠道的应用我们就得做对应的优化.不考虑虚拟机中使用应用,我们可以将应用分为原生应用,沙盒化应用,转译应用者三种.
+linux上目前应用的分发是相当碎片化的,为了可以安装管理各种渠道的应用我们就得做对应的优化.不考虑虚拟机中使用应用,我们可以将应用分为原生应用,沙盒化应用两种.
 
 ### 沙盒化应用
 
@@ -957,16 +948,6 @@ flatpak install flathub io.github.flattool.Warehouse
 然后就是性能损失.由于`snap`包的最多,性能损失也是最严重的,相比原生版本一般有10%~15%的性能(计算性能)损失,而它的打包方式也类似docker,是包含完整runtime的,因此制成品包也是最大的.
 
 虽然说了这么多缺点,但它作为`Ubuntu`默认的应用分发模式体验其实还算不错--开箱即用,下载速度也还不错,个人认为没啥必要黑它.
-
-#### steam runtime
-
-如果游戏也算应用的话steam在linux上可能是最大的应用分发渠道了.steam通过[steam-linux-runtime](https://github.com/ValveSoftware/steam-runtime)支持原生linux应用.
-
-而这个`steam-linux-runtime`实际上就是一个通用的轻量级沙盒,包含了一个统一的库环境并用namespace与操作系统隔离.一些游戏开发相关的开源应用比如`blender`,`godot`,原生支持linux的游戏比如`dota`也都可以使用这种方式运行.
-
-由于这个环境也是用namespace做抽象的,所以性能损失也是有的,只是没那么多.
-
-话虽如此,我个人还是不太推荐用`steam`管理除游戏以外的linux原生应用的,一方面这种应用太少,另一方面这类应用都往往是对计算性能要求比较高的类型,白白损失性能还是太可惜了.
 
 ### 原生应用
 
@@ -1180,106 +1161,57 @@ wget -q https://raw.githubusercontent.com/ivan-hc/AM/main/AM-INSTALLER && chmod 
     appman -R <应用名>
     ```
 
-### 转译应用
-
-其实很久之前就有一个开源项目[wine](https://github.com/wine-mirror/wine)致力于让linux和macos可以执行windows程序.起工作原理可以理解为将windows程序调用的各种系统依赖在linux/macos上重新实现一遍,然后让windows程序调用这些被转译的依赖以执行.这一套方案原理上逻辑上没啥问题,但一直以来支持并不好,主要原因是图形接口的转译跟不上.
-
-1. 一方面是厂商不开源,让转译工作难以进行,
-2. 另一方面是开源的工具(`opengl`这类)性能拉胯.
-3. 最后就是项目是社区驱动的,没钱没资源,维护自然也跟不上
-
-而就在最近几年转译应用忽然就迎来了春天,主要取决于两点
-
-1. 微软开始拥抱开源了,
-2. 阀门社开始做steam deck了.
-
-总而言之,阀门社搞了个开源的转译层项目[proton](https://github.com/ValveSoftware/Proton).这太伟大了,直接让linux下可以正常跑大部分windows平台的游戏,还顺便让其他windows软件也可以借助steam进行管理运行.
-
-我们就以steam为基准,介绍转译应用.
-
 ### 选择应用安装方式的总结
-
-https://medium.com/@TechHutTV/flatpak-snap-appimage-linux-benchmarks-df2bc874ea0b
 
 在ubuntu中可以顺利使用的应用分发方式我做了如下总结
 
-| 对比项目       | `独立静态可执行文件` | `deb`                      | `AppImage`                                                        | `Flatpak`           | `snap`         |
-| -------------- | -------------------- | -------------------------- | ----------------------------------------------------------------- | ------------------- | -------------- |
-| 发行版支持     | 跨发行版             | 仅debian系                 | 跨发行版                                                          | 跨发行版            | 跨发行版       |
-| 是否独立执行   | 是                   | 否                         | 是                                                                | 是                  | 是             |
-| 是否沙盒运行   | 否                   | 否                         | 否                                                                | 是                  | 是             |
-| 性能损失       | 无损失               | 无损失                     | 无损失                                                            | 损失较小            | 损失小         |
-| 空间占用       | 大                   | 最小                       | 较大                                                              | 本体较小,算上依赖大 | 最大           |
-| 资源平台       | 应用官网             | `apt`</br>`github release` | `AppImage Catalog`</br>`AppImage catalog v2`</br>`github release` | `flathub`           | ubuntu应用商店 |
-| 平台资源数量   | 少                   | 多                         | 较少                                                              | 较多                | 中             |
-| 平台版本活跃度 | 高                   | 取决于渠道                 | 取决于渠道                                                        | 高                  | 高             |
-| 维护工具       | 无                   | `synaptic`                 | 无                                                                | `Warehouse`         | 系统应用商店   |
-| 安装难度       | 大                   | 小                         | 小                                                                | 小                  | 小             |
-| 维护难度       | 大                   | 小                         | 大                                                                | 小                  | 小             |
+| 对比项目       | `独立归档应用`                                                                      | `deb`                                       | `AppImage`                                                                                  | `Flatpak`                       | `snap`         |
+| -------------- | ----------------------------------------------------------------------------------- | ------------------------------------------- | ------------------------------------------------------------------------------------------- | ------------------------------- | -------------- |
+| 发行版支持     | 跨发行版                                                                            | 仅debian系                                  | 跨发行版                                                                                    | 跨发行版                        | 跨发行版       |
+| 是否独立执行   | 是                                                                                  | 否                                          | 是                                                                                          | 否                              | 否             |
+| 是否沙盒运行   | 否但可以                                                                            | 否                                          | 否但可以                                                                                    | 是                              | 是             |
+| 性能损失       | 无损失                                                                              | 无损失                                      | 启动有略微损失,运行无损失                                                                   | 损失较小                        | 损失小         |
+| 空间占用       | 大                                                                                  | 最小                                        | 大                                                                                          | 本体较小,算上依赖大             | 最大           |
+| 资源平台       | [portable-linux-apps](https://portable-linux-apps.github.io/apps.html)</br>应用官网 | `apt`</br>`github release`</br>各种官网下载 | [portable-linux-apps](https://portable-linux-apps.github.io/apps.html)</br>`github release` | [flathub](https://flathub.org/) | ubuntu应用商店 |
+| 平台资源数量   | 较少                                                                                | 多                                          | 较少                                                                                        | 较多                            | 较少           |
+| 平台版本活跃度 | 高                                                                                  | 取决于渠道                                  | 取决于渠道                                                                                  | 高                              | 高             |
+| 维护工具       | `am`/`appman`                                                                       | `apt`/`synaptic`                            | `am`/`appman`                                                                               | `Warehouse`                     | 系统应用商店   |
+| 安装难度       | 大                                                                                  | 小                                          | 极小                                                                                        | 小                              | 小             |
+| 维护难度       | 大                                                                                  | 小                                          | 大                                                                                          | 小                              | 小             |
 
 可以看到如果这些平台都各有利弊.我们应该针对不同需求使用不同的平台.
 
-+ 对性能要求比较高的应用
-    + 优先使用`独立静态可执行文件`
-    + 如果更希望可以自动更新,不太在乎版本新旧,则选`deb`安装
-    + 如果实在是又要自动更新又想要新版本,可以牺牲一些性能就`Flatpak`版本安装.
-+ 对于不太在意性能的应用,无脑`Flatpak`即可
++ 对于比较大的公司或知名大项目提供的产品,比如谷歌微软blender什么的,尽量用官方提供的安装方案
++ 对性能要求比较高的尤其是吃计算资源的应用
+    + 优先尝试使用`独立归档应用`
+    + 如果有`Appimage`也可以尝试用`Appimage`
+    + 如果没有就找官网有没有提供`deb`包
++ 对于扩展性要求较高的比如要自己装插件改文件的应用
+    + 优先尝试使用`独立归档应用`
+    + 如果有`Appimage`,可以解压出来当做独立归档应用来尝试使用
++ 其他应用无脑`Flatpak`即可.
 
 ### 常用软件
 
-linux下我会尽量推荐开源工具.开源配开源嘛,他好我也好.
-
-下面是一些常用软件的安装信息
+linux下我会尽量推荐开源工具.下面是一些常用软件的安装信息
 
 #### 系统工具
 
 | 软件                                                             | 渠道                                                               | 说明                                                             |
 | ---------------------------------------------------------------- | ------------------------------------------------------------------ | ---------------------------------------------------------------- |
 | Disk Usage Analyzer                                              | [flathub](https://flathub.org/apps/org.gnome.baobab)               | 查看硬盘使用情况的工具                                           |
-| whaler                                                           | [flathub](https://flathub.org/apps/com.github.sdv43.whaler)        | 轻量级docker容器监控工具                                         |
 | Remmina                                                          | [flathub](https://flathub.org/apps/org.remmina.Remmina)            | 远程桌面的连接客户端                                             |
 | timeshift                                                        | `sudo apt install timeshift`                                       | 系统快照,我们需要自备一块</br>空的U盘专门做快照,每半年做一份快照 |
 | [missioncenter](https://missioncenter.io/)                       | [flathub](https://flathub.org/apps/io.missioncenter.MissionCenter) | 有着window上资源管理器风格的综合性资源监控软件,可以监控GP        |
 | [CPU-X](https://thetumultuousunicornofdarkness.github.io/CPU-X/) | `sudo apt install cpu-x`                                           | windows上cpu-z在linux上的平替                                    |
-| [AMD GPU TOP](https://github.com/Umio-Yasuno/amdgpu_top)         | 官网下载deb                                                        | amdgpu的运行详细信息监控                                         |
+| AMD GPU TOP                                                      | [官网下载deb](https://github.com/Umio-Yasuno/amdgpu_top)           | amdgpu的运行详细信息监控                                         |
 | bleachbit                                                        | `sudo apt install bleachbit`                                       | 系统清理工具                                                     |
 | gufw                                                             | `sudo apt install gufw`                                            | 防火墙工具,使用`sudo ufw enable`启动                             |
-
-
-#### 生产力工具
-
-
-| 分类       | 软件                           | 渠道                                                                    | 说明                                                               |
-| ---------- | ------------------------------ | ----------------------------------------------------------------------- | ------------------------------------------------------------------ |
-| 生产力工具 | Calculator                     | [flathub](https://flathub.org/apps/org.gnome.Calculator)                | 基本的计算器工具                                                   |
-| 生产力工具 | gimp                           | [flathub](https://flathub.org/apps/org.gimp.GIMP)                       | 开源的图像编辑软件,ps平替                                          |
-| 生产力工具 | freecad                        | [flathub](https://flathub.org/apps/org.freecad.FreeCAD)                 | 开源的工程制图,autocad平替                                         |
-| 生产力工具 | blender                        | [独立归档应用](https://portable-linux-apps.github.io/apps/blender.html) | 开源的3d建模渲染工具,maya平替                                      |
-| 生产力工具 | godot                          | [独立归档应用](https://portable-linux-apps.github.io/apps/godot.html)   | 开源的轻量级游戏引擎                                               |
-| 生产力工具 | unrealengine5                  | [官网下载](https://www.unrealengine.com/zh-CN/download)                 | 大名鼎鼎的虚幻引擎,                                                |
-| 生产力工具 | shotcut                        | [独立归档应用](https://portable-linux-apps.github.io/apps/shotcut.html) | 轻量级的开源视频剪辑工具                                           |
-| 生产力工具 | DaVinci Resolve                | [官网下载](http://www.blackmagicdesign.com/cn/products/davinciresolve)  | 大名鼎鼎的生产级视频剪辑工具达芬奇,有免费的社区版                  |
-| 生产力工具 | 飞书                           | [官网下载deb](https://www.feishu.cn/download)                           | 知名的办公协作工具,flathub版本无法后台挂载因此用官网版本           |
-| 生产力工具 | 微信                           | [官网下载deb](https://linux.weixin.qq.com/)                             | 知名的聊天工具,由于flathub版本的后台功能有缺陷因此使用AppImage版本 |
-| 生产力工具 | wps                            | [官网下载deb](https://www.wps.cn/product/wpslinux)                      | 知名的office套件,flatpak版本过低                                   |
-| 生产力工具 | [obs](https://obsproject.com/) | [flathub](https://flathub.org/apps/com.obsproject.Studio)               | 知名的开源直播录屏工具                                             |
-| 生产力工具 | vscode                         | [官网下载](https://code.visualstudio.com/Download)                      | 文本编辑器                                                         |
-| 生产力工具 | github desktop                 | [fork版本下载](https://github.com/shiftkey/desktop)                     | github desktop的第三方linux fork                                   |
-| 生产力工具 | balenaEtcher                   | [官网下载](https://etcher.balena.io/)                                   | 镜像写入工具                                                       |
-
-
-##### 补充设置
-
-> vscode额外设置: vscode默认会将标题栏和工具栏分开,非常的丑也非常的不紧凑.我们可以进入`文件->首选项->设置`,在其中搜索`window.titleBarStyle`,将其设置为`custom`.这样标题栏就会和工具栏合并,好看很多.
-
-#### 娱乐工具
-
-| 分类     | 软件                     | 渠道                                                                          | 说明                         |
-| -------- | ------------------------ | ----------------------------------------------------------------------------- | ---------------------------- |
-| 娱乐工具 | [mpv](https://mpv.io)    | [flathub](https://flathub.org/apps/io.mpv.Mpv)                                | 知名的开源视频播放器         |
-| 娱乐工具 | NetEase Cloud Music Gtk4 | [flathub](https://flathub.org/apps/com.github.gmg137.netease-cloud-music-gtk) | 网易云音乐的开源第三方客户端 |
-| 娱乐工具 | sunshine                 | [flathub](https://flathub.org/apps/dev.lizardbyte.app.Sunshine)               | 串流服务端                   |
-
+| chrome                                                           | [官网下载deb](https://www.google.cn/intl/zh-CN/chrome/)            | google的浏览器                                                   |
+| Warehouse                                                        | [flathub](https://flathub.org/apps/io.github.flattool.Warehouse)   | flatpak应用管理                                                  |
+| synaptic                                                         | `sudo apt install synaptic`                                        | 新立得软件包管理器,管理deb应用和包                               |
+| appman                                                           | [官网脚本下载](https://github.com/ivan-hc/AppMan)                  | 管理`PORTABLE LINUX APPS`                                        |
+| whaler                                                           | [flathub](https://flathub.org/apps/com.github.sdv43.whaler)        | 轻量级docker容器监控工具                                         |
 
 ##### 补充设置
 
@@ -1296,10 +1228,116 @@ gpu加速:
 
 + `Hardware-accelerated video decode`硬件解码设置,确保置为`已启用`
 
-> sunshine
+#### 生产力工具
+
+ | 软件                                                  | 渠道                                                                   | 说明                                                               |
+ | ----------------------------------------------------- | ---------------------------------------------------------------------- | ------------------------------------------------------------------ |
+ | Calculator                                            | [flathub](https://flathub.org/apps/org.gnome.Calculator)               | 基本的计算器工具                                                   |
+ | gimp                                                  | [flathub](https://flathub.org/apps/org.gimp.GIMP)                      | 开源的图像编辑软件,ps平替                                          |
+ | freecad                                               | `appman -i freecad`                                                    | 开源的工程制图,autocad平替                                         |
+ | blender                                               | `appman -i blender`                                                    | 开源的3d建模渲染工具,maya平替                                      |
+ | godot                                                 | `appman -i godot`                                                      | 开源的轻量级游戏引擎                                               |
+ | unrealengine5                                         | [官网下载](https://www.unrealengine.com/zh-CN/download)                | 大名鼎鼎的虚幻引擎,                                                |
+ | shotcut                                               | `appman -i shotcut.html`                                               | 轻量级的开源视频剪辑工具                                           |
+ | DaVinci Resolve                                       | [官网下载](http://www.blackmagicdesign.com/cn/products/davinciresolve) | 大名鼎鼎的生产级视频剪辑工具达芬奇,有免费的社区版                  |
+ | 飞书                                                  | [官网下载deb](https://www.feishu.cn/download)                          | 知名的办公协作工具,flathub版本无法后台挂载因此用官网版本           |
+ | 微信                                                  | [官网下载deb](https://linux.weixin.qq.com/)                            | 知名的聊天工具,由于flathub版本的后台功能有缺陷因此使用AppImage版本 |
+ | wps                                                   | [官网下载deb](https://www.wps.cn/product/wpslinux)                     | 知名的office套件,flatpak版本过低                                   |
+ | [obs](https://obsproject.com/)                        | [flathub](https://flathub.org/apps/com.obsproject.Studio)              | 知名的开源直播录屏工具                                             |
+ | vscode                                                | [官网下载deb](https://code.visualstudio.com/Download)                  | 文本编辑器                                                         |
+ | [github desktop](https://github.com/shiftkey/desktop) | `appman -i github-desktop`                                             | github desktop的第三方linux fork                                   |
+ | balenaEtcher                                          | [官网下载](https://etcher.balena.io/)                                  | 镜像写入工具                                                       |
+
+##### 补充设置
+
+> vscode额外设置: vscode默认会将标题栏和工具栏分开,非常的丑也非常的不紧凑.我们可以进入`文件->首选项->设置`,在其中搜索`window.titleBarStyle`,将其设置为`custom`.这样标题栏就会和工具栏合并,好看很多.
+
+#### 娱乐工具
+
+ | 软件                     | 渠道                                                                          | 说明                         |
+ | ------------------------ | ----------------------------------------------------------------------------- | ---------------------------- |
+ | vlc                      | [flathub](https://flathub.org/apps/org.videolan.VLC)                          | 知名的开源视频播放器         |
+ | NetEase Cloud Music Gtk4 | [flathub](https://flathub.org/apps/com.github.gmg137.netease-cloud-music-gtk) | 网易云音乐的开源第三方客户端 |
+
+## Linux下神奇的Steam
+
+steam大家都知道,知名的游戏平台嘛.但在linux下steam是一个神奇的存在,某种程度上可以说是steam盘活了桌面linux生态都不过分.
+
+steam最基本的能力当然是让玩家可以方便的打游戏,阀门社为了这个目标煞费苦心,他们的努力直接给linux平台大范围扩展了生态,以至于steam即便不打游戏都是linux上的必装软件.
+
+### steam runtime
+
+如果游戏也算应用的话steam在linux上可能是最大的应用分发渠道了.steam通过[steam-linux-runtime](https://github.com/ValveSoftware/steam-runtime)支持原生linux应用.
+
+而这个`steam-linux-runtime`实际上就是一个通用的轻量级沙盒,包含了一个统一的库环境并用namespace与操作系统隔离.一些游戏开发相关的开源应用比如`blender`,`godot`,原生支持linux的游戏比如`dota`也都可以使用这种方式运行.
+
+由于这个环境也是用namespace做抽象的,所以性能损失也是有的,只是没那么多.
+
+话虽如此,我个人还是不太推荐用`steam`管理除游戏以外的linux原生应用的,一方面这种应用太少,另一方面这类应用都往往是对计算性能要求比较高的类型,白白损失性能还是太可惜了.
+
+### 转译应用
+
+其实很久之前就有一个开源项目[wine](https://github.com/wine-mirror/wine)致力于让linux和macos可以执行windows程序.起工作原理可以理解为将windows程序调用的各种系统依赖在linux/macos上重新实现一遍,然后让windows程序调用这些被转译的依赖以执行.这一套方案原理上逻辑上没啥问题,但一直以来支持并不好,主要原因是图形接口的转译跟不上.
+
+1. 一方面是厂商不开源,让转译工作难以进行,
+2. 另一方面是开源的工具(`opengl`这类)性能拉胯.
+3. 最后就是项目是社区驱动的,没钱没资源,维护自然也跟不上
+
+而就在最近几年转译应用忽然就迎来了春天,主要取决于两点
+
+1. 微软开始拥抱开源了,
+2. 阀门社开始做steam deck了.
+
+总而言之,阀门社搞了个开源的转译层项目[proton](https://github.com/ValveSoftware/Proton).这直接让linux下可以正常跑大部分windows平台的游戏,还顺便让其他windows软件也可以借助steam进行管理运行.
+
+我们就以官网下载的原生版本的steam为基准,介绍转译应用.
+
+#### 使用steam安装proton
+
+首先我们要先安装steam,由于steam本身是一个启动器,后需可能会有很多需要手动操作的部分,因此最好是原生安装方便手动调试.然后进入steam,进入`库`,勾选`工具`,找到`proton`,一般装个最新版本就够用了.也可以多装一个`proton experimental`备用,然后视游戏安装相关的反作弊运行时即可.
+
+当然也还有另一个选择--[proton-ge](https://github.com/GloriousEggroll/proton-ge-custom),这是一个第三方的魔改`proton`,据说比官方版本效率高些,但也一样有兼容性问题.
+
+要安装先要`mesa`
+
+```bash
+# 要挂代理
+setproxy
+# 安装
+sudo add-apt-repository ppa:kisak/kisak-mesa && sudo dpkg --add-architecture i386 && sudo apt update && sudo apt upgrade && sudo apt install libgl1-mesa-dri:i386 mesa-vulkan-drivers mesa-vulkan-drivers:i386
+# 重启
+sudo reboot
+```
+
+之后根据安装说明我们继续设置
+
+1. 创建`~/.steam/root/compatibilitytools.d`文件夹
+
+2. 在项目的[release](https://github.com/GloriousEggroll/proton-ge-custom/releases)页面下载需要的版本,一般就是最新版,解压到刚才创建的文件夹
+
+    ```bash
+    tar -xf GE-ProtonVERSION.tar.gz -C ~/.steam/root/compatibilitytools.d/
+    ```
+
+3. 重启steam
+
+之后我们就可以在steam中使用它了
+
+#### 使用proton运行steam游戏
+
+steam主要还是一个游戏平台,proton主要也还是为游戏服务的.
+
+即便是安装好`proton`后,windows平台的游戏也是不能直接下载了玩的,我们需要选中已经购买好的游戏,点击右侧`设置`(齿轮按钮)->`属性`->`兼容性`,选一个`proton`版本强制指定兼容层.这样游戏就可以下载了.之于能不能玩,这就得群策群力了,[protondb](https://www.protondb.com/)是一个steam上游戏兼容性的数据网站,主要靠社区玩家提交报告来确定特定游戏的兼容性.我们可以先在其中查看
 
 
-## Linux Steam游戏相关优化
+<!-- #### 使用proton运行windwos程序
+
+
+#### 使用proton运行非steam游戏
+
+
+
+### Linux Steam游戏相关优化
 
 https://github.com/flightlessmango/MangoHud
 
@@ -1309,84 +1347,9 @@ https://www.bilibili.com/video/BV1zD4y1b7Jj?vd_source=08b668b29d50d7b81093d4adee
 https://www.mapeditor.org/
  https://itch.io/game-assets/free/tag-tilemap
 
+### 用steam串流
 
-<!-- 
-### Waydroid环境的补充
-
-安装waydroid我们可以简单的使用如下命令
-
-```bash
-# sudo免密码
-sudo su
-exit
-# 导入 repo 源头、
-curl https://repo.waydro.id | sudo bash
-
-# 安装 waydroid
-sudo apt install waydroid -y
-```
-
-在安装好后我们可以适当优化下界面
-
-```bash
-sudo waydroid init
-waydroid prop set persist.waydroid.width 480
-waydroid prop set persist.waydroid.height 900
-
-# waydroid session stop
-```
-
-这个模拟器虽然很丝滑,但是默认情况下是没法跑ARM的APK.而国内很少有原生的x86 APP,所以还是有必要安装一下ARM相关的转译依赖.
-
-```bash
-sudo apt install python3.12-venv
-cd workspace/init_source
-git clone https://github.com/casualsnek/waydroid_script
-cd waydroid_script
-python -m venv env # 给项目构造虚拟环境并执行设置脚本
-sudo su # 需要root用户
-source env/bin/activate
-# 必须挂代理
-export https_proxy=http://127.0.0.1:7897 http_proxy=http://127.0.0.1:7897 all_proxy=socks5://127.0.0.1:7897
-python -m pip install --upgrade pip -i https://mirrors.tuna.tsinghua.edu.cn/pypi/web/simple 
-python -m pip install -r requirements.txt -i https://mirrors.tuna.tsinghua.edu.cn/pypi/web/simple
-python main.py
-```
-
-进入到命令行图形化界面后我们选择
-
-+ 安卓版本: android 11
-+ action: Install
-+ app:
-    + microg
-    + libndk
-    + magisk
-    + fdroidpriv
-    + libhoudini
-    + widevine
-+ MicroG:
-    + standard
-
-安装完毕后重启
-
-```bash
-# 当前会话关机
-waydroid session stop
-# 重启 waydroid 服务
-sudo systemctl restart waydroid-container.service
-```
-
-这样后续app就可以正常安装android软件了
-
-```bash
-waydroid app install <app>.apk
-```
-
-我们也可以给waydroid模拟器设置多窗口模式
-
-```bash
-waydroid prop set persist.waydroid.multi_windows true
-``` -->
+说到串流可能大家想到的更多的是[sunshine](https://github.com/LizardByte/Sunshine)-[moonlight](https://github.com/moonlight-stream/moonlight-android)的串流组合.但实际情况是在用N卡的情况下sunshine强无敌,而在用a卡尤其是apu的核显的情况下sunshine并不好用.反而是steam link效果还不错. -->
 
 <!-- ## 远程桌面
 
@@ -1413,3 +1376,6 @@ linux: Remmina
 
 
 之后要远程使用的时候就点击这个远程应用即可 -->
+
+<!-- ## 串流 -->
+
