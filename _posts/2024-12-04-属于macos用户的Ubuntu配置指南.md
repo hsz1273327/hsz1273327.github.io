@@ -100,14 +100,28 @@ sudo reboot
     sudo apt update # 更新软件包的索引或包列表
     sudo apt install "linux-headers-$(uname -r)" "linux-modules-extra-$(uname -r)" # 根据linux内核来安装对应的linux-headers和linux-modules-extra
     sudo usermod -a -G render,video $LOGNAME # 添加当前用户到渲染和视频分组
-    wget https://repo.radeon.com/amdgpu-install/6.3/ubuntu/noble/amdgpu-install_6.3.60300-1_all.deb # 下载amdgpu安装工具,这里以6.3.6030为例
+    wget https://repo.radeon.com/amdgpu-install/6.2/ubuntu/noble/amdgpu-install_6.2.60300-1_all.deb # 下载amdgpu安装工具,这里以6.3.6030为例
     sudo apt install ./amdgpu-install_6.3.60300-1_all.deb #安装rocm安装工具
     # sudo apt update # 更新软件包的索引或包列表
     # sudo apt install amdgpu-dkms rocm # 安装amdgpu-dkms(驱动) rocm(rocm包)
     sudo reboot #重启后生效
     ```
 
-    上面的代码只是例子,我们安装的是rocm 6.3的安装器,具体版本可以查看[rocm发布页](https://rocm.docs.amd.com/en/latest/release/versions.html)
+    ```bash
+    sudo apt update # 更新软件包的索引或包列表
+    sudo apt install "linux-headers-$(uname -r)" "linux-modules-extra-$(uname -r)" # 根据linux内核来安装对应的linux-headers和linux-modules-extra
+    sudo apt install python3-setuptools python3-wheel
+    sudo usermod -a -G render,video $LOGNAME # 添加当前用户到渲染和视频分组
+    wget https://repo.radeon.com/amdgpu-install/6.2.4/ubuntu/noble/amdgpu-install_6.2.60204-1_all.deb # 下载amdgpu安装工具,这里以6.2.60204为例
+    sudo apt install ./amdgpu-install_6.2.60204-1_all.deb #安装rocm安装工具
+    # sudo apt update # 更新软件包的索引或包列表
+    # sudo apt install amdgpu-dkms rocm  # 安装amdgpu-dkms(驱动) rocm(rocm包)
+    sudo reboot #重启后生效
+    ```
+
+    上面的代码只是例子,我们安装的是rocm 6.2.4的安装器,具体版本可以查看[rocm发布页](https://rocm.docs.amd.com/en/latest/release/versions.html)
+
+    为什么选这个版本呢?因为pytorch目前(2025-01-02)只支持到6.2版本.
 
 2. 根据使用场景安装需要组件
 
@@ -170,17 +184,25 @@ sudo reboot
         如果无法使用rocm工具,可以将它的`bin`目录加入到PATH中
 
         ```bash
-        export PATH=$PATH:/opt/rocm-6.3.0/bin
+        export PATH=$PATH:/opt/rocm-6.2.4/bin
         ```
 
     + rocm的动态链接库会放在`/opt/rocm-<ver>/lib`目录.
         如果要用到这些动态链接库,可以将它加入到`LD_LIBRARY_PATH`
 
         ```bash
-        export LD_LIBRARY_PATH=/opt/rocm-6.3.0/lib
+        export LD_LIBRARY_PATH=/opt/rocm-6.2.4/lib
         ```
 
     + rocm的模块则会被放在`/opt/rocm-<ver>/lib/rocmmod`目录.
+
+    + 最后,由于我们使用的是核显780m,所以需要额外设置环境变量`HSA_OVERRIDE_GFX_VERSION`
+
+        ```bash
+        export HSA_OVERRIDE_GFX_VERSION=11.0.0
+        ```
+
+        这个`11.0.0`对应的是8000系apu核显的版本.顺道一提780m的编号`gfx1103`
 
 6. 检查驱动是否正常
 
