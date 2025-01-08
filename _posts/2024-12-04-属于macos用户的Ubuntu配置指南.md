@@ -130,7 +130,7 @@ sudo reboot
     在重启后我们重新进入命令行,然后运行`amdgpu-install`来安装所必须得组件
 
     ```bash
-    amdgpu-install --usecase=rocm,graphics
+    amdgpu-install --usecase=rocm,graphics,hip
     sudo reboot
     ```
 
@@ -179,19 +179,24 @@ sudo reboot
 
 5. 设置环境变量
 
-    rocm安装好后会被放在`/opt/rocm-<ver>`目录:
+    rocm安装好后会被放在`/opt/rocm-<ver>`目录,我们不妨设置一个环境变量`ROCM_HOME`
+
+    ```bash
+    export ROCM_HOME=/opt/rocm-6.2.4
+    ```
+
     + rocm的可执行文件会放在`/opt/rocm-<ver>/bin`目录.
         如果无法使用rocm工具,可以将它的`bin`目录加入到PATH中
 
         ```bash
-        export PATH=$PATH:/opt/rocm-6.2.4/bin
+        export PATH=$PATH:$ROCM_HOME/bin
         ```
 
     + rocm的动态链接库会放在`/opt/rocm-<ver>/lib`目录.
-        如果要用到这些动态链接库,可以将它加入到`LD_LIBRARY_PATH`
+        如果要用到这些动态链接库,可以将它临时加入到`LD_LIBRARY_PATH`
 
         ```bash
-        export LD_LIBRARY_PATH=/opt/rocm-6.2.4/lib
+        export LD_LIBRARY_PATH=$ROCM_HOME/lib
         ```
 
     + rocm的模块则会被放在`/opt/rocm-<ver>/lib/rocmmod`目录.
@@ -203,6 +208,15 @@ sudo reboot
         ```
 
         这个`11.0.0`对应的是8000系apu核显的版本.顺道一提780m的编号`gfx1103`
+
+    这样,我们的`.zshrc`就有如下内容了
+
+    ```bash
+    # ======================================================================= rocm
+    export ROCM_HOME=/opt/rocm-6.2.4
+    export PATH=$PATH:$ROCM_HOME/bin
+    export HSA_OVERRIDE_GFX_VERSION=11.0.0
+    ```
 
 6. 检查驱动是否正常
 
@@ -290,6 +304,7 @@ git工具我们需要好好设置下,毕竟ubuntu下很多东西,尤其是大文
 和在macos上一样,我们可以在`.zshrc`或其他shell的配置文件中像这样配置代理
 
 ```bash
+#========================================================================= proxy
 # 设置使用本机代理
 alias setproxy="export https_proxy=http://127.0.0.1:7897 http_proxy=http://127.0.0.1:7897 all_proxy=socks5://127.0.0.1:7897"
 # 设置使用本地局域网代理
@@ -815,6 +830,7 @@ ubuntu特有操作
 
 如果你不在乎wayland,可以接受桌面环境运行在x11上,那我们也可以安装[kinto](https://github.com/rbreaves/kinto)这个项目来获得不同风格且统一的快捷键布局.
 
+这么改有个缺陷就是只能使用`Control + Alt + C`在terminal中中断程序了
 
 ## 安装docker环境
 
@@ -835,7 +851,7 @@ ubuntu特有操作
     "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu \
     $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
     sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
-    sudo apt-get update
+    sudo apt-get updatepip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/rocm6.2
     ```
 
 + 安装docker
@@ -900,6 +916,18 @@ hello
 `homebrew`会被安装在`linuxbrew`用户目录下(根目录为`/home/linuxbrew`),而安装的包都会被放在`/home/linuxbrew/.linuxbrew/Cellar`目录下
 
 安装好`homebrew`后我们自然也就需要安装`cmake,protobuf,grpc,go,node,python3.11,micromamba`等等这些基本环境了.
+
+修改我们的`.zshrc`以固定各个包或工具的配置
+
+```bash
+#========================================================================= golang
+# 主要是将go的mod缓存和gopath改到`Libraries`目录
+export GO111MODULE=on
+export GOPROXY=https://goproxy.cn
+export GOPATH=/home/hsz/Libraries/go
+export GOMODCACHE=/home/hsz/Libraries/go/pkg/mod
+export PATH="$PATH:/home/hsz/Libraries/go/bin"
+```
 
 ## 安装和管理Linux应用
 
@@ -1234,6 +1262,7 @@ linux下我会尽量推荐开源工具.下面是一些常用软件的安装信�
 | synaptic                                                         | `sudo apt install synaptic`                                        | 新立得软件包管理器,管理deb应用和包                               |
 | appman                                                           | [官网脚本下载](https://github.com/ivan-hc/AppMan)                  | 管理`PORTABLE LINUX APPS`                                        |
 | whaler                                                           | [flathub](https://flathub.org/apps/com.github.sdv43.whaler)        | 轻量级docker容器监控工具                                         |
+| WineZGUI                                                         | [flathub](https://flathub.org/apps/io.github.fastrizwaan.WineZGUI) | wine工具集                                                       |
 
 ##### 补充设置
 
