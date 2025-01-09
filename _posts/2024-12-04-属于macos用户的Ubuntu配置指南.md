@@ -99,23 +99,10 @@ sudo reboot
     ```bash
     sudo apt update # 更新软件包的索引或包列表
     sudo apt install "linux-headers-$(uname -r)" "linux-modules-extra-$(uname -r)" # 根据linux内核来安装对应的linux-headers和linux-modules-extra
-    sudo usermod -a -G render,video $LOGNAME # 添加当前用户到渲染和视频分组
-    wget https://repo.radeon.com/amdgpu-install/6.2/ubuntu/noble/amdgpu-install_6.2.60300-1_all.deb # 下载amdgpu安装工具,这里以6.3.6030为例
-    sudo apt install ./amdgpu-install_6.3.60300-1_all.deb #安装rocm安装工具
-    # sudo apt update # 更新软件包的索引或包列表
-    # sudo apt install amdgpu-dkms rocm # 安装amdgpu-dkms(驱动) rocm(rocm包)
-    sudo reboot #重启后生效
-    ```
-
-    ```bash
-    sudo apt update # 更新软件包的索引或包列表
-    sudo apt install "linux-headers-$(uname -r)" "linux-modules-extra-$(uname -r)" # 根据linux内核来安装对应的linux-headers和linux-modules-extra
     sudo apt install python3-setuptools python3-wheel
     sudo usermod -a -G render,video $LOGNAME # 添加当前用户到渲染和视频分组
     wget https://repo.radeon.com/amdgpu-install/6.2.4/ubuntu/noble/amdgpu-install_6.2.60204-1_all.deb # 下载amdgpu安装工具,这里以6.2.60204为例
     sudo apt install ./amdgpu-install_6.2.60204-1_all.deb #安装rocm安装工具
-    # sudo apt update # 更新软件包的索引或包列表
-    # sudo apt install amdgpu-dkms rocm  # 安装amdgpu-dkms(驱动) rocm(rocm包)
     sudo reboot #重启后生效
     ```
 
@@ -168,6 +155,7 @@ sudo reboot
     /opt/rocm/lib
     /opt/rocm/lib64
     EOF
+
     sudo ldconfig
     ```
 
@@ -341,6 +329,14 @@ alias unsetproxy="unset https_proxy;unset http_proxy;unset all_proxy"
 
 一般我也会按这个次序进行设置
 
+在开始设置之前，我们需要先安装`gnome-tweaks`
+
+```bash
+sudo apt install gnome-tweaks
+```
+
+这是gnome环境的`优化`工具,安装好后会放在`显示应用`->`工具`->`优化`.
+
 macos风格的Gnome桌面美化一般使用的是[vinceliuice/WhiteSur-gtk-theme](https://github.com/vinceliuice/WhiteSur-gtk-theme.git)这个项目.
 这个项目其实已经可以包办大部分的美化任务了.
 
@@ -500,26 +496,26 @@ sudo apt-get install gnome-browser-connector
 | [Dash to Dock](https://extensions.gnome.org/extension/307/dash-to-dock/)                                      | 高       | 一个对主题更友好的dash             | 关闭`Ubuntu Docker`,功能重复了                                                                                                       |
 | [Blur my Shell](https://extensions.gnome.org/extension/3193/blur-my-shell/)                                   | 高       | 一个提供桌面模糊的插件             | 建议修改`Dash to Dock`中的拐角半径                                                                                                   |
 | [Clipboard Indicator](https://extensions.gnome.org/extension/779/clipboard-indicator/)                        | 高       | 剪切板功能,可以保存近期的复制内容  | ---                                                                                                                                  |
-| [Lock Keys](https://extensions.gnome.org/extension/1532/lock-keys/)                                           | 高       | 大小写锁定提示                     | ---                                                                                                                                  |
+| [Lock Keys](https://extensions.gnome.org/extension/1532/lock-keys/)                                           | 低       | 大小写锁定提示                     | ---                                                                                                                                  |
 | [Removable Drive Menu](https://extensions.gnome.org/extension/7/removable-drive-menu/)                        | 高       | 顶栏的移动存储操作工具             | ---                                                                                                                                  |
-| [Screenshort-cut](https://extensions.gnome.org/extension/6868/screenshort-cut/)                               | 中       | 顶栏截图工具                       | 需要额外安装`sudo apt install gir1.2-gtop-2.0 lm-sensors`获取硬盘信息                                                                |
+| [Screenshort-cut](https://extensions.gnome.org/extension/6868/screenshort-cut/)                               | 低       | 顶栏截图工具                       | 需要额外安装`sudo apt install gir1.2-gtop-2.0 lm-sensors`获取硬盘信息                                                                |
 | [Vitals](https://extensions.gnome.org/extension/1460/vitals/)                                                 | 中       | 顶栏系统监控                       | ---                                                                                                                                  |
 | [GSConnect](https://extensions.gnome.org/extension/1319/gsconnect/)                                           | 高       | 快速连接移动端设备                 | 需要配合app`kde connect`                                                                                                             |
 | [Todoit](https://extensions.gnome.org/extension/7538/todo-list/)                                              | 低       | 顶部todolist                       | ---                                                                                                                                  |
 | [Lunar Calendar 农历](https://extensions.gnome.org/extension/675/lunar-calendar/)                             | 中       | 日历改为农历                       | 需要先额外安装[Nei/ChineseCalendar](https://gitlab.gnome.org/Nei/ChineseCalendar/-/archive/20240107/ChineseCalendar-20240107.tar.gz) |
 | [Compiz alike magic lamp effect](https://extensions.gnome.org/extension/3740/compiz-alike-magic-lamp-effect/) | 中       | 仿macos的最小化动画                | ---                                                                                                                                  |
-| [gTile](https://extensions.gnome.org/extension/28/gtile/)                                                     | 高       | 多应用划分窗口                     | ---                                                                                                                                  |
+| [gTile](https://extensions.gnome.org/extension/28/gtile/)                                                     | 中       | 多应用划分窗口                     | ---                                                                                                                                  |
 | [Input Method Panel](https://extensions.gnome.org/extension/261/kimpanel/)                                    | 高       | 输入法相关                         | ---                                                                                                                                  |
-| [Click to close overview](https://extensions.gnome.org/extension/3826/click-to-close-overview/)               | 低       | 点击空白处关闭预览                 | ---                                                                                                                                  |
+| [Click to close overview](https://extensions.gnome.org/extension/3826/click-to-close-overview/)               | 高       | 点击空白处关闭预览                 | ---                                                                                                                                  |
 | [Hide Top Bar](https://extensions.gnome.org/extension/545/hide-top-bar/)                                      | 低       | 自动隐藏顶部工具栏                 | ---                                                                                                                                  |
 | [desktop-lyric](https://extensions.gnome.org/extension/4006/desktop-lyric/)                                   | 中       | 桌面歌词                           |
-| [applications-menu](https://extensions.gnome.org/extension/6/applications-menu/)                              | 高       | 顶部提供应用的归类入口             |
-| [https://extensions.gnome.org/extension/5660/weather-or-not/]                                                 | 低       | 顶部天气插件,需要有`gnome weahter` |
+| [applications-menu](https://extensions.gnome.org/extension/6/applications-menu/)                              | 低       | 顶部提供应用的归类入口             |
+| [weather-or-not](https://extensions.gnome.org/extension/5660/weather-or-not/)                                 | 低       | 顶部天气插件,需要有`gnome weahter` |
 
 除此之外,我个人推荐对系统默认插件做如下处理
 
 + 禁用Desktop Icons,这个插件会让桌面有图标(默认会有你的home目录文件夹)
-+ 在全部配置完成后dash to dock插件中关闭`显示应用程序`
++ 如果安装有`applications-menu`则在全部配置完成后dash to dock插件中关闭`显示应用程序`
 
 ### 增加空格键预览功能
 
@@ -716,27 +712,33 @@ ubuntu中蓝牙设备在机器长期不用后会自动断开连接.这对于一�
 
 1. 在`设置->系统->区域与语言`中设置中文环境.
 2. 在`语言支持`中选择默认的输入法框架为`Fcitx 5`
-3. 挂着全局代理执行如下命令
+3. 在`/etc/environment`中设置环境变量
+
+    ```bash
+    LANG=zh_CN.UTF-8
+    LANGUAGE=zh_CN:en_US
+
+    XMODIFIERS=@im=fcitx
+    QT_IM_MODULE=fcitx
+    GTK_IM_MODULE=fcitx
+    ```
+
+    之后重启
+
+    
+
+4. 在`显示应用->工具->优化`中将`Fcitx 5`添加自启动项,重启即可
+
+5. 安装Gnome插件`Input Method Panel`
+6. 着全局代理执行如下命令
 
     ```bash
     curl -sSL https://www.debuggerx.com/fcitx5_customizer/fcitx5_customizer.sh | bash -s -- recommend
     ```
 
-4. 之后除了去掉`搜狗词库`外都按推荐的来即可
+7. 之后除了去掉`搜狗词库`外都按推荐的来即可
 
-5. 在`.zshrc`(如果希望是系统级修改则在`/etc/profile`)中设置环境变量
 
-    ```bash
-    export XMODIFIERS=@im=fcitx
-    export QT_IM_MODULE=fcitx
-    export GTK_IM_MODULE=fcitx
-    ```
-
-6. 安装Gnome插件`Input Method Panel`
-
-7. 在`显示应用->工具->优化`中将`Fcitx 5`添加自启动项,重启即可
-
-<!-- sudo apt install gnome-tweaks -->
 
 ### 优化快捷键
 
@@ -851,7 +853,8 @@ ubuntu特有操作
     "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu \
     $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
     sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
-    sudo apt-get updatepip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/rocm6.2
+    
+    sudo apt-get update
     ```
 
 + 安装docker
