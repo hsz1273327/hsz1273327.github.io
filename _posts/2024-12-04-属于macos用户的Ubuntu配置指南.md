@@ -13,7 +13,7 @@ tags:
     - MacOs
     - 美化
 header-img: "img/home-bg-o.jpg"
-update: 2025-01-02
+update: 2025-01-09
 ---
 # 属于MacOs用户的Ubuntu配置指南
 
@@ -725,8 +725,6 @@ ubuntu中蓝牙设备在机器长期不用后会自动断开连接.这对于一�
 
     之后重启
 
-    
-
 4. 在`显示应用->工具->优化`中将`Fcitx 5`添加自启动项,重启即可
 
 5. 安装Gnome插件`Input Method Panel`
@@ -737,8 +735,6 @@ ubuntu中蓝牙设备在机器长期不用后会自动断开连接.这对于一�
     ```
 
 7. 之后除了去掉`搜狗词库`外都按推荐的来即可
-
-
 
 ### 优化快捷键
 
@@ -1250,22 +1246,22 @@ linux下我会尽量推荐开源工具.下面是一些常用软件的安装信�
 
 #### 系统工具
 
-| 软件                                                             | 渠道                                                               | 说明                                                             |
-| ---------------------------------------------------------------- | ------------------------------------------------------------------ | ---------------------------------------------------------------- |
-| Disk Usage Analyzer                                              | [flathub](https://flathub.org/apps/org.gnome.baobab)               | 查看硬盘使用情况的工具                                           |
-| Remmina                                                          | [flathub](https://flathub.org/apps/org.remmina.Remmina)            | 远程桌面的连接客户端                                             |
-| timeshift                                                        | `sudo apt install timeshift`                                       | 系统快照,我们需要自备一块</br>空的U盘专门做快照,每半年做一份快照 |
-| [missioncenter](https://missioncenter.io/)                       | [flathub](https://flathub.org/apps/io.missioncenter.MissionCenter) | 有着window上资源管理器风格的综合性资源监控软件,可以监控GP        |
-| [CPU-X](https://thetumultuousunicornofdarkness.github.io/CPU-X/) | `sudo apt install cpu-x`                                           | windows上cpu-z在linux上的平替                                    |
-| AMD GPU TOP                                                      | [官网下载deb](https://github.com/Umio-Yasuno/amdgpu_top)           | amdgpu的运行详细信息监控                                         |
-| bleachbit                                                        | `sudo apt install bleachbit`                                       | 系统清理工具                                                     |
-| gufw                                                             | `sudo apt install gufw`                                            | 防火墙工具,使用`sudo ufw enable`启动                             |
-| chrome                                                           | [官网下载deb](https://www.google.cn/intl/zh-CN/chrome/)            | google的浏览器                                                   |
-| Warehouse                                                        | [flathub](https://flathub.org/apps/io.github.flattool.Warehouse)   | flatpak应用管理                                                  |
-| synaptic                                                         | `sudo apt install synaptic`                                        | 新立得软件包管理器,管理deb应用和包                               |
-| appman                                                           | [官网脚本下载](https://github.com/ivan-hc/AppMan)                  | 管理`PORTABLE LINUX APPS`                                        |
-| whaler                                                           | [flathub](https://flathub.org/apps/com.github.sdv43.whaler)        | 轻量级docker容器监控工具                                         |
-| WineZGUI                                                         | [flathub](https://flathub.org/apps/io.github.fastrizwaan.WineZGUI) | wine工具集                                                       |
+| 软件                                                             | 渠道                                                               | 说明                                                               |
+| ---------------------------------------------------------------- | ------------------------------------------------------------------ | ------------------------------------------------------------------ |
+| Disk Usage Analyzer                                              | [flathub](https://flathub.org/apps/org.gnome.baobab)               | 查看硬盘使用情况的工具                                             |
+| Remmina                                                          | [flathub](https://flathub.org/apps/org.remmina.Remmina)            | 远程桌面的连接客户端                                               |
+| timeshift                                                        | `sudo apt install timeshift`                                       | 系统快照,我们需要自备一块</br>空的U盘专门做快照,每半年做一份快照   |
+| [missioncenter](https://missioncenter.io/)                       | [flathub](https://flathub.org/apps/io.missioncenter.MissionCenter) | 有着window上资源管理器风格的综合性资源监控软件,可以监控GP          |
+| [CPU-X](https://thetumultuousunicornofdarkness.github.io/CPU-X/) | `sudo apt install cpu-x`                                           | windows上cpu-z在linux上的平替                                      |
+| AMD GPU TOP                                                      | [官网下载deb](https://github.com/Umio-Yasuno/amdgpu_top)           | amdgpu的运行详细信息监控                                           |
+| bleachbit                                                        | `sudo apt install bleachbit`                                       | 系统清理工具                                                       |
+| gufw                                                             | `sudo apt install gufw`                                            | 防火墙工具,使用`sudo ufw enable`启动                               |
+| chrome                                                           | [官网下载deb](https://www.google.cn/intl/zh-CN/chrome/)            | google的浏览器                                                     |
+| Warehouse                                                        | [flathub](https://flathub.org/apps/io.github.flattool.Warehouse)   | flatpak应用管理                                                    |
+| synaptic                                                         | `sudo apt install synaptic`                                        | 新立得软件包管理器,管理deb应用和包                                 |
+| appman                                                           | [官网脚本下载](https://github.com/ivan-hc/AppMan)                  | 管理`PORTABLE LINUX APPS`                                          |
+| whaler                                                           | [flathub](https://flathub.org/apps/com.github.sdv43.whaler)        | 轻量级docker容器监控工具                                           |
+| <!--                                                             | WineZGUI                                                           | [flathub](https://flathub.org/apps/io.github.fastrizwaan.WineZGUI) | wine工具集 | --> |
 
 ##### 补充设置
 
@@ -1284,23 +1280,23 @@ gpu加速:
 
 #### 生产力工具
 
- | 软件                                                  | 渠道                                                                   | 说明                                                               |
- | ----------------------------------------------------- | ---------------------------------------------------------------------- | ------------------------------------------------------------------ |
- | Calculator                                            | [flathub](https://flathub.org/apps/org.gnome.Calculator)               | 基本的计算器工具                                                   |
- | gimp                                                  | [flathub](https://flathub.org/apps/org.gimp.GIMP)                      | 开源的图像编辑软件,ps平替                                          |
- | freecad                                               | `appman -i freecad`                                                    | 开源的工程制图,autocad平替                                         |
- | blender                                               | `appman -i blender`                                                    | 开源的3d建模渲染工具,maya平替                                      |
- | godot                                                 | `appman -i godot`                                                      | 开源的轻量级游戏引擎                                               |
- | unrealengine5                                         | [官网下载](https://www.unrealengine.com/zh-CN/download)                | 大名鼎鼎的虚幻引擎,                                                |
- | shotcut                                               | `appman -i shotcut.html`                                               | 轻量级的开源视频剪辑工具                                           |
- | DaVinci Resolve                                       | [官网下载](http://www.blackmagicdesign.com/cn/products/davinciresolve) | 大名鼎鼎的生产级视频剪辑工具达芬奇,有免费的社区版                  |
- | 飞书                                                  | [官网下载deb](https://www.feishu.cn/download)                          | 知名的办公协作工具,flathub版本无法后台挂载因此用官网版本           |
- | 微信                                                  | [官网下载deb](https://linux.weixin.qq.com/)                            | 知名的聊天工具,由于flathub版本的后台功能有缺陷因此使用AppImage版本 |
- | wps                                                   | [官网下载deb](https://www.wps.cn/product/wpslinux)                     | 知名的office套件,flatpak版本过低                                   |
- | [obs](https://obsproject.com/)                        | [flathub](https://flathub.org/apps/com.obsproject.Studio)              | 知名的开源直播录屏工具                                             |
- | vscode                                                | [官网下载deb](https://code.visualstudio.com/Download)                  | 文本编辑器                                                         |
- | [github desktop](https://github.com/shiftkey/desktop) | `appman -i github-desktop`                                             | github desktop的第三方linux fork                                   |
- | balenaEtcher                                          | [官网下载](https://etcher.balena.io/)                                  | 镜像写入工具                                                       |
+ | 软件                           | 渠道                                                                   | 说明                                                               |
+ | ------------------------------ | ---------------------------------------------------------------------- | ------------------------------------------------------------------ |
+ | Calculator                     | [flathub](https://flathub.org/apps/org.gnome.Calculator)               | 基本的计算器工具                                                   |
+ | gimp                           | [flathub](https://flathub.org/apps/org.gimp.GIMP)                      | 开源的图像编辑软件,ps平替                                          |
+ | freecad                        | `appman -i freecad`                                                    | 开源的工程制图,autocad平替                                         |
+ | blender                        | `appman -i blender`                                                    | 开源的3d建模渲染工具,maya平替                                      |
+ | godot                          | `appman -i godot`                                                      | 开源的轻量级游戏引擎                                               |
+ | unrealengine5                  | [官网下载](https://www.unrealengine.com/zh-CN/download)                | 大名鼎鼎的虚幻引擎,                                                |
+ | shotcut                        | `appman -i shotcut`                                                    | 轻量级的开源视频剪辑工具                                           |
+ | DaVinci Resolve                | [官网下载](http://www.blackmagicdesign.com/cn/products/davinciresolve) | 大名鼎鼎的生产级视频剪辑工具达芬奇,有免费的社区版                  |
+ | 飞书                           | [官网下载deb](https://www.feishu.cn/download)                          | 知名的办公协作工具,flathub版本无法后台挂载因此用官网版本           |
+ | 微信                           | [官网下载deb](https://linux.weixin.qq.com/)                            | 知名的聊天工具,由于flathub版本的后台功能有缺陷因此使用AppImage版本 |
+ | wps                            | [官网下载deb](https://www.wps.cn/product/wpslinux)                     | 知名的office套件,flatpak版本过低                                   |
+ | [obs](https://obsproject.com/) | [flathub](https://flathub.org/apps/com.obsproject.Studio)              | 知名的开源直播录屏工具                                             |
+ | vscode                         | [官网下载deb](https://code.visualstudio.com/Download)                  | 文本编辑器                                                         |
+ | github desktop                 | [github下载deb](https://github.com/shiftkey/desktop)                   | github desktop的第三方linux fork                                   |
+ | balenaEtcher                   | [官网下载](https://etcher.balena.io/)                                  | 镜像写入工具                                                       |
 
 ##### 补充设置
 
@@ -1308,10 +1304,13 @@ gpu加速:
 
 #### 娱乐工具
 
- | 软件                     | 渠道                                                                          | 说明                         |
- | ------------------------ | ----------------------------------------------------------------------------- | ---------------------------- |
- | vlc                      | [flathub](https://flathub.org/apps/org.videolan.VLC)                          | 知名的开源视频播放器         |
- | NetEase Cloud Music Gtk4 | [flathub](https://flathub.org/apps/com.github.gmg137.netease-cloud-music-gtk) | 网易云音乐的开源第三方客户端 |
+ | 软件                     | 渠道                                                                          | 说明                                                     |
+ | ------------------------ | ----------------------------------------------------------------------------- | -------------------------------------------------------- |
+ | vlc                      | [flathub](https://flathub.org/apps/org.videolan.VLC)                          | 知名的开源视频播放器                                     |
+ | NetEase Cloud Music Gtk4 | [flathub](https://flathub.org/apps/com.github.gmg137.netease-cloud-music-gtk) | 网易云音乐的开源第三方客户端                             |
+ | steam                    | [官网下载](https://store.steampowered.com/about/)                             | 知名的pc游戏平台                                         |
+ | ProtonUp-Qt              | [flathub](https://flathub.org/apps/net.davidotek.pupgui2)                     |为steam管理GE-Proton 
+ | protontricks             | [flathub](https://flathub.org/apps/com.github.Matoking.protontricks)          | 为Steam/Proton游戏以及其他常见Wine功能运行Winetricks命令 |
 
 ## Linux下神奇的Steam
 
