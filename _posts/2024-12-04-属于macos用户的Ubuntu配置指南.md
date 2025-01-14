@@ -13,7 +13,7 @@ tags:
     - MacOs
     - 美化
 header-img: "img/home-bg-o.jpg"
-update: 2025-01-09
+update: 2025-01-14
 ---
 # 属于MacOs用户的Ubuntu配置指南
 
@@ -91,6 +91,8 @@ sudo reboot
 #### amd显卡/apu核显
 
 对应的工具链叫[rocm](https://rocm.docs.amd.com/en/latest/),需要注意目前rocm在同时存在amd独显和amd核显的情况下会有错误.因此如果你用的是amd独显需要在bios中禁用核显(amd的这个操作真的很神奇,因此一般推荐au配n卡).
+
+不过需要注意,rocm官方版本目前对大多数商用级别的apu和显卡都不官方支持(官方目前仅支持7900xtx,7900xt).我们的780m核显虽然可以安装但需要有额外设置而且很多周边工具并不支持,当然正常用是没啥问题的,而且pytorch和llama.cpp是可以正常使用的,但如果想要用全套ai相关工具,我们可能还是得借助第三方工具链[lamikr/rocm_sdk_builder](https://github.com/lamikr/rocm_sdk_builder/tree/master).本篇我们还是以官方驱动为准.
 
 可以使用如下步骤安装:
 
@@ -318,6 +320,10 @@ alias unsetproxy="unset https_proxy;unset http_proxy;unset all_proxy"
     ```
 
 ## 美化系统
+
+ubuntu系统界面大致可以分为如下几个部分
+
+![系统界面][1]
 
 美化系统我们大致可以分为如下几个步骤
 
@@ -1284,19 +1290,23 @@ gpu加速:
  | ------------------------------ | ---------------------------------------------------------------------- | ------------------------------------------------------------------ |
  | Calculator                     | [flathub](https://flathub.org/apps/org.gnome.Calculator)               | 基本的计算器工具                                                   |
  | gimp                           | [flathub](https://flathub.org/apps/org.gimp.GIMP)                      | 开源的图像编辑软件,ps平替                                          |
+ | Inkscape                       | [flathub](https://flathub.org/apps/org.inkscape.Inkscape)              | 矢量图编辑工具                                                     |
  | freecad                        | `appman -i freecad`                                                    | 开源的工程制图,autocad平替                                         |
  | blender                        | `appman -i blender`                                                    | 开源的3d建模渲染工具,maya平替                                      |
  | godot                          | `appman -i godot`                                                      | 开源的轻量级游戏引擎                                               |
  | unrealengine5                  | [官网下载](https://www.unrealengine.com/zh-CN/download)                | 大名鼎鼎的虚幻引擎,                                                |
  | shotcut                        | `appman -i shotcut`                                                    | 轻量级的开源视频剪辑工具                                           |
  | DaVinci Resolve                | [官网下载](http://www.blackmagicdesign.com/cn/products/davinciresolve) | 大名鼎鼎的生产级视频剪辑工具达芬奇,有免费的社区版                  |
+ | KiCad                          | [flathub](https://flathub.org/apps/org.kicad.KiCad)                    | 知名的开源eda工具                                                  |
+ | balenaEtcher                   | [官网下载](https://etcher.balena.io/)                                  | 镜像写入工具                                                       |
  | 飞书                           | [官网下载deb](https://www.feishu.cn/download)                          | 知名的办公协作工具,flathub版本无法后台挂载因此用官网版本           |
  | 微信                           | [官网下载deb](https://linux.weixin.qq.com/)                            | 知名的聊天工具,由于flathub版本的后台功能有缺陷因此使用AppImage版本 |
  | wps                            | [官网下载deb](https://www.wps.cn/product/wpslinux)                     | 知名的office套件,flatpak版本过低                                   |
  | [obs](https://obsproject.com/) | [flathub](https://flathub.org/apps/com.obsproject.Studio)              | 知名的开源直播录屏工具                                             |
  | vscode                         | [官网下载deb](https://code.visualstudio.com/Download)                  | 文本编辑器                                                         |
  | github desktop                 | [github下载deb](https://github.com/shiftkey/desktop)                   | github desktop的第三方linux fork                                   |
- | balenaEtcher                   | [官网下载](https://etcher.balena.io/)                                  | 镜像写入工具                                                       |
+ | Xmind                          | [flathub](https://flathub.org/apps/net.xmind.XMind)                    | 知名的脑图工具                                                     |
+ | minder                         | [flathub](flatpak install flathub com.github.phase1geo.minder)         | xmind的开源替代                                                    |
 
 ##### 补充设置
 
@@ -1309,7 +1319,7 @@ gpu加速:
  | vlc                      | [flathub](https://flathub.org/apps/org.videolan.VLC)                          | 知名的开源视频播放器                                     |
  | NetEase Cloud Music Gtk4 | [flathub](https://flathub.org/apps/com.github.gmg137.netease-cloud-music-gtk) | 网易云音乐的开源第三方客户端                             |
  | steam                    | [官网下载](https://store.steampowered.com/about/)                             | 知名的pc游戏平台                                         |
- | ProtonUp-Qt              | [flathub](https://flathub.org/apps/net.davidotek.pupgui2)                     |为steam管理GE-Proton 
+ | ProtonUp-Qt              | [flathub](https://flathub.org/apps/net.davidotek.pupgui2)                     | 为steam管理GE-Proton                                     |
  | protontricks             | [flathub](https://flathub.org/apps/com.github.Matoking.protontricks)          | 为Steam/Proton游戏以及其他常见Wine功能运行Winetricks命令 |
 
 ## Linux下神奇的Steam
@@ -1317,6 +1327,14 @@ gpu加速:
 steam大家都知道,知名的游戏平台嘛.但在linux下steam是一个神奇的存在,某种程度上可以说是steam盘活了桌面linux生态都不过分.
 
 steam最基本的能力当然是让玩家可以方便的打游戏,阀门社为了这个目标煞费苦心,他们的努力直接给linux平台大范围扩展了生态,以至于steam即便不打游戏都是linux上的必装软件.
+
+### 添加非steam应用
+
+steam除了可以管理它自己平台上的软件,也可以自己给它添加软件由他启动
+
+![添加非steam应用-入口][2]
+
+![添加非steam应用-选应用][3]
 
 ### steam runtime
 
@@ -1349,60 +1367,66 @@ steam最基本的能力当然是让玩家可以方便的打游戏,阀门社为�
 
 首先我们要先安装steam,由于steam本身是一个启动器,后需可能会有很多需要手动操作的部分,因此最好是原生安装方便手动调试.然后进入steam,进入`库`,勾选`工具`,找到`proton`,一般装个最新版本就够用了.也可以多装一个`proton experimental`备用,然后视游戏安装相关的反作弊运行时即可.
 
-当然也还有另一个选择--[proton-ge](https://github.com/GloriousEggroll/proton-ge-custom),这是一个第三方的魔改`proton`,据说比官方版本效率高些,但也一样有兼容性问题.
+#### 使用ProtonUp-Qt安装proton-ge
 
-要安装先要`mesa`
+proton项目是开源的,除了steam官方的proton,自然也会有魔改proton.其中最知名的自然就是[proton-ge](https://github.com/GloriousEggroll/proton-ge-custom),这个第三方的魔改`proton`据说比官方版本效率更高些,而且兼容性会更好些,虽然也一样可能有兼容性问题.
+
+`proton-ge`官方给的安装方式还是比较麻烦的,我们可以使用[ProtonUp-Qt](https://flathub.org/apps/net.davidotek.pupgui2)来进行自动安装,只要打开后选择最新版本安装即可.需要注意steam必须是原生安装的,否则安装位置会不对了.
+
+![安装proton-ge][4]
+
+#### 使用proton运行windows软件
+
+即便是安装好`proton`后,windows平台的软件也是不能直接下载了用的,我们需要选中已经购买好的游戏,点击右侧`设置`(齿轮按钮)->`属性`->`兼容性`,选一个`proton`版本强制指定兼容层.这样游戏就可以下载运行了.
+
+![设置proton-入口][5]
+
+![设置proton-选择版本][6]
+
+之于能不能玩,这就得群策群力了,[protondb](https://www.protondb.com/)是一个steam上游戏兼容性的数据网站,主要靠社区玩家提交报告来确定特定游戏的兼容性.我们可以先在其中查看
+
+### 游戏帧数检测
+
+我们看到很多评测视频里会有帧数(FPS)等指示用来观察游戏的流畅程度.在linux下也有,需要使用[flightlessmango/MangoHud](https://github.com/flightlessmango/MangoHud)这个软件.
 
 ```bash
-# 要挂代理
-setproxy
-# 安装
-sudo add-apt-repository ppa:kisak/kisak-mesa && sudo dpkg --add-architecture i386 && sudo apt update && sudo apt upgrade && sudo apt install libgl1-mesa-dri:i386 mesa-vulkan-drivers mesa-vulkan-drivers:i386
-# 重启
-sudo reboot
+sudo apt install mangohud
 ```
 
-之后根据安装说明我们继续设置
+安装完成后我们可以在steam中设置`启动选项修改`为`mangohud %command%`
 
-1. 创建`~/.steam/root/compatibilitytools.d`文件夹
+![启动选项修改][7]
 
-2. 在项目的[release](https://github.com/GloriousEggroll/proton-ge-custom/releases)页面下载需要的版本,一般就是最新版,解压到刚才创建的文件夹
+默认会在游戏界面的左上角给出cpu,gpu占用和帧数数据.我们可以在`~/.config/MangoHud/MangoHud.conf`文件中对展示的内容进行自定义,具体有哪些参数可以看[这张表](https://github.com/flightlessmango/MangoHud?tab=readme-ov-file#environment-variables).建议像我下面这样设置
 
-    ```bash
-    tar -xf GE-ProtonVERSION.tar.gz -C ~/.steam/root/compatibilitytools.d/
-    ```
+```txt
+cpu_temp
+gpu_temp
+ram
+vram
+position=top-left
+```
 
-3. 重启steam
+<!-- https://www.bilibili.com/video/BV1zD4y1b7Jj?vd_source=08b668b29d50d7b81093d4adee9dfde0&spm_id_from=333.788.videopod.sections -->
 
-之后我们就可以在steam中使用它了
-
-#### 使用proton运行steam游戏
-
-steam主要还是一个游戏平台,proton主要也还是为游戏服务的.
-
-即便是安装好`proton`后,windows平台的游戏也是不能直接下载了玩的,我们需要选中已经购买好的游戏,点击右侧`设置`(齿轮按钮)->`属性`->`兼容性`,选一个`proton`版本强制指定兼容层.这样游戏就可以下载了.之于能不能玩,这就得群策群力了,[protondb](https://www.protondb.com/)是一个steam上游戏兼容性的数据网站,主要靠社区玩家提交报告来确定特定游戏的兼容性.我们可以先在其中查看
-
-
-<!-- #### 使用proton运行windwos程序
-
-
-#### 使用proton运行非steam游戏
-
-
-
-### Linux Steam游戏相关优化
-
-https://github.com/flightlessmango/MangoHud
-
-https://www.bilibili.com/video/BV1zD4y1b7Jj?vd_source=08b668b29d50d7b81093d4adee9dfde0&spm_id_from=333.788.videopod.sections
-
-
+<!-- 
 https://www.mapeditor.org/
- https://itch.io/game-assets/free/tag-tilemap
+ https://itch.io/game-assets/free/tag-tilemap -->
 
 ### 用steam串流
 
-说到串流可能大家想到的更多的是[sunshine](https://github.com/LizardByte/Sunshine)-[moonlight](https://github.com/moonlight-stream/moonlight-android)的串流组合.但实际情况是在用N卡的情况下sunshine强无敌,而在用a卡尤其是apu的核显的情况下sunshine并不好用.反而是steam link效果还不错. -->
+说到串流可能大家想到的更多的是[sunshine](https://github.com/LizardByte/Sunshine)-[moonlight](https://github.com/moonlight-stream/moonlight-android)的串流组合.但实际情况是在用N卡的情况下sunshine强无敌,而在用a卡尤其是apu的核显的情况下sunshine并不好用,尤其在linux下根本用不了.反而是steam link效果还不错.
+
+用法也不复杂
+
+1. 接收端的机器安装`steam link`,苹果直接在app store里下,安卓则去[官网下](https://help.steampowered.com/zh-cn/faqs/view/7112-CD02-7B57-59F8)即可,之后打开它
+2. 发送端机器打开steam,在`steam->设置`中找到`远程畅玩`,激活后`配对流式应用`即可.如果你已经有配对好了的就需要先`取消设备配对`然后再做配对
+3. 这时你接收端的机器会有个pin码,在发送端机器中将这个码填上就配对完成了.
+
+![steamlink设置入口-1][8]
+![steamlink设置入口-2][9]
+
+steam串流非常吃网络,发送端一定要用有线的方式接入网络,接收端也尽量在网络覆盖范围内.网络稳定串流才能稳定
 
 <!-- ## 远程桌面
 
@@ -1432,3 +1456,12 @@ linux: Remmina
 
 <!-- ## 串流 -->
 
+[1]: {{site.url}}/img/in-post/ubuntu/gnome桌面结构.jpg
+[2]: {{site.url}}/img/in-post/ubuntu/add_app.png
+[3]: {{site.url}}/img/in-post/ubuntu/add_app_2.png
+[4]: {{site.url}}/img/in-post/ubuntu/install_proton_ge.png
+[5]: {{site.url}}/img/in-post/ubuntu/proton_set_1.png
+[6]: {{site.url}}/img/in-post/ubuntu/proton_set_2.png
+[7]: {{site.url}}/img/in-post/ubuntu/framepannel.png
+[8]: {{site.url}}/img/in-post/ubuntu/steamlink-1.png
+[9]: {{site.url}}/img/in-post/ubuntu/steamlink-2.png
