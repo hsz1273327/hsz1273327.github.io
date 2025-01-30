@@ -13,7 +13,7 @@ tags:
     - MacOs
     - 美化
 header-img: "img/home-bg-o.jpg"
-update: 2025-01-14
+update: 2025-01-31
 ---
 # 属于MacOs用户的Ubuntu配置指南
 
@@ -80,7 +80,7 @@ sudo reboot
 
 通常我们并不需要手动安装驱动,系统自带的通用驱动都可以正常使用.ubuntu本身也提供了一个应用`驱动管理`来检测和安装驱动.只有一些特殊硬件我们需要在特定情况下手动安装驱动.
 
-### 显卡驱动
+### 显卡驱动和运算库
 
 最常见的需要手动安装驱动的硬件就是显卡.这种通常是为了通过官方工具调用显卡计算接口.主流的显卡其实就amd(ati)显卡和Nvidia显卡两家,最近几年Intel也开始做独显了,虽然基本没人买.
 
@@ -92,9 +92,11 @@ sudo reboot
 
 对应的工具链叫[rocm](https://rocm.docs.amd.com/en/latest/),需要注意目前rocm在同时存在amd独显和amd核显的情况下会有错误.因此如果你用的是amd独显需要在bios中禁用核显(amd的这个操作真的很神奇,因此一般推荐au配n卡).
 
-不过需要注意,rocm官方版本目前对大多数商用级别的apu和显卡都不官方支持(官方目前仅支持7900xtx,7900xt).我们的780m核显虽然可以安装但需要有额外设置而且很多周边工具并不支持,当然正常用是没啥问题的,而且pytorch和llama.cpp是可以正常使用的,但如果想要用全套ai相关工具,我们可能还是得借助第三方工具链[lamikr/rocm_sdk_builder](https://github.com/lamikr/rocm_sdk_builder/tree/master).本篇我们还是以官方驱动为准.
+不过需要注意,rocm官方版本目前对大多数商用级别的apu和显卡都不官方支持(官方目前仅支持7900xtx,7900xt).我们的780m核显虽然可以安装但需要有额外设置而且很多周边工具并不支持,当然正常用是没啥问题的,而且pytorch和llama.cpp是可以正常使用的,但如果想要用全套ai相关工具,我们可能还是得借助第三方工具链[lamikr/rocm_sdk_builder](https://github.com/lamikr/rocm_sdk_builder/tree/master).
 
-可以使用如下步骤安装:
+##### 官方驱动和rocm
+
+可以使用如下步骤安装官方驱动和rocm:
 
 1. 安装安装器
 
@@ -229,9 +231,9 @@ sudo reboot
     apt list --installed
     ```
 
-##### rocm版本更新
+###### rocm版本更新
 
-更新版本我们需要完全卸载已有的rocm,驱动,和rocm安装器
+更新版本我们需要完全卸载已有的rocm,驱动和rocm安装器
 
 ```bash
 sudo amdgpu-install --uninstall # 卸载驱动和库
@@ -241,6 +243,48 @@ sudo reboot # 重启后生效
 ```
 
 之后在下载新版本的安装器重新安装配置一次即可
+
+##### rocm_sdk_builder(2025-01-31新增)
+
+
+
+[lamikr/rocm_sdk_builder](https://github.com/lamikr/rocm_sdk_builder/tree/master)是一个第三方的rocm方案.它通过给rocm和相关工具源码打补丁的方式让部分相对较新的显卡(核显)可以获得rocm相关工具的原生支持.刚好780m和ubuntu 24.04在它的支持范围内,我们自然也就可以装.当然缺点就是版本相对低些,目前(2025/01/31)只到rocm 6.1.2版本,目前正在慢慢适配6.2版本.相应的,torch,onnxruntime等依赖rocm的库版本也相对更低些,但它可以正常运行sd等常规ai工具,也还是值得一装的.
+
+安装rocm_sdk_builder有2个条件
+
+1. 需要一个干净的系统,不能安装过amd的官方驱动
+2. 需要能翻墙的稳定网络环境,依赖项都是在github上的,网络不稳git操作出问题就必须重新下载否则编译无法通过
+
+满足这些条件后我们就可以安装了
+
+```bash
+# 我们依然惯例的将rocm_sdk_builder项目源码放在~/workspace/init_source
+mkdir -p workspace/init_source # 构造目录
+cd workspace/init_source
+git clone https://github.com/lamikr/rocm_sdk_builder.git
+cd rocm_sdk_builder
+# 切到rocm_sdk_builder_612分支
+git checkout releases/rocm_sdk_builder_612
+# 安装所需依赖
+./install_deps.sh
+# 将当前用户添加到render用户组并重启
+sudo adduser [当前用户名] render
+sudo reboot
+
+cd workspace/init_source/rocm_sdk_builder
+# 选择编译针对的显卡,这里我们为780m选择gfx1103
+./babs.sh -c
+# 下载依赖到src_projects目录,注意下载好后观察log有没有错误,有的话将对应的项目的目录删除重新执行,否则编译会出错
+./babs.sh -i
+# 编译项目,编译中间文件会被放在builddir文件夹下大约会持续5~10小时
+./babs.sh -b
+```
+
+在编译完成后成果会被安装到`/opt/rocm_sdk_612`目录下--可执行文件被放在`/opt/rocm_sdk_612/bin`下(还包含一个python3.11环境);相关库的头文件被放在`/opt/rocm_sdk_612/include`中,如果要使用相关的环境,可以执行`source /opt/rocm_sdk_612/bin/env_rocm.sh`.
+
+而相关的python库会被编译为whl文件放在项目目录下的`packages/whl`目录下(我这里就是`~/workspace/init_source/rocm_sdk_builder/packages/whl`下).
+
+
 
 <!-- #### Nvidia显卡
 
