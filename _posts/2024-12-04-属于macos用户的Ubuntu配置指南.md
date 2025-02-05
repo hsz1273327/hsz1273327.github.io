@@ -246,8 +246,6 @@ sudo reboot # 重启后生效
 
 ##### rocm_sdk_builder(2025-01-31新增)
 
-
-
 [lamikr/rocm_sdk_builder](https://github.com/lamikr/rocm_sdk_builder/tree/master)是一个第三方的rocm方案.它通过给rocm和相关工具源码打补丁的方式让部分相对较新的显卡(核显)可以获得rocm相关工具的原生支持.刚好780m和ubuntu 24.04在它的支持范围内,我们自然也就可以装.当然缺点就是版本相对低些,目前(2025/01/31)只到rocm 6.1.2版本,目前正在慢慢适配6.2版本.相应的,torch,onnxruntime等依赖rocm的库版本也相对更低些,但它可以正常运行sd等常规ai工具,也还是值得一装的.
 
 安装rocm_sdk_builder有2个条件
@@ -1311,7 +1309,6 @@ linux下我会尽量推荐开源工具.下面是一些常用软件的安装信�
 | synaptic                                                         | `sudo apt install synaptic`                                        | 新立得软件包管理器,管理deb应用和包                                 |
 | appman                                                           | [官网脚本下载](https://github.com/ivan-hc/AppMan)                  | 管理`PORTABLE LINUX APPS`                                          |
 | whaler                                                           | [flathub](https://flathub.org/apps/com.github.sdv43.whaler)        | 轻量级docker容器监控工具                                           |
-| <!--                                                             | WineZGUI                                                           | [flathub](https://flathub.org/apps/io.github.fastrizwaan.WineZGUI) | wine工具集 | --> |
 
 ##### 补充设置
 
