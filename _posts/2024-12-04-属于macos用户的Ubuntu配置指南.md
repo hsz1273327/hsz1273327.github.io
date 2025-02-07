@@ -12,8 +12,9 @@ tags:
     - Ubuntu
     - MacOs
     - 美化
+    - Rocm
 header-img: "img/home-bg-o.jpg"
-update: 2025-01-31
+update: 2025-02-07
 ---
 # 属于MacOs用户的Ubuntu配置指南
 
@@ -23,9 +24,9 @@ update: 2025-01-31
 
 + 精简流畅.
 + 使用兼容性和支持尽量好的发行版.
-+ 可以使界面和操作尽量接近MacOs.
-+ 可以的话增加一些window下的优秀交互工具
-+ 尽量少折腾
++ 界面和操作尽量接近MacOs.
++ 能充分利用所有硬件,廉价的在本地折腾ai相关工具
++ 能打游戏
 
 选哪个发行版答案就呼之欲出了--标题上的ubuntu.
 
@@ -282,8 +283,6 @@ cd workspace/init_source/rocm_sdk_builder
 
 而相关的python库会被编译为whl文件放在项目目录下的`packages/whl`目录下(我这里就是`~/workspace/init_source/rocm_sdk_builder/packages/whl`下).
 
-
-
 <!-- #### Nvidia显卡
 
 对应的工具链叫[cuda](),安装 -->
@@ -331,7 +330,7 @@ git工具我们需要好好设置下,毕竟ubuntu下很多东西,尤其是大文
 
 ### 配置代理
 
-作为一个写代码的,代理几乎波不可少.作为一台主力办公机,没道理不按一个clash客户端.[clashverge](https://github.com/clash-verge-rev/clash-verge-rev/releases/tag/v1.7.7)自然是ubuntu下的首选,安装也只是下载下来,先安装依赖再安装本体即可.
+作为一个写代码的,代理几乎波不可少.作为一台主力办公机,没道理不按一个clash客户端.[clashverge](https://github.com/clash-verge-rev/clash-verge-rev/releases/tag/v1.7.7)自然是ubuntu下的首选,安装也只是下载下来,先安装依赖再安装本体即可,具体可以看[我的这一篇博文](https://blog.hszofficial.site/introduce/2024/11/29/clash%E9%83%A8%E7%BD%B2/#linuxdebian%E7%B3%BB%E4%B8%8B%E7%9A%84%E5%AE%89%E8%A3%85).
 
 和在macos上一样,我们可以在`.zshrc`或其他shell的配置文件中像这样配置代理
 
@@ -361,21 +360,7 @@ alias unsetproxy="unset https_proxy;unset http_proxy;unset all_proxy"
 
     ```
 
-## 美化系统
-
-ubuntu系统界面大致可以分为如下几个部分
-
-![系统界面][1]
-
-美化系统我们大致可以分为如下几个步骤
-
-1. 美化桌面
-2. 美化登录页面
-3. 添加实用插件
-4. 美化terminal
-5. 美化字体
-
-一般我也会按这个次序进行设置
+### 安装gnome-tweaks
 
 在开始设置之前，我们需要先安装`gnome-tweaks`
 
@@ -385,205 +370,17 @@ sudo apt install gnome-tweaks
 
 这是gnome环境的`优化`工具,安装好后会放在`显示应用`->`工具`->`优化`.
 
-macos风格的Gnome桌面美化一般使用的是[vinceliuice/WhiteSur-gtk-theme](https://github.com/vinceliuice/WhiteSur-gtk-theme.git)这个项目.
-这个项目其实已经可以包办大部分的美化任务了.
+## 美化terminal
 
-我们可以先找个地方(比如`~/workspace/init_source`)来安装它
+作为linux最重要的当然是terminal.ubuntu默认使用的是`Gonme termial`,美化terminal其实也分成两个部分
 
-```bash
-
-mkdir -p workspace/init_source # 构造目录
-cd workspace/init_source
-git clone https://github.com/vinceliuice/WhiteSur-gtk-theme.git --depth=1
-```
-
-### 美化桌面
-
-对于美化桌面,其实也可以认为是3个任务
-
-#### 美化主题
-
-一个是主题美化,这是一个很复杂的问题,我们知道ubuntu最开始使用的是源自debian的`deb`软件分发,但最近几个版本他们搞了个`snap`.而且还存在一种`flatpak`应用,也就是说有三种gui应用.
-
-+ `deb`软件,debian的软件包格式,最轻量,也最多.`apt`工具安装的就是这种
-+ `flatpak`软件,可以在[flathub](https://flathub.org/)中下载并安装.一种完全开源的,面向跨发行版分发的软件包格式.我们的美化主题需要额外设置以适配
-+ `snap`软件,ubuntu主推的软件包格式,也是为了跨发行版分发而推出的,但由于其服务端并不开源,不太受开源社区待见.
-
-主题美化不光是自带软件的美化,还得让各种gui应用都可以获得相应的美化.这就很难了.
-
-但对于我们这种要求不高的其实就很简单.直接执行`WhiteSur-gtk-theme`项目的`./install.sh`脚本即可
-
-```bash
-cd workspace/init_source/WhiteSur-gtk-theme
-./install.sh
-./install.sh -t all  # 安装指定颜色主题,如果要全部颜色可以使用`-t all`,要指定颜色则是类似`-t [purple/pink/red/orange/yellow/green/grey]`
-./install.sh -N mojave # 改变文件管理器分栏样式,可选为默认,`mojave`和`glassy`
-./install.sh -l  # 安装对`libadwaita`软件的适配,目前并不完美
-sudo flatpak override --filesystem=xdg-config/gtk-3.0 && sudo flatpak override --filesystem=xdg-config/gtk-4.0 # 适配非snap的flatpak应用
-```
-
-#### 美化壁纸
-
-另一个桌面的美化点就是壁纸,我们可以使用[vinceliuice/WhiteSur-wallpapers](https://github.com/vinceliuice/WhiteSur-wallpapers)项目提供的macos风格的壁纸.安装好然后去设置中替换即可.
-
-```bash
-cd workspace/init_source
-git clone https://github.com/vinceliuice/WhiteSur-wallpapers.git
-cd WhiteSur-wallpapers
-# 安装会根据时间变化的桌面壁纸,
-#可以使用`-t [whitesur|monterey|ventura]`指定壁纸,默认全装;
-#可以使用`-s [1080p|2k|4k]`指定分辨率,默认4k;
-sudo ./install-gnome-backgrounds.sh
-# 安装静态壁纸
-#可以使用`-t [whitesur|monterey|ventura]`指定壁纸,默认全装;
-#可以使用`-s [1080p|2k|4k]`指定分辨率,默认4k;
-#可以使用`-c [night|light|dark]`指定颜色风格,默认全装;
-#可以使用`-n [whitesur|monterey|ventura]`安装灰化壁纸,默认不灰化;
-./install-wallpapers.sh
-```
-
-#### 美化图标
-
-最后是美化图标.实话讲ubuntu的图标确实丑.我们可以使用[vinceliuice/WhiteSur-icon-theme](https://github.com/vinceliuice/WhiteSur-icon-theme)项目提供的图标来美化它,这个图标库就很还原macos了.
-
-```bash
-cd workspace/init_source
-git clone https://github.com/vinceliuice/WhiteSur-icon-theme.git
-cd WhiteSur-icon-theme
-./install.sh
-./install.sh -a # 安装macos风格的替换图标
-./install.sh -b # 安装右上角下拉菜单的图标
-```
-
-需要注意这个库对snap应用并不原生支持
-
-在安装好后我们还需要设置激活
-
-在`显示应用->工具->优化`中选中`外观`然后设置.我个人习惯用如下设置
-
-+ `图标`: `WhiteSur-light`
-+ `shell`:  `WhiteSur-light-solid`
-+ `过时应用程序`: `WhiteSur-light-solid`
-
-#### 美化鼠标
-
-这也属于不优化也没什么大不了的项目,但如果能优化下确实体验是能更好些.
-
-美化鼠标可以使用项目[ful1e5/apple_cursor](https://github.com/ful1e5/apple_cursor)这个项目,去它最新的release中下载`macOS.tar.xz`
-,然后解压,可以获得两个文件夹`macOS`和`macOS-White`,将他们都移动到`/usr/share/icons`目录后重启就安装完成了.
-
-```bash
-cd macOS
-sudo mv macOS* /usr/share/icons/ 
-sudo reboot
-```
-
-之后在`显示应用->工具->优化`中选中`外观`然后设置`光标`为`macOS`即可.
-
-### 美化登录页面
-
-对于登录界面我们还是使用`vinceliuice/WhiteSur-gtk-theme`这个项目
-
-```bash
-cd workspace/init_source/WhiteSur-gtk-theme
-sudo ./tweaks.sh -g # 我们可以增加`-nd`(不将背景变暗)或`-nb`(不将背景变模糊)或`-b default`(默认,背景变暗变模糊)来设置效果.
-```
-
-这个登录页除了ubuntu字样外就完全果里果气了.
-
-### 添加实用插件
-
-Gnome支持插件.插件可以增加功能也可以增加动画效果等.而gnome的插件搜索和安装在ubuntu下我们一般依赖于firefox浏览器.那不妨我们就先优化下firefox浏览器的体验.
-
-#### firefox浏览器优化
-
-就像ie/edge之于windows,safari之于macos,firefox浏览器是ubuntu自带的默认浏览器.讲道理它和chrome一样很好用,甚至在chrome之前它是最好用的浏览器.但由于我个人chrome用的太久,要迁移太麻烦,所以我还是会将chrome作为主力浏览器.
-
-但即便为了Gnome插件,firefox也是值得优化下体验的.这个优化主要包括3个方面
-
-> 美化
-
-依然借助`vinceliuice/WhiteSur-gtk-theme`项目,这个项目提供了对firefox的专门优化
-
-```bash
-cd workspace/init_source/WhiteSur-gtk-theme
-./tweaks.sh -f monterey # 可选flat和monterey,monterey比较紧凑
-```
-
-> 墙
-
-处理墙的问题我们只要安装[zeroomega](https://github.com/zero-peak/ZeroOmega)即可.进去网页<https://addons.mozilla.org/en-US/firefox/addon/zeroomega/>点击安装就可以了,剩下的就是设置ip和端口.
-
-> 内建翻译
-
-firefox有内建翻译,但不支持中文,我们可以安装插件[划词翻译](https://addons.mozilla.org/zh-CN/firefox/addon/hcfy/?utm_source=addons.mozilla.org&utm_medium=referral&utm_content=search)借助谷歌百度等的翻译来实现和chrome中的相同效果
-
-#### 安装gnome浏览器插件
-
-虽然是个浏览器插件,但我们得用apt安装.
-
-```bash
-sudo apt-get install gnome-browser-connector
-```
-
-安装好后firefox的右上角插件栏中就会有一个脚印一样的图标,它就是gnome的浏览器插件,点击它就可以进入插件搜索页面.
-
-#### gnome插件安装
-
-安装gnome插件很简单,用firefox的gnome浏览器插件进入到gnome插件页面后点击插件名后面的开关到开的状态即可.
-
-当安装好后我们可以在`扩展`应用中对插件进行开关和设置,而已经安装了哪些插件可以在[installed extentions页面中查看](https://extensions.gnome.org/local/).
-
-需要注意我们的系统`ubuntu 2024.04`使用的是`Gnome 46`,插件需要支持这个版本才能安装.
-
-下面是我认为比较有必要的gnome插件汇总
-
-| 插件                                                                                                          | 推荐等级 | 用途                               | 补充说明                                                                                                                             |
-| ------------------------------------------------------------------------------------------------------------- | -------- | ---------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
-| [user-themes](https://extensions.gnome.org/extension/19/user-themes/)                                         | 高       | 管理用户主题                       | ---                                                                                                                                  |
-| [Dash to Dock](https://extensions.gnome.org/extension/307/dash-to-dock/)                                      | 高       | 一个对主题更友好的dash             | 关闭`Ubuntu Docker`,功能重复了                                                                                                       |
-| [Blur my Shell](https://extensions.gnome.org/extension/3193/blur-my-shell/)                                   | 高       | 一个提供桌面模糊的插件             | 建议修改`Dash to Dock`中的拐角半径                                                                                                   |
-| [Clipboard Indicator](https://extensions.gnome.org/extension/779/clipboard-indicator/)                        | 高       | 剪切板功能,可以保存近期的复制内容  | ---                                                                                                                                  |
-| [Lock Keys](https://extensions.gnome.org/extension/1532/lock-keys/)                                           | 低       | 大小写锁定提示                     | ---                                                                                                                                  |
-| [Removable Drive Menu](https://extensions.gnome.org/extension/7/removable-drive-menu/)                        | 高       | 顶栏的移动存储操作工具             | ---                                                                                                                                  |
-| [Screenshort-cut](https://extensions.gnome.org/extension/6868/screenshort-cut/)                               | 低       | 顶栏截图工具                       | 需要额外安装`sudo apt install gir1.2-gtop-2.0 lm-sensors`获取硬盘信息                                                                |
-| [Vitals](https://extensions.gnome.org/extension/1460/vitals/)                                                 | 中       | 顶栏系统监控                       | ---                                                                                                                                  |
-| [GSConnect](https://extensions.gnome.org/extension/1319/gsconnect/)                                           | 高       | 快速连接移动端设备                 | 需要配合app`kde connect`                                                                                                             |
-| [Todoit](https://extensions.gnome.org/extension/7538/todo-list/)                                              | 低       | 顶部todolist                       | ---                                                                                                                                  |
-| [Lunar Calendar 农历](https://extensions.gnome.org/extension/675/lunar-calendar/)                             | 中       | 日历改为农历                       | 需要先额外安装[Nei/ChineseCalendar](https://gitlab.gnome.org/Nei/ChineseCalendar/-/archive/20240107/ChineseCalendar-20240107.tar.gz) |
-| [Compiz alike magic lamp effect](https://extensions.gnome.org/extension/3740/compiz-alike-magic-lamp-effect/) | 中       | 仿macos的最小化动画                | ---                                                                                                                                  |
-| [gTile](https://extensions.gnome.org/extension/28/gtile/)                                                     | 中       | 多应用划分窗口                     | ---                                                                                                                                  |
-| [Input Method Panel](https://extensions.gnome.org/extension/261/kimpanel/)                                    | 高       | 输入法相关                         | ---                                                                                                                                  |
-| [Click to close overview](https://extensions.gnome.org/extension/3826/click-to-close-overview/)               | 高       | 点击空白处关闭预览                 | ---                                                                                                                                  |
-| [Hide Top Bar](https://extensions.gnome.org/extension/545/hide-top-bar/)                                      | 低       | 自动隐藏顶部工具栏                 | ---                                                                                                                                  |
-| [desktop-lyric](https://extensions.gnome.org/extension/4006/desktop-lyric/)                                   | 中       | 桌面歌词                           |
-| [applications-menu](https://extensions.gnome.org/extension/6/applications-menu/)                              | 低       | 顶部提供应用的归类入口             |
-| [weather-or-not](https://extensions.gnome.org/extension/5660/weather-or-not/)                                 | 低       | 顶部天气插件,需要有`gnome weahter` |
-
-除此之外,我个人推荐对系统默认插件做如下处理
-
-+ 禁用Desktop Icons,这个插件会让桌面有图标(默认会有你的home目录文件夹)
-+ 如果安装有`applications-menu`则在全部配置完成后dash to dock插件中关闭`显示应用程序`
-
-### 增加空格键预览功能
-
-mac下一个经典操作就是选中目标后按空格键
-
-```bash
-sudo apt-get install gnome-sushi unoconv
-```
-
-### 美化terminal
-
-ubuntu默认就是zsh,美化terminal其实也分成两个部分
-
-#### terminal本体的美化
+### terminal本体的美化
 
 依然是使用`Solarized Dark`.在`Default->颜色->内置方案`中找到并设置即可.剩下的就是根据个人习惯做细微修改,
 比如我会将文本颜色和光标改为更醒目的白色,将粗体字改为紫色,高亮字改为橙色,将光标改为竖线,并稍微设置点透明度.
-ubuntu 默认使用的是`Gonme termial`,他只支持统一的透明度,比较可惜.
+ubuntu 默认使用的是,他只支持统一的透明度,比较可惜.
 
-#### zsh的美化
+### zsh的美化
 
 我们还是把bash环境替换为zsh,毕竟确实更好用.
 
@@ -681,7 +478,7 @@ Do all these icons fit between the crosses?
 
 就行了,要重置可以执行`p10k configure`再来一遍
 
-### 美化字体
+## 美化字体
 
 ubuntu中字体分为`界面字体`,`文档字体`,`等宽字体`.所谓`界面字体`就是gui界面上展示的字体,比如应用title,菜单栏的字体;所谓`文档字体`就是打字时的字体;`等宽字体`则是每个字符固定宽度的字体,在一些特殊位置会用到.
 
@@ -701,7 +498,7 @@ ubuntu中字体分为`界面字体`,`文档字体`,`等宽字体`.所谓`界面�
     git clone https://github.com/ryanoasis/nerd-fonts.git --depth 1
     ```
 
-#### 设置字体
+### 设置字体
 
 设置全局字体在`显示应用`->`工具`->`优化`.选中`字体`这个位置,我个人习惯设置成如下:
 
@@ -715,6 +512,14 @@ ubuntu中字体分为`界面字体`,`文档字体`,`等宽字体`.所谓`界面�
 
 ubuntu默认状态下是很原始的,我们需要做如下操作才能让它用起来舒服些
 
+### 增加空格键预览功能
+
+mac下一个经典操作就是选中目标后按空格键
+
+```bash
+sudo apt-get install gnome-sushi unoconv
+```
+
 ### 常用软件预加载
 
 [preload](https://www.fosslinux.com/135006/how-to-use-preload-to-speedup-app-launches-in-ubuntu.htm)是一个空间换时间的应用预加载工具.
@@ -724,8 +529,9 @@ ubuntu默认状态下是很原始的,我们需要做如下操作才能让它用�
 
 ```bash
 sudo apt-get install preload
-systemctl status preload
 ```
+
+`preload`安装好后会被`systemd`统一管理.
 
 ### 全面的编解码器支持
 
@@ -877,6 +683,199 @@ ubuntu特有操作
 如果你不在乎wayland,可以接受桌面环境运行在x11上,那我们也可以安装[kinto](https://github.com/rbreaves/kinto)这个项目来获得不同风格且统一的快捷键布局.
 
 这么改有个缺陷就是只能使用`Control + Alt + C`在terminal中中断程序了
+
+## 美化系统
+
+ubuntu系统界面大致可以分为如下几个部分
+
+![系统界面][1]
+
+美化系统我们大致可以分为如下几个步骤
+
+1. 美化桌面
+2. 美化登录页面
+3. 添加实用插件
+
+一般我也会按这个次序进行设置
+
+macos风格的Gnome桌面美化一般使用的是[vinceliuice/WhiteSur-gtk-theme](https://github.com/vinceliuice/WhiteSur-gtk-theme.git)这个项目.
+这个项目其实已经可以包办大部分的美化任务了.
+
+我们可以先找个地方(比如`~/workspace/init_source`)来安装它
+
+```bash
+
+mkdir -p workspace/init_source # 构造目录
+cd workspace/init_source
+git clone https://github.com/vinceliuice/WhiteSur-gtk-theme.git --depth=1
+```
+
+### 美化桌面
+
+对于美化桌面,其实也可以认为是3个任务
+
+#### 美化主题
+
+一个是主题美化,这是一个很复杂的问题,我们知道linux下生态是很'去中心化'的,因此美化的效果很可能一些生态下支持一些就不支持.主题美化不光是自带软件的美化,还得让各种gui应用都可以获得相应的美化,这就很难了,这就会造成一个体验上的不统一.这个真没办法,我们只能尽量覆盖
+
+对于我们这种要求不高的其实就很简单.直接执行`WhiteSur-gtk-theme`项目的`./install.sh`脚本即可
+
+```bash
+cd workspace/init_source/WhiteSur-gtk-theme
+./install.sh
+./install.sh -t all  # 安装指定颜色主题,如果要全部颜色可以使用`-t all`,要指定颜色则是类似`-t [purple/pink/red/orange/yellow/green/grey]`
+./install.sh -N mojave # 改变文件管理器分栏样式,可选为默认,`mojave`和`glassy`
+./install.sh -l  # 安装对`libadwaita`软件的适配,目前并不完美
+sudo flatpak override --filesystem=xdg-config/gtk-3.0 && sudo flatpak override --filesystem=xdg-config/gtk-4.0 # 适配flatpak应用
+```
+
+#### 美化壁纸
+
+另一个桌面的美化点就是壁纸,我们可以使用[vinceliuice/WhiteSur-wallpapers](https://github.com/vinceliuice/WhiteSur-wallpapers)项目提供的macos风格的壁纸.安装好然后去设置中替换即可.
+
+```bash
+cd workspace/init_source
+git clone https://github.com/vinceliuice/WhiteSur-wallpapers.git
+cd WhiteSur-wallpapers
+# 安装会根据时间变化的桌面壁纸,
+#可以使用`-t [whitesur|monterey|ventura]`指定壁纸,默认全装;
+#可以使用`-s [1080p|2k|4k]`指定分辨率,默认4k;
+sudo ./install-gnome-backgrounds.sh
+# 安装静态壁纸
+#可以使用`-t [whitesur|monterey|ventura]`指定壁纸,默认全装;
+#可以使用`-s [1080p|2k|4k]`指定分辨率,默认4k;
+#可以使用`-c [night|light|dark]`指定颜色风格,默认全装;
+#可以使用`-n [whitesur|monterey|ventura]`安装灰化壁纸,默认不灰化;
+./install-wallpapers.sh
+```
+
+安装好的壁纸我们需要重启后去`设置->外观->背景`中选择使用.
+
+#### 美化图标
+
+然后是美化图标.实话讲ubuntu的图标确实丑.我们可以使用[vinceliuice/WhiteSur-icon-theme](https://github.com/vinceliuice/WhiteSur-icon-theme)项目提供的图标来美化它,这个图标库就很还原macos了.
+
+```bash
+cd workspace/init_source
+git clone https://github.com/vinceliuice/WhiteSur-icon-theme.git
+cd WhiteSur-icon-theme
+./install.sh
+./install.sh -a # 安装macos风格的替换图标
+./install.sh -b # 安装右上角下拉菜单的图标
+```
+
+在安装好后我们还需要设置激活
+
+在`显示应用->工具->优化`中选中`外观`然后设置.我个人习惯用如下设置
+
++ `图标`: `WhiteSur-light`
++ `shell`:  `WhiteSur-light-solid`
++ `过时应用程序`: `WhiteSur-light-solid`
+
+#### 美化鼠标
+
+这也属于不优化也没什么大不了的项目,但如果能优化下确实体验是能更好些.
+
+美化鼠标可以使用项目[ful1e5/apple_cursor](https://github.com/ful1e5/apple_cursor)这个项目,去它最新的release中下载`macOS.tar.xz`
+,然后解压,可以获得两个文件夹`macOS`和`macOS-White`,将他们都移动到`/usr/share/icons`目录后重启就安装完成了.
+
+```bash
+cd macOS
+sudo mv macOS* /usr/share/icons/ 
+sudo reboot
+```
+
+之后在`显示应用->工具->优化`中选中`外观`然后设置`光标`为`macOS`即可.
+
+### 美化登录页面
+
+对于登录界面我们还是使用`vinceliuice/WhiteSur-gtk-theme`这个项目
+
+```bash
+cd workspace/init_source/WhiteSur-gtk-theme
+sudo ./tweaks.sh -g # 我们可以增加`-nd`(不将背景变暗)或`-nb`(不将背景变模糊)或`-b default`(默认,背景变暗变模糊)来设置效果.
+```
+
+这个登录页除了ubuntu字样外就完全果里果气了.
+
+### 添加实用插件
+
+Gnome支持插件.插件可以增加功能也可以增加动画效果等.而gnome的插件搜索和安装在ubuntu下我们一般依赖于firefox浏览器.那不妨我们就先优化下firefox浏览器的体验.
+
+#### firefox浏览器优化
+
+就像ie/edge之于windows,safari之于macos,firefox浏览器是ubuntu自带的默认浏览器.讲道理它和chrome一样很好用,甚至在chrome之前它是最好用的浏览器.但由于我个人chrome用的太久,要迁移太麻烦,所以我还是会将chrome作为主力浏览器.
+
+但即便为了Gnome插件,firefox也是值得优化下体验的,因为我们还要靠它管理本地的gnome插件.这个优化主要包括3个方面
+
+> 美化
+
+依然借助`vinceliuice/WhiteSur-gtk-theme`项目,这个项目提供了对firefox的专门优化
+
+```bash
+cd workspace/init_source/WhiteSur-gtk-theme
+./tweaks.sh -f monterey # 可选flat和monterey,monterey比较紧凑
+```
+
+> 墙
+
+处理墙的问题我们只要安装[zeroomega](https://github.com/zero-peak/ZeroOmega)即可.进去网页<https://addons.mozilla.org/en-US/firefox/addon/zeroomega/>点击安装就可以了,剩下的就是设置ip和端口.
+
+> 内建翻译
+
+firefox有内建翻译,但不支持中文,我们可以安装插件[划词翻译](https://addons.mozilla.org/zh-CN/firefox/addon/hcfy/?utm_source=addons.mozilla.org&utm_medium=referral&utm_content=search)借助谷歌百度等的翻译来实现和chrome中的相同效果
+
+#### 安装gnome浏览器插件
+
+浏览器要作为管理本地插件的工具显然光靠一个浏览器插件是不够的.我们需要先安装一个专用连接器
+
+```bash
+sudo apt-get install gnome-browser-connector
+```
+
+之后在firefox中安装插件[GNOME Shell integration](https://addons.mozilla.org/zh-CN/firefox/addon/gnome-shell-integration/?utm_source=addons.mozilla.org&utm_medium=referral&utm_content=search).安装好后firefox的右上角插件栏中就会有一个脚印一样的图标,它就是gnome的浏览器插件,点击它就可以进入插件搜索页面.
+
+#### gnome插件安装
+
+安装gnome插件很简单,用firefox的gnome浏览器插件进入到gnome插件页面后点击插件名后面的开关到开的状态即可.
+
+当安装好后我们可以在`扩展`应用中对插件进行开关和设置,而已经安装了哪些插件可以在[installed extentions页面中查看](https://extensions.gnome.org/local/).
+
+需要注意我们的系统`ubuntu 2024.04`使用的是`Gnome 46`,插件需要支持这个版本才能安装.
+
+下面是我认为比较有必要的gnome插件汇总
+
+| 插件                                                                                                          | 推荐等级 | 用途                               | 补充说明                                                                                                                             |
+| ------------------------------------------------------------------------------------------------------------- | -------- | ---------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
+| [user-themes](https://extensions.gnome.org/extension/19/user-themes/)                                         | 高       | 管理用户主题                       | ---                                                                                                                                  |
+| [Dash to Dock](https://extensions.gnome.org/extension/307/dash-to-dock/)                                      | 高       | 一个对主题更友好的dash             | 关闭`Ubuntu Docker`,功能重复了                                                                                                       |
+| [Blur my Shell](https://extensions.gnome.org/extension/3193/blur-my-shell/)                                   | 高       | 一个提供桌面模糊的插件             | 建议修改`Dash to Dock`中的拐角半径                                                                                                   |
+| [Clipboard Indicator](https://extensions.gnome.org/extension/779/clipboard-indicator/)                        | 高       | 剪切板功能,可以保存近期的复制内容  | ---                                                                                                                                  |
+| [Lock Keys](https://extensions.gnome.org/extension/1532/lock-keys/)                                           | 低       | 大小写锁定提示                     | ---                                                                                                                                  |
+| [Removable Drive Menu](https://extensions.gnome.org/extension/7/removable-drive-menu/)                        | 高       | 顶栏的移动存储操作工具             | ---                                                                                                                                  |
+| [Screenshort-cut](https://extensions.gnome.org/extension/6868/screenshort-cut/)                               | 低       | 顶栏截图工具                       | 需要额外安装`sudo apt install gir1.2-gtop-2.0 lm-sensors`获取硬盘信息                                                                |
+| [Vitals](https://extensions.gnome.org/extension/1460/vitals/)                                                 | 中       | 顶栏系统监控                       | ---                                                                                                                                  |
+| [GSConnect](https://extensions.gnome.org/extension/1319/gsconnect/)                                           | 高       | 快速连接移动端设备                 | 需要配合app`kde connect`                                                                                                             |
+| [Todoit](https://extensions.gnome.org/extension/7538/todo-list/)                                              | 低       | 顶部todolist                       | ---                                                                                                                                  |
+| [Lunar Calendar 农历](https://extensions.gnome.org/extension/675/lunar-calendar/)                             | 中       | 日历改为农历                       | 需要先额外安装[Nei/ChineseCalendar](https://gitlab.gnome.org/Nei/ChineseCalendar/-/archive/20240107/ChineseCalendar-20240107.tar.gz) |
+| [Compiz alike magic lamp effect](https://extensions.gnome.org/extension/3740/compiz-alike-magic-lamp-effect/) | 中       | 仿macos的最小化动画                | ---                                                                                                                                  |
+| [gTile](https://extensions.gnome.org/extension/28/gtile/)                                                     | 中       | 多应用划分窗口                     | ---                                                                                                                                  |
+| [Input Method Panel](https://extensions.gnome.org/extension/261/kimpanel/)                                    | 高       | 输入法相关                         | ---                                                                                                                                  |
+| [Click to close overview](https://extensions.gnome.org/extension/3826/click-to-close-overview/)               | 高       | 点击空白处关闭预览                 | ---                                                                                                                                  |
+| [Hide Top Bar](https://extensions.gnome.org/extension/545/hide-top-bar/)                                      | 低       | 自动隐藏顶部工具栏                 | ---                                                                                                                                  |
+| [desktop-lyric](https://extensions.gnome.org/extension/4006/desktop-lyric/)                                   | 中       | 桌面歌词                           |
+| [applications-menu](https://extensions.gnome.org/extension/6/applications-menu/)                              | 低       | 顶部提供应用的归类入口             |
+| [weather-or-not](https://extensions.gnome.org/extension/5660/weather-or-not/)                                 | 低       | 顶部天气插件,需要有`gnome weahter` |
+
+除此之外,我个人推荐对系统默认插件做如下处理
+
++ 如果安装了`dash to dock`我们最好把它关掉,因为自带插件`Ubuntu Dock`会在安装了`dash to dock`的情况下直接调用它,开了就相当于启动了两份`dash to dock`会造成混乱.
+
++ 如果安装有`applications-menu`则在全部配置完成后`dash to dock`插件中关闭`显示应用程序`
+
++ `weather-or-not`插件依赖`gnome weahter`,我们需要先安装`gnome weahter`之后打开,输入自己所在的城市(用中文搜),重启后就可以激活,推荐将插件的位置设置为`clock left center`
+
++ [可选]禁用Desktop Icons,这个插件会让桌面有图标(默认会有你的home目录文件夹).如果无法关闭(我就碰到了这种情况)我们可以进去它的设置把`在桌面显示个人文件夹`关掉
 
 ## 安装docker环境
 
@@ -1294,21 +1293,21 @@ linux下我会尽量推荐开源工具.下面是一些常用软件的安装信�
 
 #### 系统工具
 
-| 软件                                                             | 渠道                                                               | 说明                                                               |
-| ---------------------------------------------------------------- | ------------------------------------------------------------------ | ------------------------------------------------------------------ |
-| Disk Usage Analyzer                                              | [flathub](https://flathub.org/apps/org.gnome.baobab)               | 查看硬盘使用情况的工具                                             |
-| Remmina                                                          | [flathub](https://flathub.org/apps/org.remmina.Remmina)            | 远程桌面的连接客户端                                               |
-| timeshift                                                        | `sudo apt install timeshift`                                       | 系统快照,我们需要自备一块</br>空的U盘专门做快照,每半年做一份快照   |
-| [missioncenter](https://missioncenter.io/)                       | [flathub](https://flathub.org/apps/io.missioncenter.MissionCenter) | 有着window上资源管理器风格的综合性资源监控软件,可以监控GP          |
-| [CPU-X](https://thetumultuousunicornofdarkness.github.io/CPU-X/) | `sudo apt install cpu-x`                                           | windows上cpu-z在linux上的平替                                      |
-| AMD GPU TOP                                                      | [官网下载deb](https://github.com/Umio-Yasuno/amdgpu_top)           | amdgpu的运行详细信息监控                                           |
-| bleachbit                                                        | `sudo apt install bleachbit`                                       | 系统清理工具                                                       |
-| gufw                                                             | `sudo apt install gufw`                                            | 防火墙工具,使用`sudo ufw enable`启动                               |
-| chrome                                                           | [官网下载deb](https://www.google.cn/intl/zh-CN/chrome/)            | google的浏览器                                                     |
-| Warehouse                                                        | [flathub](https://flathub.org/apps/io.github.flattool.Warehouse)   | flatpak应用管理                                                    |
-| synaptic                                                         | `sudo apt install synaptic`                                        | 新立得软件包管理器,管理deb应用和包                                 |
-| appman                                                           | [官网脚本下载](https://github.com/ivan-hc/AppMan)                  | 管理`PORTABLE LINUX APPS`                                          |
-| whaler                                                           | [flathub](https://flathub.org/apps/com.github.sdv43.whaler)        | 轻量级docker容器监控工具                                           |
+| 软件                                                             | 渠道                                                               | 说明                                                             |
+| ---------------------------------------------------------------- | ------------------------------------------------------------------ | ---------------------------------------------------------------- |
+| Disk Usage Analyzer                                              | [flathub](https://flathub.org/apps/org.gnome.baobab)               | 查看硬盘使用情况的工具                                           |
+| Remmina                                                          | [flathub](https://flathub.org/apps/org.remmina.Remmina)            | 远程桌面的连接客户端                                             |
+| timeshift                                                        | `sudo apt install timeshift`                                       | 系统快照,我们需要自备一块</br>空的U盘专门做快照,每半年做一份快照 |
+| [missioncenter](https://missioncenter.io/)                       | [flathub](https://flathub.org/apps/io.missioncenter.MissionCenter) | 有着window上资源管理器风格的综合性资源监控软件,可以监控GP        |
+| [CPU-X](https://thetumultuousunicornofdarkness.github.io/CPU-X/) | `sudo apt install cpu-x`                                           | windows上cpu-z在linux上的平替                                    |
+| AMD GPU TOP                                                      | [官网下载deb](https://github.com/Umio-Yasuno/amdgpu_top)           | amdgpu的运行详细信息监控                                         |
+| bleachbit                                                        | `sudo apt install bleachbit`                                       | 系统清理工具                                                     |
+| gufw                                                             | `sudo apt install gufw`                                            | 防火墙工具,使用`sudo ufw enable`启动                             |
+| chrome                                                           | [官网下载deb](https://www.google.cn/intl/zh-CN/chrome/)            | google的浏览器                                                   |
+| Warehouse                                                        | [flathub](https://flathub.org/apps/io.github.flattool.Warehouse)   | flatpak应用管理                                                  |
+| synaptic                                                         | `sudo apt install synaptic`                                        | 新立得软件包管理器,管理deb应用和包                               |
+| appman                                                           | [官网脚本下载](https://github.com/ivan-hc/AppMan)                  | 管理`PORTABLE LINUX APPS`                                        |
+| whaler                                                           | [flathub](https://flathub.org/apps/com.github.sdv43.whaler)        | 轻量级docker容器监控工具                                         |
 
 ##### 补充设置
 
