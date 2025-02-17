@@ -77,215 +77,43 @@ sudo apt-get upgrade linux-image-generic #更新内核
 sudo reboot
 ```
 
-## 安装驱动
+## 修复依赖问题
 
-通常我们并不需要手动安装驱动,系统自带的通用驱动都可以正常使用.ubuntu本身也提供了一个应用`驱动管理`来检测和安装驱动.只有一些特殊硬件我们需要在特定情况下手动安装驱动.
+下面是总结的常见依赖错误
 
-### 显卡驱动和运算库
+### --configure出错
 
-最常见的需要手动安装驱动的硬件就是显卡.这种通常是为了通过官方工具调用显卡计算接口.主流的显卡其实就amd(ati)显卡和Nvidia显卡两家,最近几年Intel也开始做独显了,虽然基本没人买.
-
-我手头只有一个apu和一张Nvidia显卡,所以就只介绍这俩了.
-
-我这边仅以ubuntu 24.04 TLS系统为例
-
-#### amd显卡/apu核显
-
-对应的工具链叫[rocm](https://rocm.docs.amd.com/en/latest/),需要注意目前rocm在同时存在amd独显和amd核显的情况下会有错误.因此如果你用的是amd独显需要在bios中禁用核显(amd的这个操作真的很神奇,因此一般推荐au配n卡).
-
-不过需要注意,rocm官方版本目前对大多数商用级别的apu和显卡都不官方支持(官方目前仅支持7900xtx,7900xt).我们的780m核显虽然可以安装但需要有额外设置而且很多周边工具并不支持,当然正常用是没啥问题的,而且pytorch和llama.cpp是可以正常使用的,但如果想要用全套ai相关工具,我们可能还是得借助第三方工具链[lamikr/rocm_sdk_builder](https://github.com/lamikr/rocm_sdk_builder/tree/master).
-
-##### 官方驱动和rocm
-
-可以使用如下步骤安装官方驱动和rocm:
-
-1. 安装安装器
-
-    ```bash
-    sudo apt update # 更新软件包的索引或包列表
-    sudo apt install "linux-headers-$(uname -r)" "linux-modules-extra-$(uname -r)" # 根据linux内核来安装对应的linux-headers和linux-modules-extra
-    sudo apt install python3-setuptools python3-wheel
-    sudo usermod -a -G render,video $LOGNAME # 添加当前用户到渲染和视频分组
-    wget https://repo.radeon.com/amdgpu-install/6.2.4/ubuntu/noble/amdgpu-install_6.2.60204-1_all.deb # 下载amdgpu安装工具,这里以6.2.60204为例
-    sudo apt install ./amdgpu-install_6.2.60204-1_all.deb #安装rocm安装工具
-    sudo reboot #重启后生效
-    ```
-
-    上面的代码只是例子,我们安装的是rocm 6.2.4的安装器,具体版本可以查看[rocm发布页](https://rocm.docs.amd.com/en/latest/release/versions.html)
-
-    为什么选这个版本呢?因为pytorch目前(2025-01-02)只支持到6.2版本.
-
-2. 根据使用场景安装需要组件
-
-    上面的代码安装了`amdgpu-install`这个工具,它是一个amdgpu的管理工具,可以用于安装和更新AMDGPU的驱动, `rocm`,`rocm 组件`等amdgpu相关的工具.
-
-    在重启后我们重新进入命令行,然后运行`amdgpu-install`来安装所必须得组件
-
-    ```bash
-    amdgpu-install --usecase=rocm,graphics,hip
-    sudo reboot
-    ```
-
-    支持的usecase可以通过命令`sudo amdgpu-install --list-usecase`查看.
-
-    主要的usecase包括
-
-    + `dkms`,仅安装驱动,其他的所有usecase都会安装驱动所以一般不用这个
-    + `graphics`,图形界面相关工具,如果你使用ubuntu桌面系统你就得装,不装很多软件会因为显卡报错无法打开(比如各种electron封装)
-    + `multimedia`,开源多媒体库相关工具
-    + `multimediasdk`,开源多媒体开发,包含`multimedia`
-    + `workstation`,工作站相关工具,包含`multimedia`同时包含闭源的OpenGL工具
-    + `rocm`,显卡做异构计算工具,包括OpenCL运行时,HIP运行时,机器学习框架,和rocm相关的库和工具
-    + `rocmdev`,rocm开发工具,包含`rocm`和相关的调试开发工具
-    + `rocmdevtools`,仅包含`rocm`和相关的调试开发工具
-    + `amf`,基于amf编解码器(闭源)的多媒体工具
-    + `lrt`,rocm的编译器,运行时和设备库等工具
-    + `opencl`,异构计算库opencl相关工具,库和运行时
-    + `openclsdk`,包含`opencl`,同时包含opencl的相关开发工具和头文件等
-    + `hip`,高性能计算库hip的运行时
-    + `hiplibsdk`,包含`hip`,同时包含hip开发相关库和工具以及ROCm的数学库
-    + `openmpsdk`,并行计算库openmp的运行时和相关库和工具
-    + `mllib`,机器学习相关工具和库,包括MIOpen核心和相关库,以及Clang OpenCL
-    + `mlsdk`,包含`mllib`,额外附带MIOpen和Clang OpenCL的开发库
-    + `asan`,支持ASAN(内存检测工具)的ROCm工具
-
-    正常情况下使用`amdgpu-install --usecase=rocm,graphics` 安装即可
-
-3. 设置系统连接
-
-    也就是设置相关工具的查找位置
-
-    ```bash
-    sudo tee --append /etc/ld.so.conf.d/rocm.conf <<EOF
-    /opt/rocm/lib
-    /opt/rocm/lib64
-    EOF
-
-    sudo ldconfig
-    ```
-
-4. 使用`update-alternatives`更新配置ROCm二进制文件的路径.
-
-    ```bash
-    update-alternatives --list rocm
-    ```
-
-5. 设置环境变量
-
-    rocm安装好后会被放在`/opt/rocm-<ver>`目录,我们不妨设置一个环境变量`ROCM_HOME`
-
-    ```bash
-    export ROCM_HOME=/opt/rocm-6.2.4
-    ```
-
-    + rocm的可执行文件会放在`/opt/rocm-<ver>/bin`目录.
-        如果无法使用rocm工具,可以将它的`bin`目录加入到PATH中
-
-        ```bash
-        export PATH=$PATH:$ROCM_HOME/bin
-        ```
-
-    + rocm的动态链接库会放在`/opt/rocm-<ver>/lib`目录.
-        如果要用到这些动态链接库,可以将它临时加入到`LD_LIBRARY_PATH`
-
-        ```bash
-        export LD_LIBRARY_PATH=$ROCM_HOME/lib
-        ```
-
-    + rocm的模块则会被放在`/opt/rocm-<ver>/lib/rocmmod`目录.
-
-    + 最后,由于我们使用的是核显780m,所以需要额外设置环境变量`HSA_OVERRIDE_GFX_VERSION`
-
-        ```bash
-        export HSA_OVERRIDE_GFX_VERSION=11.0.0
-        ```
-
-        这个`11.0.0`对应的是8000系apu核显的版本.顺道一提780m的编号`gfx1103`
-
-    这样,我们的`.zshrc`就有如下内容了
-
-    ```bash
-    # ======================================================================= rocm
-    export ROCM_HOME=/opt/rocm-6.2.4
-    export PATH=$PATH:$ROCM_HOME/bin
-    export HSA_OVERRIDE_GFX_VERSION=11.0.0
-    ```
-
-6. 检查驱动是否正常
-
-    ```bash
-    dkms status
-    ```
-
-    这个命令会打印出显卡的状态
-
-7. 检查rocm是否正常安装
-
-    ```bash
-    rocminfo # 检查rocm状态
-    clinfo # 检查opencl状态
-    ```
-
-8. 检查包是否安装正常
-
-    ```bash
-    apt list --installed
-    ```
-
-###### rocm版本更新
-
-更新版本我们需要完全卸载已有的rocm,驱动和rocm安装器
+apt安装的包都是系统级别,最怕不知为啥忽然报冲突,一个典型的的报错像是
 
 ```bash
-sudo amdgpu-install --uninstall # 卸载驱动和库
-sudo apt purge amdgpu-install # 卸载安装器
-sudo apt autoremove # 卸载对应依赖
-sudo reboot # 重启后生效
+...
+pkg: 处理软件包 xxxx (--configure)时出错：
+子进程 已安装 post-installation 脚本 返回错误状态 1
+
+...
+
+dpkg: 处理软件包 xxxx (--configure)时出错：
+依赖关系问题 - 仍未被配置
+...
 ```
 
-之后在下载新版本的安装器重新安装配置一次即可
+等等,碰到这种报错我们需要做一些手动操作来修复,思路是:
 
-##### rocm_sdk_builder(2025-01-31新增)
-
-[lamikr/rocm_sdk_builder](https://github.com/lamikr/rocm_sdk_builder/tree/master)是一个第三方的rocm方案.它通过给rocm和相关工具源码打补丁的方式让部分相对较新的显卡(核显)可以获得rocm相关工具的原生支持.刚好780m和ubuntu 24.04在它的支持范围内,我们自然也就可以装.当然缺点就是版本相对低些,目前(2025/01/31)只到rocm 6.1.2版本,目前正在慢慢适配6.2版本.相应的,torch,onnxruntime等依赖rocm的库版本也相对更低些,但它可以正常运行sd等常规ai工具,也还是值得一装的.
-
-安装rocm_sdk_builder有2个条件
-
-1. 需要一个干净的系统,不能安装过amd的官方驱动
-2. 需要能翻墙的稳定网络环境,依赖项都是在github上的,网络不稳git操作出问题就必须重新下载否则编译无法通过
-
-满足这些条件后我们就可以安装了
+1. 先备份`dpkg`下的`info`
+2. 然后自己创建一个新的空的`info`
+3. 然后更新索引,让apt解决冲突
+4. 再把新的info里的内容拷贝到旧的里面
+5. 旧的再改成info,删除自己
 
 ```bash
-# 我们依然惯例的将rocm_sdk_builder项目源码放在~/workspace/init_source
-mkdir -p workspace/init_source # 构造目录
-cd workspace/init_source
-git clone https://github.com/lamikr/rocm_sdk_builder.git
-cd rocm_sdk_builder
-# 切到rocm_sdk_builder_612分支
-git checkout releases/rocm_sdk_builder_612
-# 安装所需依赖
-./install_deps.sh
-# 将当前用户添加到render用户组并重启
-sudo adduser [当前用户名] render
-sudo reboot
-
-cd workspace/init_source/rocm_sdk_builder
-# 选择编译针对的显卡,这里我们为780m选择gfx1103
-./babs.sh -c
-# 下载依赖到src_projects目录,注意下载好后观察log有没有错误,有的话将对应的项目的目录删除重新执行,否则编译会出错
-./babs.sh -i
-# 编译项目,编译中间文件会被放在builddir文件夹下大约会持续5~10小时
-./babs.sh -b
+sudo mv /var/lib/dpkg/info /var/lib/dpkg/info_old 
+sudo mkdir /var/lib/dpkg/info
+sudo apt-get update
+sudo apt-get -f install  
+sudo mv /var/lib/dpkg/info/* /var/lib/dpkg/info_old   
+sudo rm -rf /var/lib/dpkg/info  
+sudo mv /var/lib/dpkg/info_old /var/lib/dpkg/info
 ```
-
-在编译完成后成果会被安装到`/opt/rocm_sdk_612`目录下--可执行文件被放在`/opt/rocm_sdk_612/bin`下(还包含一个python3.11环境);相关库的头文件被放在`/opt/rocm_sdk_612/include`中,如果要使用相关的环境,可以执行`source /opt/rocm_sdk_612/bin/env_rocm.sh`.
-
-而相关的python库会被编译为whl文件放在项目目录下的`packages/whl`目录下(我这里就是`~/workspace/init_source/rocm_sdk_builder/packages/whl`下).
-
-<!-- #### Nvidia显卡
-
-对应的工具链叫[cuda](),安装 -->
 
 ## 基础设置
 
