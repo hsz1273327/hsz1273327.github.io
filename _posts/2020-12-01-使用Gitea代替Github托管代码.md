@@ -7,7 +7,7 @@ tags:
     - Git
     - DevOps
 header-img: "img/home-bg-o.jpg"
-update: 2024-06-14
+update: 2025-03-05
 series:
     get_along_well_with_github:
         index: 9
@@ -996,8 +996,30 @@ gitea实现了多种常见编程语言的包仓库以及docker镜像仓库的协
 并将生成的令牌也放到`组织->设置->Actions->秘钥`的`PACKAGE_AUTH`中.
 ![][33]
 
+对于多数的package仓库,我们都会结合action构造CI/CD管线来使用,但其实只要你有登陆权限,你可以随便怎么用它来做分发
 
 ##### 用于python包管理
+
+python的包管理使用的现成的pip体系:
+
+分发上传时只要设置好`TWINE_USERNAME`(gitea用户名)和`TWINE_PASSWORD`(gitea用户密码),将`<giteaurl>/api/packages/<组织名>/pypi`作为`TWINE_REPOSITORY_URL`即可
+
+```bash
+export TWINE_USERNAME=<gitea用户密码>
+export TWINE_PASSWORD=<gitea用户名>
+export TWINE_REPOSITORY_URL="<giteaurl>/api/packages/<组织名>/pypi"
+twine upload dist/*
+```
+
+分发下载使用时命令
+
+```bash
+pip install --index-url https://<gitea用户名>:<gitea用户密码>@<giteaurl>/api/packages/<组织名>/pypi/simple --no-deps <包名>
+```
+
+使用`--no-deps`可以忽略依赖项
+
+> 结合action构造分发管线
 
 上传可以使用下面的action配置:
 
@@ -1036,15 +1058,28 @@ jobs:
               run: twine upload dist/*
 ```
 
-下载使用时命令
+##### 用于js包管理
+
+js包管理不能使用用户名密码必须依赖令牌,我们需要先去`用户->应用`中找到生成令牌,然后存下来后续使用.
+
+分发上传时我们需要用`npm config set`将仓库注册到本地,然后用`npm publish`正常上传即可
 
 ```bash
-pip install --index-url https://<gitea用户名>:<gitea用户密码>@<giteaurl>/api/packages/<组织名>/pypi/simple --no-deps <包名>
+npm config set $URL:registry=https://<你的gitea实例host>/api/packages/<组织名>/npm/
+npm config set -- '//<你的gitea实例host>/api/packages/<组织名>/npm/:_authToken' "<你的登录令牌>"
+npm publish
 ```
 
-使用`--no-deps`可以忽略依赖项
+分发下载时在项目根目录下创建`.npmrc`
 
-##### 用于js包管理
+```txt
+@组织名:registry=https://<你的gitea实例host>/api/packages/<组织名>/npm/
+//<你的gitea实例host>/api/packages/<组织名>/npm/:_authToken=<你的登录令牌>
+```
+
+然后像正常一样使用`npm install`即可
+
+> 结合action构造分发管线
 
 上传可以使用下面的action配置:
 
@@ -1086,15 +1121,6 @@ jobs:
           npm publish
 ```
 
-其他项目需要安装它时在项目根目录下创建.npmrc
-
-```txt
-@组织名:registry=https://hszszgitea.ddnsto.com/api/packages/组织名/npm/
-//hszszgitea.ddnsto.com/api/packages/组织名/npm/:_authToken=你的登录令牌
-```
-
-然后像正常一样使用`npm install`即可
-
 ##### 用于go包管理
 
 我们并不需要使用package功能做包管理,git仓库本身就是现成的go包管理工具.限制仅仅是在`go.mod`中以`.git`作为`module`字段的结尾.
@@ -1114,7 +1140,48 @@ jobs:
 
 ##### 用于C/C++包管理
 
-package功能提供了C/C++包管理工具conan的支持.上传可以使用下面的action配置:
+package功能提供了C/C++包管理工具conan的支持.
+
+分发上传时只要你的组织和它对应的地址已经注册到本地了就可以正常的上传
+
+```bash
+conan remote add <组织名> https://<你的gitea实例host>/api/packages/<仓库所在组织名>/conan
+conan remote login  -p <你的密码> <仓库所在组织名> <你的账户名>
+export PACKAGE_VERSION=<项目版本号>
+conan upload --r <组织名> <你的项目名>/$PACKAGE_VERSION
+```
+
+分发下载这个包作为依赖的项目先要做好如下设置:
+
+1. 安装好gcc,cmake等编译工具
+2. 安装好conan并配置好profile
+3. 执行如下操作配置好conan本地仓库
+
+```bash
+conan remote add <仓库所在组织名> https://<你的gitea实例host>/api/packages/<仓库所在组织名>/conan
+conan remote login  -p <你的密码> <仓库所在组织名> <你的账户名>
+```
+
+之后正常配置`conanfile.txt`安装即可
+
++ 在`conanfile.txt`中设置
+
+```txt
+[requires]
+<依赖的项目名>/<项目版本号>
+
+[generators]
+CMakeDeps
+CMakeToolchain
+```
+
+```bash
+conan install . --output-folder=build --build=missing
+```
+
+> 结合action构造分发管线
+
+上传可以使用下面的action配置:
 
 ```yaml
 name: Upload CXX Package
@@ -1164,55 +1231,29 @@ jobs:
                 
 ```
 
-要使用这个包作为依赖的项目先要做好如下设置:
+##### 用于镜像管理
 
-1. 安装好gcc,cmake等编译工具
-2. 安装好conan并配置好profile
-3. 执行如下操作配置好conan本地仓库
 
-```bash
-conan remote add <仓库所在组织名> https://hszszgitea.ddnsto.com/api/packages/<仓库所在组织名>/conan
-conan remote login  -p <你的密码> <仓库所在组织名> <你的账户名>
-```
+gitea实现了一个完整的容器镜像仓库,和其他仓库不一样的是这个仓库的地址是整个gitea站点而不是组织,而组织的作用其实和镜像仓库的命名空间差不多.要使用它分发很简单:
 
-之后正常安装即可
+1. 登陆镜像仓库
 
-```bash
-conan install . --output-folder=build --build=missing
-```
+    ```bash
+    docker login
+    ```
 
-## Usage
+    之后输入你的账号密码即可
 
-+ 在`conanfile.txt`中设置
+2. 给镜像打标签,注意标签命名形式为`<你的gitea实例host>/<组织名>/<镜像名>:<版本标签>`,这个打标签的过程可以是`docker build`的过程也可以是`docker tag`的过程
 
-```txt
-[requires]
-<依赖的项目名>/0.0.1
+3. 上传,和正常容器上传一样,指定好镜像上传即可
 
-[generators]
-CMakeDeps
-CMakeToolchain
-```
+    ```bash
+    docker push <你的gitea实例host>/<组织名>/<项目名>:<版本标签>
+    ```
 
-+ 在`CmakeLists.txt`中设置
+分发下载时由于镜像名里已经有了地址信息,登陆后直接`docker pull <镜像名>`即可
 
-```cmake
-find_package(<依赖的项目名> REQUIRED)
-...
-target_link_libraries(example <依赖的项目名>::<依赖的项目名>)
-```
-
-在`src`文件夹中写好你的程序后执行安装操作.执行完安装后进入`build`文件夹执行
-
-```bash
-cmake .. -DCMAKE_TOOLCHAIN_FILE=conan_toolchain.cmake -DCMAKE_BUILD_TYPE=Release
-cmake --build .
-```
-
-进行编译.编译的结果会在`build`文件夹中.
-
-<!--
-##### 用于镜像管理 -->
 
 
 <!-- 
