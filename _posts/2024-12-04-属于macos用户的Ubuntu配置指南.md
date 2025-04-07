@@ -1174,7 +1174,7 @@ gpu加速:
  | vscode                         | [官网下载deb](https://code.visualstudio.com/Download)                  | 文本编辑器                                                         |
  | github desktop                 | [github下载deb](https://github.com/shiftkey/desktop)                   | github desktop的第三方linux fork                                   |
  | Xmind                          | [flathub](https://flathub.org/apps/net.xmind.XMind)                    | 知名的脑图工具                                                     |
- | minder                         | [flathub](flatpak install flathub com.github.phase1geo.minder)         | xmind的开源替代                                                    |
+ | minder                         | [flathub](https://flathub.org/apps/com.github.phase1geo.minder)         | xmind的开源替代                                                    |
 
 ##### 补充设置
 
