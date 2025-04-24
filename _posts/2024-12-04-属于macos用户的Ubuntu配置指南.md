@@ -14,7 +14,7 @@ tags:
     - 美化
     - Rocm
 header-img: "img/home-bg-o.jpg"
-update: 2025-02-07
+update: 2025-04-24
 ---
 # 属于MacOs用户的Ubuntu配置指南
 
@@ -1321,6 +1321,175 @@ linux: Remmina
 
 
 之后要远程使用的时候就点击这个远程应用即可 -->
+
+## 其他补充
+
+### aria2下载器
+
+当然了我们也可以用docker安装aria2下载器,但那种方式比较适合家用服务器,因为它会固定下载到一个指定的文件夹下,而作为终端pc,更合适的用法是直接安装配置,在需要的时候命令行执行下载,这样灵活的多.
+
+1. 安装
+
+    ```bash
+    sudo apt install aria2
+    ```
+
+2. 配置
+
+    我们需要先创建配置相关文件
+
+    ```bash
+    sudo mkdir /etc/aria2 # aria2的配置文件夹
+    sudo touch /etc/aria2/aria2.session    #新建session文件
+    sudo chmod 777 /etc/aria2/aria2.session    #设置aria2.session可写
+    sudo nano /etc/aria2/aria2.conf
+    ```
+
+    之后编辑`aria2.conf`文件
+
+    ```txt
+    ## 文件保存相关 ##
+
+    # 文件的保存路径(可使用绝对路径或相对路径), 默认: 当前启动位置
+    #dir=~/downloads
+    # 启用磁盘缓存, 0为禁用缓存, 需1.16以上版本, 默认:16M
+    disk-cache=128M
+    # 文件预分配方式, 能有效降低磁盘碎片, 默认:prealloc
+    # 预分配所需时间: none < falloc ? trunc < prealloc
+    # falloc和trunc则需要文件系统和内核支持
+    # NTFS建议使用falloc, EXT3/4建议trunc, MAC 下需要注释此项
+    file-allocation=trunc 
+    # 断点续传
+    continue=true
+
+    ## 下载连接相关 ##
+
+    # 最大同时下载任务数, 运行时可修改, 默认:5
+    #max-concurrent-downloads=5
+    # 同一服务器连接数, 添加时可指定, 默认:1
+    #max-connection-per-server=5
+    # 最小文件分片大小, 添加时可指定, 取值范围1M -1024M, 默认:20M
+    # 假定size=10M, 文件为20MiB 则使用两个来源下载; 文件为15MiB 则使用一个来源下载
+    #min-split-size=10M
+    # 单个任务最大线程数, 添加时可指定, 默认:5
+    #split=5
+    # 整体下载速度限制, 运行时可修改, 默认:0
+    max-overall-download-limit=0
+    # 单个任务下载速度限制, 默认:0
+    max-download-limit=0
+    # 整体上传速度限制, 运行时可修改, 默认:0
+    max-overall-upload-limit=0
+    # 单个任务上传速度限制, 默认:0
+    max-upload-limit=0
+    # 禁用IPv6, 默认:false
+    #disable-ipv6=true
+    # 连接超时时间, 默认:60
+    #timeout=60
+    # 最大重试次数, 设置为0表示不限制重试次数, 默认:5
+    #max-tries=5
+    # 设置重试等待的秒数, 默认:0
+    #retry-wait=0
+
+    ## 进度保存相关 ##
+
+    # 从会话文件中读取下载任务
+    #input-file=/etc/aria2/aria2.session
+    # 在Aria2退出时保存`错误/未完成`的下载任务到会话文件
+    #save-session=/etc/aria2/aria2.session
+    # 定时保存会话, 0为退出时才保存, 需1.16.1以上版本, 默认:0
+    #save-session-interval=60
+
+    ## RPC相关设置 ##
+
+    # 启用RPC, 默认:false
+    enable-rpc=true
+    # 允许所有来源, 默认:false
+    rpc-allow-origin-all=true
+    # 允许非外部访问, 默认:false
+    rpc-listen-all=true
+    # 事件轮询方式, 取值:[epoll, kqueue, port, poll, select], 不同系统默认值不同
+    #event-poll=select
+    # RPC监听端口, 端口被占用时可以修改, 默认:6800
+    rpc-listen-port=6860
+    # 设置的RPC授权令牌, v1.18.4新增功能, 取代 --rpc-user 和 --rpc-passwd 选项
+    #rpc-secret=<TOKEN>
+    # 设置的RPC访问用户名, 此选项新版已废弃, 建议改用 --rpc-secret 选项
+    #rpc-user=<USER>
+    # 设置的RPC访问密码, 此选项新版已废弃, 建议改用 --rpc-secret 选项
+    #rpc-passwd=<PASSWD>
+    # 是否启用 RPC 服务的 SSL/TLS 加密,
+    # 启用加密后 RPC 服务需要使用 https 或者 wss 协议连接
+    #rpc-secure=true
+    # 在 RPC 服务中启用 SSL/TLS 加密时的证书文件,
+    # 使用 PEM 格式时，您必须通过 --rpc-private-key 指定私钥，这里可以是CRT或者其他格式，标准内都支持。
+    #rpc-certificate=/path/to/certificate.pem
+    # 在 RPC 服务中启用 SSL/TLS 加密时的私钥文件
+    #rpc-private-key=/path/to/certificate.key
+
+    ## BT/PT下载相关 ##
+
+    # 当下载的是一个种子(以.torrent结尾)时, 自动开始BT任务, 默认:true
+    #follow-torrent=true
+    # BT监听端口, 当端口被屏蔽时使用, 默认:6881-6999
+    #listen-port=51413
+    # 单个种子最大连接数, 默认:55
+    #bt-max-peers=55
+    # 打开DHT功能, PT需要禁用, 默认:true
+    enable-dht=false
+    # 打开IPv6 DHT功能, PT需要禁用
+    enable-dht6=false
+    # DHT网络监听端口, 默认:6881-6999
+    #dht-listen-port=6881-6999
+    # 本地节点查找, PT需要禁用, 默认:false
+    bt-enable-lpd=false
+    # 种子交换, PT需要禁用, 默认:true
+    enable-peer-exchange=false
+    # 每个种子限速, 对少种的PT很有用, 默认:50K
+    #bt-request-peer-speed-limit=50K
+    # 客户端伪装, PT需要
+    peer-id-prefix=-TR2770-
+    user-agent=Transmission/2.77
+    peer-agent=Transmission/2.77
+    # 当种子的分享率达到这个数时, 自动停止做种, 0为一直做种, 默认:1.0
+    seed-ratio=2.0
+    # 强制保存会话, 即使任务已经完成, 默认:false
+    # 较新的版本开启后会在任务完成后依然保留.aria2文件
+    #force-save=false
+    # BT校验相关, 默认:true
+    #bt-hash-check-seed=true
+    # 继续之前的BT任务时, 无需再次校验, 默认:false
+    bt-seed-unverified=true
+    # 保存磁力链接元数据为种子文件(.torrent文件), 默认:false
+    bt-save-metadata=true
+    ```
+
+3. 检查
+
+    执行`sudo aria2c --conf-path=/etc/aria2/aria2.conf`,能正常跑不报错就说明没问题了
+
+安装完成后重启,`aria2c`的服务就会被`systemd`接管了.由于上面的配置中我们启动了rpc,其他支持的软件也就可以借助这个rpc来通过`aria2`下载东西了.
+
+之后每次要下载只要执行命令`aria2c [-d 保存目录 [-o 文件名] | -Z] <URI | 磁力链 | torrent文件 | METALINK文件>...`
+
+`-d`指定下载文件保存的目录.当只有一个要下载的链接时可以用`-o`为下载文件的结果改名;如果有多个链接,可以使用`-Z`将并行下载各个链接改为串行下载.
+
+个人认为作为个人终端的pc并不需要有界面管理`aria2c`的下载任务,就像`git`一样命令行足够了
+
+### mycard
+
+[mycard](https://mycard.world/)很神奇的自带linux支持,这个平台主要是用来玩ygopro和东方的,
+
+不想花钱买卡又想打游戏王的牌佬就可以在linux下很轻松的玩到ygopro2了.在linux下首页下载提供的是一个`appimage`,下载下来后给个`+x`权限人工集成下就能用了.
+
+有如下注意事项:
+
++ mycard下载游戏依赖`aria2c`,需要先安装`aria2c`再安装`mycard`
++ mycard解压游戏依赖`zstd`,需要先安装`zstd`(`sudo apt install zstd`)再安装`mycard`
++ 游戏王只能使用`ygopro2`,因为`ygopro`的依赖编译有问题,会缺少`irrKlang`,而`ygopro2`是unity开发,没有依赖问题
++ 东方游戏都是window游戏,mycard仅能用作下载,运行需要借助steam的proton
+
+
+
 
 <!-- ## 串流 -->
 
