@@ -2,17 +2,14 @@
 layout: post
 title: "属于macos用户的Ubuntu配置指南"
 series:
-    aipc_experiment:
-        index: 3
+    ubuntu_experiment:
+        index: 1
 date: 2024-12-04
 author: "Hsz"
 category: recommend
 tags:
     - Linux
-    - Ubuntu
-    - MacOs
     - 美化
-    - Rocm
 header-img: "img/home-bg-o.jpg"
 update: 2025-04-24
 ---
