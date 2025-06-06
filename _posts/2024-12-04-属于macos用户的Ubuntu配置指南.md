@@ -1195,6 +1195,31 @@ steam大家都知道,知名的游戏平台嘛.但在linux下steam是一个神奇
 
 steam最基本的能力当然是让玩家可以方便的打游戏,阀门社为了这个目标煞费苦心,他们的努力直接给linux平台大范围扩展了生态,以至于steam即便不打游戏都是linux上的必装软件.
 
+### N卡安装steam的额外依赖
+
+steam为了可以兼容老游戏，会要安装很多32位的依赖，如果你是n卡，直接安装steam它会给你报错
+
+```txt
+You are missing the following 32-bit libraries, and Steam may not run:
+
+libc.so.6
+```
+
+要解决这个问题，我们需要先额外安装两个依赖
+
+1. 安装32位的`libc6`
+
+    ```bash
+    sudo apt install libc6:i386 
+    ```
+
+2. 安装`nvidia-driver`对应版本的32位驱动
+
+    ```bash
+    dpkg -l | grep nvidia-driver # 获取到驱动版本 比如570
+    sudo apt install libnvidia-gl-570:i386 #安装对应32位依赖
+    ```
+
 ### 添加非steam应用
 
 steam除了可以管理它自己平台上的软件,也可以自己给它添加软件由他启动
