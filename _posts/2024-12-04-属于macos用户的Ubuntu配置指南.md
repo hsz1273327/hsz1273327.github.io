@@ -11,7 +11,7 @@ tags:
     - Linux
     - 美化
 header-img: "img/home-bg-o.jpg"
-update: 2025-04-24
+update: 2025-08-24
 ---
 # 属于MacOs用户的Ubuntu配置指南
 
@@ -111,6 +111,36 @@ sudo mv /var/lib/dpkg/info/* /var/lib/dpkg/info_old
 sudo rm -rf /var/lib/dpkg/info  
 sudo mv /var/lib/dpkg/info_old /var/lib/dpkg/info
 ```
+
+## N卡驱动和cuda安装[2025-08-24更新]
+
+对于最新的ubuntu 24.04tls来说安装n卡的设置已经相当简单.但还是有如下几个注意点:
+
+1. 硬件连接和bios设置--你需要cpu带核显,并且核显在bios中是开启的,在第一次安装ubuntu时显示器也需要连接在核显上(即主板的hdmi/dp接口上)
+2. 安装ubuntu时选择第三方驱动安装,这样会自动安装n卡的社区驱动.这个驱动已经可以让你跑大部分的程序了.在关机后你可以将显示器换到n卡上,也可以取bios中关闭核显.
+3. 如果你需要cuda支持,那社区的驱动就不行了,在较早的ubuntu版本中我们需要先卸载社区驱动,然后再安装官方驱动,但在24.04中我们可以直接安装官方驱动,它会自动覆盖社区驱动.安装命令如下
+
+```bash
+# 添加nvidia的官方源
+wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2404/x86_64/cuda-ubuntu2404.pin
+sudo mv cuda-ubuntu2404.pin /etc/apt/preferences.d/cuda-repository-pin-600
+# 下载cuda的本地安装包(以cuda 12.9为例)
+wget https://developer.download.nvidia.com/compute/cuda/12.9.0/local_installers/cuda-repo-ubuntu2404-12-9-local_12.9.0-575.51.03-1_amd64.deb
+sudo dpkg -i cuda-repo-ubuntu2404-12-9-local_12.9.0-575.51.03-1_amd64.deb
+sudo cp /var/cuda-repo-ubuntu2404-12-9-local/cuda-*-keyring.gpg /usr/share/keyrings/
+# 安装cuda
+sudo apt-get update
+sudo apt-get -y install cuda-toolkit-12-9
+# 安装驱动
+sudo apt-get install -y nvidia-open
+```
+
+需要注意:
+
+1. 你要关注使用的ubuntu的linux核心版本,截止到2025-08-24最新的ubunut 24.04.03lts使用的是6.14的内核,最低支持的n卡驱动版本是575版本,对应的cuda版本是12.9
+ 
+2. 安装驱动可以安装有开源部分的`nvidia-open`也可以安装完全闭源的`nvidia-driver`,但英伟达官方在力推开源驱动,因此我建议安装`nvidia-open`
+3. 安装驱动过程中会让你填一个密码,密码要求6~8位.这个密码即`MOK (Machine Owner Key)`,它是用来给驱动签名的,如果你不填这个密码,驱动是无法加载的.在设置好密码后,重启时会进入一个蓝色的界面让你选,注意,**默认第一个选项是让你直接进系统,不能选**,选第二个`Enroll MOK`,一路跟着引导最后会让你输入这个密码,输入后驱动就可以正常加载了.
 
 ## 基础设置
 
