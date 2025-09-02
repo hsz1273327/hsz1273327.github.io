@@ -11,7 +11,7 @@ tags:
     - Linux
     - 美化
 header-img: "img/home-bg-o.jpg"
-update: 2025-08-24
+update: 2025-09-02
 ---
 # 属于MacOs用户的Ubuntu配置指南
 
@@ -73,6 +73,10 @@ sudo apt update # 更新软件包的索引或包列表
 sudo apt-get upgrade linux-image-generic #更新内核
 sudo reboot
 ```
+
+### 更换linux内核[2025-08-24更新]
+
+根据你需要的软件和驱动版本你
 
 ## 修复依赖问题
 
@@ -722,7 +726,7 @@ sudo apt-get install gnome-browser-connector
 | [applications-menu](https://extensions.gnome.org/extension/6/applications-menu/)                              | 低       | 顶部提供应用的归类入口             |
 | [weather-or-not](https://extensions.gnome.org/extension/5660/weather-or-not/)                                 | 低       | 顶部天气插件,需要有`gnome weahter` |
 [GNOME Fuzzy App Search](https://extensions.gnome.org/extension/3956/gnome-fuzzy-app-search/)|中|模糊搜索工具
-
+[]()|高|开机后自动进入第一个桌面
 
 除此之外,我个人推荐对系统默认插件做如下处理
 
