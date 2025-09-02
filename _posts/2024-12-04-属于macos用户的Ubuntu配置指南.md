@@ -76,7 +76,69 @@ sudo reboot
 
 ### 更换linux内核[2025-08-24更新]
 
-根据你需要的软件和驱动版本你
+并不是说内核版本越高越好,根据你需要的软件和硬件驱动,有的时候需要根据需求换内核版本.
+
+最新的ubuntu 24.04lts使用的是6.14内核,这个内核比较新,一些老旧设备可能不支持,比如最近比较火的MI50显卡,它最后一个支持的rocm版本是6.3.3,而这个版本的rocm只支持在ubuntu 24.04lts中6.8和6.11版本的内核上运行,因此我们就需要降级内核使用.
+
+一般会需要注意linux内核版本的情况主要就是显卡相关软件和虚拟机相关软件.我们需要根据自己的需求选择合适的内核版本.
+
+#### 安装指定版本的linux内核
+
+1. 首先更新软件包列表：
+
+    ```bash
+    sudo apt update
+    ```
+
+2. 然后,列出所有可用的内核映像包:
+
+    ```bash
+    sudo apt-cache search linux-image
+    ```
+
+    这样你会找到一大堆可用的内核版本. 通常你会看到几个不同的包名它们可能带有不同的后缀,例如:
+
+    + `linux-image-6.11.0-xx-generic`: 这是标准的通用内核,适用于大多数桌面和服务器.
+
+    + `linux-image-6.11.0-xx-lowlatency`: 这是一个低延迟内核,专为音频制作,实时控制或其他需要极低延迟的应用设计
+
+    + `linux-image-unsigned-6.11.0-xx-generic`: 这是一个未签名的内核,通常用于需要自定义内核模块或在特定硬件上调试时.对于大多数用户来说你不需要安装这个版本
+
+    其中`xx`表示具体的版本号,比如`1019`,`1020`等,在大版本号不变的情况下,版本号越大表示内核更新的补丁越多.
+
+3. 选择你需要的版本,比如说你想安装`linux-image-6.8.0-1019-generic`,你可以使用如下命令安装:
+
+    ```bash
+    sudo apt install linux-image-6.8.0-1019-generic
+    ```
+
+4. 安装完成后,你需要更新引导加载器以确保新内核被正确识别:
+
+    ```bash
+    sudo update-grub
+    ```
+
+    在大多数情况下,当你使用apt命令安装新内核时apt的安装脚本会自动为你运行update-grub,但为了确保万无一失,手动执行一次这个命令总是一个好习惯.
+
+5. 最后,重启你的计算机以使用新内核:
+
+    ```bash
+    sudo reboot
+    ```
+
+6. 重启后,你可以使用`uname -r`命令来验证当前正在运行的内核版本:
+
+    ```bash
+    uname -r
+    ```
+
+    这应该显示你刚刚安装的内核版本.
+
+#### 后遗症
+
+安装指定版本的linux内核后,我们可能会遇到一些问题,比如显卡驱动无法加载,虚拟机无法启动等.这些问题一般都是由于内核模块和驱动不匹配导致的.当然最简单的办法就是直接在安装好操作系统后就更换好内核,然后再安装显卡驱动和虚拟机等软件.
+
+另外就是一些本来直接二进制分发的软件可能会因为内核版本不匹配而只能编译安装.
 
 ## 修复依赖问题
 
@@ -142,7 +204,6 @@ sudo apt-get install -y nvidia-open
 需要注意:
 
 1. 你要关注使用的ubuntu的linux核心版本,截止到2025-08-24最新的ubunut 24.04.03lts使用的是6.14的内核,最低支持的n卡驱动版本是575版本,对应的cuda版本是12.9
- 
 2. 安装驱动可以安装有开源部分的`nvidia-open`也可以安装完全闭源的`nvidia-driver`,但英伟达官方在力推开源驱动,因此我建议安装`nvidia-open`
 3. 安装驱动过程中会让你填一个密码,密码要求6~8位.这个密码即`MOK (Machine Owner Key)`,它是用来给驱动签名的,如果你不填这个密码,驱动是无法加载的.在设置好密码后,重启时会进入一个蓝色的界面让你选,注意,**默认第一个选项是让你直接进系统,不能选**,选第二个`Enroll MOK`,一路跟着引导最后会让你输入这个密码,输入后驱动就可以正常加载了.
 
@@ -718,15 +779,15 @@ sudo apt-get install gnome-browser-connector
 | [Todoit](https://extensions.gnome.org/extension/7538/todo-list/)                                              | 低       | 顶部todolist                       | ---                                                                                                                                  |
 | [Lunar Calendar 农历](https://extensions.gnome.org/extension/675/lunar-calendar/)                             | 中       | 日历改为农历                       | 需要先额外安装[Nei/ChineseCalendar](https://gitlab.gnome.org/Nei/ChineseCalendar/-/archive/20240107/ChineseCalendar-20240107.tar.gz) |
 | [Compiz alike magic lamp effect](https://extensions.gnome.org/extension/3740/compiz-alike-magic-lamp-effect/) | 中       | 仿macos的最小化动画                | ---                                                                                                                                  |
-| [Forge](https://extensions.gnome.org/extension/4481/forge/)                                                     | 低       | 多应用划分窗口                     | ---                                                                                                                                  |
+| [Forge](https://extensions.gnome.org/extension/4481/forge/)                                                   | 低       | 多应用划分窗口                     | ---                                                                                                                                  |
 | [Input Method Panel](https://extensions.gnome.org/extension/261/kimpanel/)                                    | 高       | 输入法相关                         | ---                                                                                                                                  |
 | [Click to close overview](https://extensions.gnome.org/extension/3826/click-to-close-overview/)               | 高       | 点击空白处关闭预览                 | ---                                                                                                                                  |
 | [Hide Top Bar](https://extensions.gnome.org/extension/545/hide-top-bar/)                                      | 低       | 自动隐藏顶部工具栏                 | ---                                                                                                                                  |
 | [desktop-lyric](https://extensions.gnome.org/extension/4006/desktop-lyric/)                                   | 中       | 桌面歌词                           |
 | [applications-menu](https://extensions.gnome.org/extension/6/applications-menu/)                              | 低       | 顶部提供应用的归类入口             |
 | [weather-or-not](https://extensions.gnome.org/extension/5660/weather-or-not/)                                 | 低       | 顶部天气插件,需要有`gnome weahter` |
-[GNOME Fuzzy App Search](https://extensions.gnome.org/extension/3956/gnome-fuzzy-app-search/)|中|模糊搜索工具
-[]()|高|开机后自动进入第一个桌面
+| [GNOME Fuzzy App Search](https://extensions.gnome.org/extension/3956/gnome-fuzzy-app-search/)                 | 中       | 模糊搜索工具                       |
+| [No overview at start-up](https://extensions.gnome.org/extension/4099/no-overview/)                           | 高       | 开机后自动进入第一个桌面           |
 
 除此之外,我个人推荐对系统默认插件做如下处理
 
@@ -1207,7 +1268,7 @@ gpu加速:
  | vscode                         | [官网下载deb](https://code.visualstudio.com/Download)                  | 文本编辑器                                                         |
  | github desktop                 | [github下载deb](https://github.com/shiftkey/desktop)                   | github desktop的第三方linux fork                                   |
  | Xmind                          | [flathub](https://flathub.org/apps/net.xmind.XMind)                    | 知名的脑图工具                                                     |
- | minder                         | [flathub](https://flathub.org/apps/com.github.phase1geo.minder)         | xmind的开源替代                                                    |
+ | minder                         | [flathub](https://flathub.org/apps/com.github.phase1geo.minder)        | xmind的开源替代                                                    |
 
 ##### 补充设置
 
