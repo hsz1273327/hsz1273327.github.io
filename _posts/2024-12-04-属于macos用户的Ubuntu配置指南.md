@@ -11,7 +11,7 @@ tags:
     - Linux
     - 美化
 header-img: "img/home-bg-o.jpg"
-update: 2025-09-02
+update: 2025-09-03
 ---
 # 属于MacOs用户的Ubuntu配置指南
 
@@ -76,9 +76,9 @@ sudo reboot
 
 ### 更换linux内核[2025-08-24更新]
 
-并不是说内核版本越高越好,根据你需要的软件和硬件驱动,有的时候需要根据需求换内核版本.
+并不是说内核版本越高越好,根据你需要的软件,有的时候需要根据需求换内核版本.
 
-最新的ubuntu 24.04lts使用的是6.14内核,这个内核比较新,一些老旧设备可能不支持,比如最近比较火的MI50显卡,它最后一个支持的rocm版本是6.3.3,而这个版本的rocm只支持在ubuntu 24.04lts中6.8和6.11版本的内核上运行,因此我们就需要降级内核使用.
+最新的ubuntu 24.04lts使用的是6.14内核,这个内核比较新,一些老旧设备可能不支持,比如最近比较火的MI50显卡,它最后一个支持的rocm版本是6.3.3,而这个版本的rocm只支持在ubuntu 24.04lts中6.8和6.11版本的内核上运行,因此我们就需要降级内核使用.当然如果你并不需要rocm,只要驱动,最新驱动一般也能支持最新的内核,那就没必要降级内核了.
 
 一般会需要注意linux内核版本的情况主要就是显卡相关软件和虚拟机相关软件.我们需要根据自己的需求选择合适的内核版本.
 
@@ -178,7 +178,69 @@ sudo rm -rf /var/lib/dpkg/info
 sudo mv /var/lib/dpkg/info_old /var/lib/dpkg/info
 ```
 
-## N卡驱动和cuda安装[2025-08-24更新]
+## 显卡驱动和计算库[2025-09-03更新]
+
+要说和macos最大的区别恐怕就是linux下可以用独显了.这既是Linux系统相对macos的优势,也是麻烦的来源.因为显卡驱动和计算库的安装和配置往往是最麻烦的.
+
+当然如果你只是要用来打游戏,装驱动就行,但如果你要用来跑AI相关的程序,那就需要安装计算库了,比如N卡的cuda和A卡的rocm.
+
+注意:
+
+1. 驱动和计算库是分开的,驱动负责显卡的基本功能,计算库负责提供GPU计算能力.但往往计算库会捆绑驱动,因此安装计算库时会需要安装对应版本的驱动.
+2. 如果你只是要打游戏,那只需要安装最新驱动就行了,一般最新驱动都能支持老硬件,但如果你要跑AI相关程序,那就需要根据程序要求的计算库版本来安装对应版本的驱动和计算库了.
+3. 单独安装最新驱动和安装计算库是两码事.
+4. 除了硬件绑定的计算库(N卡的cuda和A卡的Rocm)外,还有一些通用的计算库,比如`opencl`,`vulkan`等,这些计算库不依赖于具体硬件,但性能可能不如硬件绑定的计算库.
+
+### 仅安装最新驱动
+
+这里介绍的是最简单的安装最新驱动的方式,如果你只是要打游戏,那就足够了.
+
+#### N卡驱动安装
+
+ubuntu 24.04lts中安装n卡驱动已经相当简单,只需要在安装系统时选择`第三方驱动安装`即可,这样会自动安装n卡的社区驱动.这个驱动已经可以让你跑大部分的程序了.在关机后你可以将显示器换到n卡上,也可以取bios中关闭核显.
+
+这是最不折腾的N卡驱动安装方式,你可以在`软件和更新(Software & Updates)`应用中切换到`附加驱动(Additional Drivers)`选项卡进行版本确认,也可以在terminal中使用`nvidia-smi`命令查看驱动版本.
+
+要更新驱动也可以在`软件和更新(Software & Updates)`应用中进行更新.
+
+#### A卡驱动安装
+
+a卡的驱动需要在amd官网下载最新版本的安装器,然后运行安装器进行安装.
+
+如果你是amd的消费级显卡或者专业卡可以在[这个页面](https://www.amd.com/zh-cn/support/download/linux-drivers.html)下载安装器.如果你是用的amd的服务器卡则需要去[这个网页](https://www.amd.com/zh-cn/support/download/drivers.html)在搜索框中搜索你的显卡型号,然后下载对应的linux驱动.注意我们需要选择`Ubuntu x86 64-Bit`这个板块下的东西,而且需要注意选择ubuntu的版本,比如你是ubuntu 24.04lts就需要选择最上面的和你系统匹配的比如`Radeon™ Software for Linux® version 25.10.2 for Ubuntu 22.04.5 HWE`这个版本的安装器
+
+我们下载好后会得到一个`.deb`的安装包(比如`amdgpu-install_6.4.60402-1_all.deb`),然后我们可以使用如下命令进行安装
+
+```bash
+# 清理之前的残留(如果有的话)
+amdgpu-install --uninstall
+sudo reboot
+# 彻底清理之前的amdgpu-install
+sudo apt-get purge amdgpu-install
+sudo reboot
+# 更新系统确保驱动可以安装
+sudo apt-get update
+sudo apt-get dist-upgrade
+sudo reboot
+
+# 安装依赖
+sudo apt install "linux-headers-$(uname -r)" "linux-modules-extra-$(uname -r)"
+sudo apt install python3-setuptools python3-wheel
+# 安装amdgpu-install
+cd ~/Downloads # 进入下载目录
+sudo apt-get install ./amdgpu-install_6.4.60402-1_all.deb
+sudo apt-get update
+# 安装驱动,这里以安装最新的`amdgpu-pro`驱动为例,如果你只是要安装开源的`amdgpu`驱动,可以去掉`--pro`参数
+sudo usermod -a -G render,video $LOGNAME # 添加当前用户到渲染和视频分组
+amdgpu-install --usecase=graphics
+sudo reboot # 重启后生效
+```
+
+### 安装计算库
+
+这里介绍的是安装计算库的方式,如果你要跑AI相关程序,那就需要安装计算库了.安装计算库追求的是稳定,因此一般装了就很少会更新.而且很多性价比设备支持计算库已经停在了某个版本,因此我们需要根据自己的硬件和程序要求来安装对应版本的计算库.
+
+#### N卡cuda安装
 
 对于最新的ubuntu 24.04tls来说安装n卡的设置已经相当简单.但还是有如下几个注意点:
 
@@ -199,13 +261,66 @@ sudo apt-get update
 sudo apt-get -y install cuda-toolkit-12-9
 # 安装驱动
 sudo apt-get install -y nvidia-open
+sudo reboot
 ```
 
 需要注意:
 
-1. 你要关注使用的ubuntu的linux核心版本,截止到2025-08-24最新的ubunut 24.04.03lts使用的是6.14的内核,最低支持的n卡驱动版本是575版本,对应的cuda版本是12.9
-2. 安装驱动可以安装有开源部分的`nvidia-open`也可以安装完全闭源的`nvidia-driver`,但英伟达官方在力推开源驱动,因此我建议安装`nvidia-open`
-3. 安装驱动过程中会让你填一个密码,密码要求6~8位.这个密码即`MOK (Machine Owner Key)`,它是用来给驱动签名的,如果你不填这个密码,驱动是无法加载的.在设置好密码后,重启时会进入一个蓝色的界面让你选,注意,**默认第一个选项是让你直接进系统,不能选**,选第二个`Enroll MOK`,一路跟着引导最后会让你输入这个密码,输入后驱动就可以正常加载了.
+1. 安装驱动可以安装有开源部分的`nvidia-open`也可以安装完全闭源的`nvidia-driver`,但英伟达官方在力推开源驱动,因此我建议安装`nvidia-open`
+2. 安装驱动过程中会让你填一个密码,密码要求6~8位.这个密码即`MOK (Machine Owner Key)`,它是用来给驱动签名的,如果你不填这个密码,驱动是无法加载的.在设置好密码后,重启时会进入一个蓝色的界面让你选,注意,**默认第一个选项是让你直接进系统,不能选**,选第二个`Enroll MOK`,一路跟着引导最后会让你输入这个密码,输入后驱动就可以正常加载了.
+
+关于cuda的版本选择,我们可以总结如下:
+
+1. 截止到2025-09-03,pytorch最新稳定版本为2.8支持的最新的cuda版本是12.9,这个版本支持的显卡是从`GeForce GTX 1650`开始的,如果你的显卡比这个老,那就只能安装老版本的cuda了.它支持最新的ubunut 24.04.03lts使用的是6.14的内核,最低支持的n卡驱动版本是575版本
+
+2. 如果你需要兼容一些老显卡,那你就必须给linux内核降级,比如你需要给MI50显卡安装rocm,那你可以把内核降级到6.11,然后安装n卡驱动570版本,再安装cuda 12.8版本.
+
+    ```bash
+    ...
+    wget https://developer.download.nvidia.com/compute/cuda/12.8.0/local_installers/cuda-repo-ubuntu2404-12-8-local_12.8.0-570.86.10-1_amd64.deb
+    sudo dpkg -i cuda-repo-ubuntu2404-12-8-local_12.8.0-570.86.10-1_amd64.deb
+    sudo cp /var/cuda-repo-ubuntu2404-12-8-local/cuda-*-keyring.gpg /usr/share/keyrings/
+    sudo apt-get update
+    sudo apt-get -y install cuda-toolkit-12-8
+    ...
+    ```
+
+#### A卡rocm安装
+
+对于amd的显卡来说安装rocm还是比较简单的,你如果是比较新的amd官方支持rocm的显卡,那直接在安装好最新安装器后执行如下命令即可
+
+```bash
+amdgpu-install --usecase=rocm,graphics,hip
+sudo reboot
+```
+
+至于如何确定自己的卡是否官方支持rocm,可以查看[这个网页](https://rocm.docs.amd.com/projects/install-on-linux/en/latest/reference/system-requirements.html)
+
+如果你是比较老的amd显卡,那就需要指定版本安装了,比如我现在用的MI50显卡,它最后一个支持的rocm版本是6.3.3,而这个版本的rocm只支持在ubuntu 24.04lts中6.8和6.11版本的内核上运行,因此我们就需要降级内核,然后下载6.3.3的安装器.
+
+```bash
+sudo apt update
+sudo apt install "linux-headers-$(uname -r)" "linux-modules-extra-$(uname -r)"
+sudo apt install python3-setuptools python3-wheel
+sudo usermod -a -G render,video $LOGNAME # Add the current user to the render and video groups
+wget https://repo.radeon.com/amdgpu-install/6.3.3/ubuntu/noble/amdgpu-install_6.3.60303-1_all.deb
+sudo apt install ./amdgpu-install_6.3.60303-1_all.deb
+sudo apt update
+# 安装驱动,这里以安装最新的`amdgpu-pro`驱动为例,如果你只是要安装开源的`amdgpu`驱动,可以去掉`--pro`参数
+sudo usermod -a -G render,video $LOGNAME # 添加当前用户到渲染和视频分组
+amdgpu-install --usecase=graphics,rocm,hip
+sudo reboot # 重启后生效
+```
+
+#### vulkan
+
+现在的通用计算库中vulkan是最推荐的,它既支持n卡也支持a卡,i卡也支持,而且性能也不错,生态算是比较完善的.而且通常各家显卡的驱动中都会捆绑vulkan的支持.也就是说如果你只是要调用vulkan(所谓runtime运行时)那并不需要单独安装vulkan,但如果你要开发vulkan程序(所谓sdk开发包)那就需要单独安装vulkan sdk.
+
+在ubuntu 24.04lts中安装vulkan的sdk推荐使用[vulkan官方提供的sdk压缩包](https://vulkan.lunarg.com/sdk/home#linux)
+
+
+
+安装好后可以使用`vulkaninfo`命令查看是否安装成功.
 
 ## 基础设置
 
