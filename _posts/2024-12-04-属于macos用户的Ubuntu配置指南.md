@@ -11,7 +11,7 @@ tags:
     - Linux
     - 美化
 header-img: "img/home-bg-o.jpg"
-update: 2025-09-03
+update: 2025-09-04
 ---
 # 属于MacOs用户的Ubuntu配置指南
 
@@ -66,21 +66,65 @@ sudo apt full-upgrade #更新系统上所有过时的软件包升级到最新版
 sudo reboot
 ```
 
-> 仅更新linux内核
+## 设置grub
 
-```bash
-sudo apt update # 更新软件包的索引或包列表
-sudo apt-get upgrade linux-image-generic #更新内核
-sudo reboot
-```
+ubuntu安装好后,默认的grub菜单是隐藏的.这对于一般使用来说没什么问题,但如果我们需要切换内核,需要做内存测试,那就不方便了.我们可以通过设置让它显示出来.
 
-### 更换linux内核[2025-08-24更新]
+1. 打开终端,编辑`/etc/default/grub`文件
+
+    ```bash
+    sudo nano /etc/default/grub
+    ```
+
+2. 修改 GRUB 选项
+
+    找到以下几行,并根据需要进行修改:
+
+    + `GRUB_TIMEOUT_STYLE`,这个值用于设置grub的样式行为.可选值为`hidden`和`menu`.默认为`hidden`,改为`menu`,这样就会显示菜单
+    + `GRUB_TIMEOUT`,这个值表示grub菜单显示的时间,单位是秒.如果你想让它一直显示直到你选择,可以设置为`-1`,如果你想让它显示5秒钟,可以设置为`5`.默认是`0`,表示不显示菜单直接进入系统
+    + `GRUB_DEFAULT`,这个值表示默认启动的菜单项,默认是`0`,表示第一个菜单项.如果你想让它默认启动第二个菜单项,可以设置为`1`.如果你想让它默认启动最后一个菜单项,可以设置为`-1`.如果你想让它默认启动某个特定的菜单项,可以设置为`saved`,然后使用`sudo grub-set-default "菜单项名称"`来设置.
+
+    我个人习惯设置如下:
+
+    ```txt
+    GRUB_TIMEOUT_STYLE=menu # 将 hidden 改为 menu
+    GRUB_TIMEOUT=5          # 设置等待时间为 5 秒,可以根据需要调整
+    GRUB_DEFAULT=0          # 默认启动第一个菜单项,可以根据需要调整
+    ```
+
+3. 保存并退出
+
+    在 nano 中,按 `Ctrl + O` 保存文件,然后按 `Ctrl + X` 退出编辑器.
+
+4. 更新 GRUB 配置
+
+    ```bash
+    sudo update-grub
+    ```
+
+5. 重启系统后生效
+
+    ```bash
+    sudo reboot
+    ```
+
+### 更换linux内核[危险操作不推荐]
 
 并不是说内核版本越高越好,根据你需要的软件,有的时候需要根据需求换内核版本.
 
 最新的ubuntu 24.04lts使用的是6.14内核,这个内核比较新,一些老旧设备可能不支持,比如最近比较火的MI50显卡,它最后一个支持的rocm版本是6.3.3,而这个版本的rocm只支持在ubuntu 24.04lts中6.8和6.11版本的内核上运行,因此我们就需要降级内核使用.当然如果你并不需要rocm,只要驱动,最新驱动一般也能支持最新的内核,那就没必要降级内核了.
 
 一般会需要注意linux内核版本的情况主要就是显卡相关软件和虚拟机相关软件.我们需要根据自己的需求选择合适的内核版本.
+
+#### 更新linux内核
+
+如果你希望用上发行版支持的最新的linux内核,可以像下面这样执行
+
+```bash
+sudo apt update # 更新软件包的索引或包列表
+sudo apt-get upgrade linux-image-generic #更新内核
+sudo reboot
+```
 
 #### 安装指定版本的linux内核
 
@@ -126,7 +170,9 @@ sudo reboot
     sudo reboot
     ```
 
-6. 重启后,你可以使用`uname -r`命令来验证当前正在运行的内核版本:
+6. 重启后,在grub菜单中选择`advance`,找到你刚刚安装的内核版本,选择用它启动系统即可.
+
+7. 重新进入ubuntu后你可以使用`uname -r`命令来验证当前正在运行的内核版本:
 
     ```bash
     uname -r
@@ -136,9 +182,11 @@ sudo reboot
 
 #### 后遗症
 
-安装指定版本的linux内核后,我们可能会遇到一些问题,比如显卡驱动无法加载,虚拟机无法启动等.这些问题一般都是由于内核模块和驱动不匹配导致的.当然最简单的办法就是直接在安装好操作系统后就更换好内核,然后再安装显卡驱动和虚拟机等软件.
+最大的后遗症就是很多设备的驱动可能无法使用,比如鼠标,显卡等,然后就是虚拟机可能无法启动等.这些问题一般都是由于内核模块和驱动不匹配导致的.当然最简单的办法就是直接在安装好操作系统后就更换好内核,然后再安装显卡驱动和虚拟机等软件.
 
 另外就是一些本来直接二进制分发的软件可能会因为内核版本不匹配而只能编译安装.
+
+因此,如果你不是特别需要,我并不推荐更换内核.
 
 ## 修复依赖问题
 
@@ -235,6 +283,14 @@ sudo usermod -a -G render,video $LOGNAME # 添加当前用户到渲染和视频�
 amdgpu-install --usecase=graphics
 sudo reboot # 重启后生效
 ```
+
+amd的最新驱动安装程序即便是已经不支持老旧硬件也是可以安装的,对应的rocm和hip也可以安装只是有很多功能无法使用.
+
+```bash
+amdgpu-install --usecase=graphics,rocm,hip
+```
+
+如果只是用来跑跑ollama什么的其实也够了.
 
 ### 安装计算库
 
