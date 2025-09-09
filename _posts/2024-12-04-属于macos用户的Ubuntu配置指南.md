@@ -467,13 +467,21 @@ apu的核显也会受amd驱动的影响,因此实际上最好别配amd的独显,
 + n卡有cuda,对于ai相关生态来说非常好用,尤其是训练方面
 + a卡有rocm,hip,天生对opencl有更好的支持,很多工业软件对opencl的支持也不错,而且a卡的显存一般都比较大,对于一些大模型推理来说更有优势.
 + 核显可以用来跑一些轻量级任务,带带显示器看看视频什么的.
++ 想在打游戏时充分利用两张卡的性能可以像apu插帧一样借助小黄鸭(Lossless Scaling)来实现,具体就是
 
-但这种配置坑是最多的,主要是驱动和计算库的冲突问题.因此我建议:
+    1. 显示器接a卡
+    2. 用小黄鸭(Lossless Scaling)将游戏窗口放大到全屏,并开启插帧功能
+    3. 渲染用n卡跑,插帧用a卡跑
+
+    这样就可以充分利用两张卡的性能了.
+
+但这种配置坑是最多的,主要是驱动和计算库的冲突问题.因此我建议像下面这样安装:
 
 + 插满卡后核显接显示器安装ubuntu,并在安装过程中勾选`第三方驱动安装`.
 + 安装好系统后先安装amd的驱动和计算库,然后关机显示器改接n卡开机.确保驱动安装好核显能用.
 + 然后关机,显示器再接回核显,再安装n卡的驱动和cuda.注意安装n卡驱动时选择完全闭源的`nvidia-driver`,不要选择带开源部分的`nvidia-open`,因为`nvidia-open`会缺失vulkan的支持,会影响游戏等程序使用n卡运行.
 + 安装好后重启,然后使用`nvidia-smi`和`rocminfo`命令查看两张卡是否都能被识别.
+
 
 #### 多显卡的功耗限制
 
@@ -1657,8 +1665,8 @@ libc.so.6
 2. 安装`nvidia-driver`对应版本的32位驱动
 
     ```bash
-    dpkg -l | grep nvidia-driver # 获取到驱动版本 比如570
-    sudo apt install libnvidia-gl-570:i386 #安装对应32位依赖
+    dpkg -l | grep nvidia-driver # 获取到驱动版本 比如575
+    sudo apt install libnvidia-gl-575:i386 #安装对应32位依赖
     ```
 
 ### 添加非steam应用
@@ -1745,6 +1753,12 @@ position=top-left
 <!-- 
 https://www.mapeditor.org/
  https://itch.io/game-assets/free/tag-tilemap -->
+
+### 小黄鸭(Lossless Scaling)伪双卡交火[2025-09-09更新]
+
+`Lossless Scaling`是steam上的一个小软件,它可以让我们在低分辨率下运行游戏,然后将画面放大到全屏显示,还可以进行插帧.如果我们刚好有两块显卡,那么就可以用这个软件让一块显卡专门负责游戏的渲染,另一块显卡专门负责桌面的插帧显示,这样就相当于双卡交火了.遗憾的是官方版本是windows限定,不过有个开源插件[lsfg-vk](https://github.com/PancakeTAS/lsfg-vk),用它就可以在linux下使用这项伪双卡交火技术了.注意这个软件用到了`Vulkan`,你得确保你的显卡驱动支持`Vulkan`.
+
+
 
 ### 用steam串流
 
