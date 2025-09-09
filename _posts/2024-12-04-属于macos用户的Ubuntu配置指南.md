@@ -11,7 +11,7 @@ tags:
     - Linux
     - 美化
 header-img: "img/home-bg-o.jpg"
-update: 2025-09-04
+update: 2025-09-09
 ---
 # 属于MacOs用户的Ubuntu配置指南
 
@@ -239,6 +239,14 @@ sudo mv /var/lib/dpkg/info_old /var/lib/dpkg/info
 3. 单独安装最新驱动和安装计算库是两码事.
 4. 除了硬件绑定的计算库(N卡的cuda和A卡的Rocm)外,还有一些通用的计算库,比如`opencl`,`vulkan`等,这些计算库不依赖于具体硬件,但性能可能不如硬件绑定的计算库.
 
+### MOC
+
+`MOC (Machine Owner Key)`是一种用于在 Linux 系统上签署内核模块的机制.它允许用户创建和管理自己的密钥对,并使用这些密钥对内核模块进行签名.这样,即使是第三方或自定义的内核模块,也可以被系统信任并加载,而不会被安全机制阻止.
+
+无论是amd显卡还是N卡,第一次安装显卡驱动过程中会让你填一个密码,密码要求6~8位.这个密码即`MOK`,它是用来给驱动签名的,如果你不填这个密码,驱动是无法加载的.在设置好密码后,重启时会进入一个蓝色的界面让你选,注意,**默认第一个选项是让你直接进系统,不能选**,选第二个`Enroll MOK`,一路跟着引导最后会让你输入这个密码,输入后驱动就可以正常加载了.
+
+这个moc的验证过程只会在第一次安装驱动时进行,后续更新驱动不会再让你输入密码了.
+
 ### 仅安装最新驱动
 
 这里介绍的是最简单的安装最新驱动的方式,如果你只是要打游戏,那就足够了.
@@ -316,14 +324,14 @@ sudo cp /var/cuda-repo-ubuntu2404-12-9-local/cuda-*-keyring.gpg /usr/share/keyri
 sudo apt-get update
 sudo apt-get -y install cuda-toolkit-12-9
 # 安装驱动
-sudo apt-get install -y nvidia-open
+sudo apt-get install -y nvidia-driver
 sudo reboot
 ```
 
 需要注意:
 
-1. 安装驱动可以安装有开源部分的`nvidia-open`也可以安装完全闭源的`nvidia-driver`,但英伟达官方在力推开源驱动,因此我建议安装`nvidia-open`
-2. 安装驱动过程中会让你填一个密码,密码要求6~8位.这个密码即`MOK (Machine Owner Key)`,它是用来给驱动签名的,如果你不填这个密码,驱动是无法加载的.在设置好密码后,重启时会进入一个蓝色的界面让你选,注意,**默认第一个选项是让你直接进系统,不能选**,选第二个`Enroll MOK`,一路跟着引导最后会让你输入这个密码,输入后驱动就可以正常加载了.
+1. 安装驱动可以安装有开源部分的`nvidia-open`也可以安装完全闭源的`nvidia-driver`.为了兼容性和稳定性考虑,我推荐安装完全闭源的`nvidia-driver`,它包含了所有的功能,而且通常稳定性也更好.
+2. 安装好后可以使用`nvidia-smi`命令查看驱动和cuda是否安装成功.
 
 关于cuda的版本选择,我们可以总结如下:
 
@@ -368,15 +376,182 @@ amdgpu-install --usecase=graphics,rocm,hip
 sudo reboot # 重启后生效
 ```
 
-#### vulkan
+#### vulkan[2025-09-09更新]
 
-现在的通用计算库中vulkan是最推荐的,它既支持n卡也支持a卡,i卡也支持,而且性能也不错,生态算是比较完善的.而且通常各家显卡的驱动中都会捆绑vulkan的支持.也就是说如果你只是要调用vulkan(所谓runtime运行时)那并不需要单独安装vulkan,但如果你要开发vulkan程序(所谓sdk开发包)那就需要单独安装vulkan sdk.
+现在的通用计算库中vulkan是最推荐的,它既支持n卡也支持a卡,i卡也支持,而且性能也不错,生态算是比较完善的.linux上跑游戏基本就是靠的vulkan.而且通常各家显卡的驱动中都会捆绑vulkan的支持.也就是说如果你只是要调用vulkan(所谓runtime运行时)那并不需要单独安装vulkan.但如果要查看vulkan的支持情况我们可以安装`vulkan-tools`,它提供了`vulkaninfo`命令可以查看vulkan的支持情况.
+
+```bash
+# 安装vulkan-tools
+sudo apt-get install vulkan-tools
+
+# 使用vulkaninfo查看vulkan支持情况
+vulkaninfo
+```
+
+如果你想查看目前的vulkan环境是否支持amd显卡或NVIDIA显卡,可以使用如下命令
+
+```bash
+# 查看amd显卡支持情况
+vulkaninfo | grep "AMD"
+# 查看NVIDIA显卡支持情况
+vulkaninfo | grep "NVIDIA" 
+```
+
+##### vulkan sdk
+
+如果你要开发vulkan程序(所谓sdk开发包)那就需要单独安装vulkan sdk.
 
 在ubuntu 24.04lts中安装vulkan的sdk推荐使用[vulkan官方提供的sdk压缩包](https://vulkan.lunarg.com/sdk/home#linux)
+,下载后解压到某个目录,然后设置环境变量即可.
 
+```bash
+# 假设你下载并解压到了~/vulkan-sdk目录
+export VULKAN_SDK=~/vulkan-sdk/x.x.x.x/x86_64
+export PATH=$VULKAN_SDK/bin:$PATH
+export LD_LIBRARY_PATH=$VULKAN_SDK/lib:$LD_LIBRARY_PATH
+# export VK_ICD_FILENAMES=$VULKAN_SDK/etc/vulkan/icd.d:$VK_ICD_FILENAMES
+# export VK_LAYER_PATH=$VULKAN_SDK/etc/vulkan/explicit_layer.d:$VK_LAYER_PATH
+```
 
+### 多显卡问题[2025-09-09更新]
 
-安装好后可以使用`vulkaninfo`命令查看是否安装成功.
+我们装ubuntu需要核显,对于消费级主机,核显大致可以分为两类
+
++ 亮机核显,就是intel的核显和amd除了apu系列外的核显,这种核显性能很差,基本不能指望做计算任务,但足够带得起显示器.
++ 计算核显,就是amd的apu系列的核显,这种核显性能还不错,可以做一些轻量级的计算任务,但也不能指望它能做重型计算任务.
+
+通常多显卡的情况主要是如下几种情况:
+
++ 亮机核显+a卡/n卡,最常见的情况,在linux下一般也是屏蔽核显使用的,所以可以忽略对这个配置的讨论.
++ apu+a卡/n卡,apu本身带一个还不错的核显,而且由于砍pcie通道所以一般最多配一张显卡而且基本是70ti级别以下的独显,这种配置往往并不是追求性能的方案而是追求性价比的方案,往往是渐进式升级的结果,比如先买个apu,然后再加个独显.也算一种挺常见的配置.我们会在下面讨论单独讨论如何针对这种配置进行设置.
++ 亮机核显+双n卡,一般是将消费级平台当小型工作站的用户,通常是用来跑ai的,这种配置在linux下也比较常见,我们也会在下面讨论如何针对这种配置进行设置.
++ 亮机核显+n卡+a卡,比较奇葩的配置,但其实是一个万金油配置,也是可玩性比较高的一个配置,我们下面会有针对性的进行讨论.
++ 亮机核显+双a卡,很少见,一般是用来跑ai推理的,这里就不讨论了.
+
+对于多显卡用户,我们需要注意如下几点:
+
+1. 如果是amd的带核显的cpu,它的核显也会受amd驱动的影响.因此如果安装amd驱动失败,核显也不会工作.因此建议配张n卡亮机卡,并且在安装系统时勾选`第三方驱动安装`,这样就不会因为amd驱动问题导致屏幕不亮无法进入系统了(可以安装amd驱动后屏幕接n卡以确保屏幕能亮).
+2. 打游戏基本依赖vulkan,因此多显卡用户打游戏时需要确保vulkan能正常工作.
+
+### apu+a卡/n卡
+
+对于apu+a卡/n卡的配置,我们主要看独显是amd的还是nvidia的
+
+> amd独显
+
+apu的核显也会受amd驱动的影响,因此实际上最好别配amd的独显,如果只有amd的独显,安驱动出问题很可能完全亮不起来.
+
+> nvidia独显
+
+对于独显为N卡的情况,我建议先安装amd的驱动,确保核显能用,然后再安装n卡的驱动.
+  
+#### 充分利用apu的核显
+
+为了充分利用apu,我建议用独显做主力卡,但apu也不要屏蔽核显,更加推荐显示器接核显使用混合模式.这并不会有什么坏处,反而在一些场景下可能还是更好的选择.原因有:
+
++ 显示器接核显可以减少独显的负担,尤其是对于一些4k显示器来说,独显不需要处理桌面显示的任务,可以专心做计算任务.
++ 可以利用比如小黄鸭(Lossless Scaling)插帧,插帧对显卡算力要求不高,核显完全可以胜任,独显可以专心做计算任务;同时核显比走pcie的独显离cpu更近,输出延迟可以得到更好的控制.这在游戏场景很常用(steam部分会做进一步介绍).
++ 在重型任务时我们主要用独显,空出来的核显可以用来跑一些轻量级任务,比如显卡跑渲染的时候拿核显打打游戏,或者显卡跑训练的时候拿核显跑点推理什么的,这样可以更充分利用硬件资源.
++ 核显使用内存,可以用来跑像qwen3 30BA3这样的吃显存但激活层少的moe模型,消费级显卡很少有足够的显存可以跑得动这种模型,但核显可以,还不影响独显的使用.
+
+### 亮机核显+双n卡
+
+这种搭配一般是用来跑ai的,通常是用来跑训练的,因此我们主要关注的是如何让两张卡都能被程序识别并使用.主要是围绕独显的驱动和计算库来设置的.核显建议不要屏蔽,显示器接核显使用混合模式,理由和上面apu的理由类似.这个核显只要不打游戏,看看视频足够了,
+
+至于amd的核显要不要装驱动,我个人建议不要装,amd的亮机核显性能太差,装了驱动反而可能会带来不必要的麻烦,而且也不会带来什么性能提升.
+
+### 亮机核显+n卡+a卡
+
+这种配置比较奇葩,但其实是一个万金油配置,也是可玩性比较高的一个配置.这种配置可以让你同时利用n卡和a卡的优势,
+
++ n卡有cuda,对于ai相关生态来说非常好用,尤其是训练方面
++ a卡有rocm,hip,天生对opencl有更好的支持,很多工业软件对opencl的支持也不错,而且a卡的显存一般都比较大,对于一些大模型推理来说更有优势.
++ 核显可以用来跑一些轻量级任务,带带显示器看看视频什么的.
+
+但这种配置坑是最多的,主要是驱动和计算库的冲突问题.因此我建议:
+
++ 插满卡后核显接显示器安装ubuntu,并在安装过程中勾选`第三方驱动安装`.
++ 安装好系统后先安装amd的驱动和计算库,然后关机显示器改接n卡开机.确保驱动安装好核显能用.
++ 然后关机,显示器再接回核显,再安装n卡的驱动和cuda.注意安装n卡驱动时选择完全闭源的`nvidia-driver`,不要选择带开源部分的`nvidia-open`,因为`nvidia-open`会缺失vulkan的支持,会影响游戏等程序使用n卡运行.
++ 安装好后重启,然后使用`nvidia-smi`和`rocminfo`命令查看两张卡是否都能被识别.
+
+#### 多显卡的功耗限制
+
+多显卡情况下功耗往往是一个问题,一般来说apu功耗不会太高,120w基本就跑满了,但独显现在一个个都是耗电大户,因此如果是双独显方案我们需要先查清楚独显的功耗墙并准备一个足够冗余的大电源,建议1200w以上. 
+
+除了电源外,我们还可以通过软件来限制显卡的功耗,以确保电源不会超载.
+
+> AMD显卡功耗限制
+
+对于amd显卡来说可以使用`rocm-smi`命令来限制功耗,这个命令需要安装`rocm`.比如我有一张MI50,它的功耗墙是220w,我可以将它限制在150w以内,性能大致损失在5%以内,但可以大幅降低功耗和发热.
+
+```bash
+rocm-smi --setpoweroverdrive 150 -d [显卡ID]
+```
+
+这个`显卡ID`可以通过`rocm-smi`命令查看,一般从0开始编号.先根据信息判断下要设置卡的编号,然后使用`rocm-smi --id [GPU_ID]`进行确认.没问题了再设置功耗.
+
+> nvidia显卡功耗限制
+
+对于n卡,限制功耗的功能在驱动中已经集成了,我们可以使用`nvidia-smi`命令来限制功耗.比如我有一张3080,它的功耗墙是320w,我可以将它限制在200w以内,性能大致损失在5%以内,但可以大幅降低功耗和发热.
+
+```bash
+nvidia-smi -i 0 -pl 200
+```
+
+这个`-i 0`表示对编号为0的显卡进行设置,如果有多张卡可以通过`nvidia-smi`命令查看编号,然后对每张卡分别设置即可.
+
+> 持久化显卡功耗限制
+
+上面介绍的设置都是临时设置,在机器重启后会失效,如果要持久化功耗限制,可以利用`systemd`来实现.
+
+>> n卡限制功耗的设置:
+
+1. 创建服务文件，例如 `/etc/systemd/system/nvidia-powerlimit.service`:
+
+    ```conf
+    [Unit]
+    Description=Set NVIDIA GPU power limit on startup
+    After=multi-user.target
+
+    [Service]
+    Type=oneshot
+    ExecStart=/usr/bin/nvidia-smi -i 0 -pl 200  # 将参数改为你想要的功耗和显卡ID
+
+    [Install]
+    WantedBy=multi-user.target
+    ```
+
+2. 启用并启动服务
+
+    ```bash
+    sudo systemctl enable nvidia-powerlimit.service
+    sudo systemctl start nvidia-powerlimit.service
+    ```
+
+>> a卡限制功耗的设置:
+
+1. 创建服务文件，例如 `/etc/systemd/system/amd-powerlimit.service`:
+
+    ```conf
+    [Unit]
+    Description=Set AMD GPU power limit on startup
+    After=multi-user.target
+
+    [Service]
+    Type=oneshot
+    ExecStart=/usr/bin/rocm-smi --setpoweroverdrive 150 -d 0  # 将参数改为你想要的功耗和显卡ID
+
+    [Install]
+    WantedBy=multi-user.target
+    ```
+
+2. 启用并启动服务
+
+    ```bash
+    sudo systemctl enable rocm-powerlimit.service
+    sudo systemctl start rocm-powerlimit.service
+    ```
 
 ## 基础设置
 
