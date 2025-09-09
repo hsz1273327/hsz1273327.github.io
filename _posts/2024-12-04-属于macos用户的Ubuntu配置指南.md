@@ -324,13 +324,13 @@ sudo cp /var/cuda-repo-ubuntu2404-12-9-local/cuda-*-keyring.gpg /usr/share/keyri
 sudo apt-get update
 sudo apt-get -y install cuda-toolkit-12-9
 # 安装驱动
-sudo apt-get install -y nvidia-driver
+sudo apt-get install -y cuda-drivers
 sudo reboot
 ```
 
 需要注意:
 
-1. 安装驱动可以安装有开源部分的`nvidia-open`也可以安装完全闭源的`nvidia-driver`.为了兼容性和稳定性考虑,我推荐安装完全闭源的`nvidia-driver`,它包含了所有的功能,而且通常稳定性也更好.
+1. 安装驱动可以安装有开源部分的`nvidia-open`也可以安装完全闭源的`cuda-drivers`.为了兼容性和稳定性考虑,我推荐安装完全闭源的`cuda-drivers`,它包含了所有的功能,而且通常稳定性也更好.
 2. 安装好后可以使用`nvidia-smi`命令查看驱动和cuda是否安装成功.
 
 关于cuda的版本选择,我们可以总结如下:
