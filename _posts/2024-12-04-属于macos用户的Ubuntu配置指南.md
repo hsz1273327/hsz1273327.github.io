@@ -11,7 +11,7 @@ tags:
     - Linux
     - 美化
 header-img: "img/home-bg-o.jpg"
-update: 2025-09-09
+update: 2025-09-18
 ---
 # 属于MacOs用户的Ubuntu配置指南
 
@@ -483,7 +483,6 @@ apu的核显也会受amd驱动的影响,因此实际上最好别配amd的独显,
 + 然后关机,显示器再接回核显,再安装n卡的驱动和cuda.注意安装n卡驱动时选择完全闭源的`nvidia-driver`,不要选择带开源部分的`nvidia-open`,因为`nvidia-open`会缺失vulkan的支持,会影响游戏等程序使用n卡运行.
 + 安装好后重启,然后使用`nvidia-smi`和`rocminfo`命令查看两张卡是否都能被识别.
 
-
 #### 多显卡的功耗限制
 
 多显卡情况下功耗往往是一个问题,一般来说apu功耗不会太高,120w基本就跑满了,但独显现在一个个都是耗电大户,因此如果是双独显方案我们需要先查清楚独显的功耗墙并准备一个足够冗余的大电源,建议1200w以上. 
@@ -803,7 +802,7 @@ ubuntu中字体分为`界面字体`,`文档字体`,`等宽字体`.所谓`界面�
 
 ## 系统优化
 
-ubuntu默认状态下是很原始的,我们需要做如下操作才能让它用起来舒服些
+ubuntu默认状态下是很原始的,我们可以根据需要做如下操作,让它用起来舒服些
 
 ### 增加空格键预览功能
 
@@ -977,6 +976,19 @@ ubuntu特有操作
 
 这么改有个缺陷就是只能使用`Control + Alt + C`在terminal中中断程序了
 
+### 多屏优化[2025-09-18更新]
+
+如果你有多个显示器,可以在`设置->显示`中设置主显示器和显示器排列顺序,并且可以设置不同显示器的缩放比例和分辨率.
+
+#### 指定应用的新窗口到指定显示器
+
+在多显示器环境下,我们可以指定某个应用的新窗口打开到指定的显示器上.比如我有两个显示器,一个4k的主显示器,一个1080p的副显示器,我希望浏览器新窗口打开到副显示器上,而终端新窗口打开到主显示器上.
+我们可以使用`devilspie2`这个工具来实现这个功能.
+
+```bash
+sudo apt install devilspie2
+```
+
 ## 美化系统
 
 ubuntu系统界面大致可以分为如下几个部分
@@ -1138,29 +1150,30 @@ sudo apt-get install gnome-browser-connector
 
 下面是我认为比较有必要的gnome插件汇总
 
-| 插件                                                                                                          | 推荐等级 | 用途                               | 补充说明                                                                                                                             |
-| ------------------------------------------------------------------------------------------------------------- | -------- | ---------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
-| [user-themes](https://extensions.gnome.org/extension/19/user-themes/)                                         | 高       | 管理用户主题                       | ---                                                                                                                                  |
-| [Dash to Dock](https://extensions.gnome.org/extension/307/dash-to-dock/)                                      | 高       | 一个对主题更友好的dash             | 关闭`Ubuntu Docker`,功能重复了                                                                                                       |
-| [Blur my Shell](https://extensions.gnome.org/extension/3193/blur-my-shell/)                                   | 高       | 一个提供桌面模糊的插件             | 建议修改`Dash to Dock`中的拐角半径                                                                                                   |
-| [Clipboard Indicator](https://extensions.gnome.org/extension/779/clipboard-indicator/)                        | 高       | 剪切板功能,可以保存近期的复制内容  | ---                                                                                                                                  |
-| [Lock Keys](https://extensions.gnome.org/extension/1532/lock-keys/)                                           | 低       | 大小写锁定提示                     | ---                                                                                                                                  |
-| [Removable Drive Menu](https://extensions.gnome.org/extension/7/removable-drive-menu/)                        | 高       | 顶栏的移动存储操作工具             | ---                                                                                                                                  |
-| [Screenshort-cut](https://extensions.gnome.org/extension/6868/screenshort-cut/)                               | 低       | 顶栏截图工具                       | 需要额外安装`sudo apt install gir1.2-gtop-2.0 lm-sensors`获取硬盘信息                                                                |
-| [Vitals](https://extensions.gnome.org/extension/1460/vitals/)                                                 | 中       | 顶栏系统监控                       | ---                                                                                                                                  |
-| [GSConnect](https://extensions.gnome.org/extension/1319/gsconnect/)                                           | 高       | 快速连接移动端设备                 | 需要配合app`kde connect`                                                                                                             |
-| [Todoit](https://extensions.gnome.org/extension/7538/todo-list/)                                              | 低       | 顶部todolist                       | ---                                                                                                                                  |
-| [Lunar Calendar 农历](https://extensions.gnome.org/extension/675/lunar-calendar/)                             | 中       | 日历改为农历                       | 需要先额外安装[Nei/ChineseCalendar](https://gitlab.gnome.org/Nei/ChineseCalendar/-/archive/20240107/ChineseCalendar-20240107.tar.gz) |
-| [Compiz alike magic lamp effect](https://extensions.gnome.org/extension/3740/compiz-alike-magic-lamp-effect/) | 中       | 仿macos的最小化动画                | ---                                                                                                                                  |
-| [Forge](https://extensions.gnome.org/extension/4481/forge/)                                                   | 低       | 多应用划分窗口                     | ---                                                                                                                                  |
-| [Input Method Panel](https://extensions.gnome.org/extension/261/kimpanel/)                                    | 高       | 输入法相关                         | ---                                                                                                                                  |
-| [Click to close overview](https://extensions.gnome.org/extension/3826/click-to-close-overview/)               | 高       | 点击空白处关闭预览                 | ---                                                                                                                                  |
-| [Hide Top Bar](https://extensions.gnome.org/extension/545/hide-top-bar/)                                      | 低       | 自动隐藏顶部工具栏                 | ---                                                                                                                                  |
-| [desktop-lyric](https://extensions.gnome.org/extension/4006/desktop-lyric/)                                   | 中       | 桌面歌词                           |
-| [applications-menu](https://extensions.gnome.org/extension/6/applications-menu/)                              | 低       | 顶部提供应用的归类入口             |
-| [weather-or-not](https://extensions.gnome.org/extension/5660/weather-or-not/)                                 | 低       | 顶部天气插件,需要有`gnome weahter` |
-| [GNOME Fuzzy App Search](https://extensions.gnome.org/extension/3956/gnome-fuzzy-app-search/)                 | 中       | 模糊搜索工具                       |
-| [No overview at start-up](https://extensions.gnome.org/extension/4099/no-overview/)                           | 高       | 开机后自动进入第一个桌面           |
+| 插件                                                                                                          | 推荐等级 | 用途                                                                                | 补充说明                                                                                                                             |
+| ------------------------------------------------------------------------------------------------------------- | -------- | ----------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
+| [user-themes](https://extensions.gnome.org/extension/19/user-themes/)                                         | 高       | 管理用户主题                                                                        | ---                                                                                                                                  |
+| [Dash to Dock](https://extensions.gnome.org/extension/307/dash-to-dock/)                                      | 高       | 一个对主题更友好的dash                                                              | 关闭`Ubuntu Docker`,功能重复了                                                                                                       |
+| [Blur my Shell](https://extensions.gnome.org/extension/3193/blur-my-shell/)                                   | 高       | 一个提供桌面模糊的插件                                                              | 建议修改`Dash to Dock`中的拐角半径                                                                                                   |
+| [No overview at start-up](https://extensions.gnome.org/extension/4099/no-overview/)                           | 高       | 开机后自动进入第一个桌面                                                            | ---                                                                                                                                  |
+| [Click to close overview](https://extensions.gnome.org/extension/3826/click-to-close-overview/)               | 高       | 点击空白处关闭预览                                                                  | ---                                                                                                                                  |
+| [Compiz alike magic lamp effect](https://extensions.gnome.org/extension/3740/compiz-alike-magic-lamp-effect/) | 中       | 仿macos的最小化动画                                                                 | ---                                                                                                                                  |
+| [Input Method Panel](https://extensions.gnome.org/extension/261/kimpanel/)                                    | 高       | 顶栏输入法支持相关                                                                  | ---                                                                                                                                  |
+| [Removable Drive Menu](https://extensions.gnome.org/extension/7/removable-drive-menu/)                        | 高       | 顶栏的移动存储操作工具                                                              | ---                                                                                                                                  |
+| [GSConnect](https://extensions.gnome.org/extension/1319/gsconnect/)                                           | 高       | 顶栏快速连接移动端设备                                                              | 需要配合app`kde connect`                                                                                                             |
+| [Clipboard Indicator](https://extensions.gnome.org/extension/779/clipboard-indicator/)                        | 中       | 顶栏剪切板管理功能,可以保存近期的复制内容                                           | ---                                                                                                                                  |
+| [Vitals](https://extensions.gnome.org/extension/1460/vitals/)                                                 | 中       | 顶栏系统监控                                                                        | ---                                                                                                                                  |
+| [Lock Keys](https://extensions.gnome.org/extension/1532/lock-keys/)                                           | 低       | 顶栏大小写锁定提示                                                                  | ---                                                                                                                                  |
+| [Screenshort-cut](https://extensions.gnome.org/extension/6868/screenshort-cut/)                               | 低       | 顶栏截图工具                                                                        | 需要额外安装`sudo apt install gir1.2-gtop-2.0 lm-sensors`获取硬盘信息                                                                |
+| [Todoit](https://extensions.gnome.org/extension/7538/todo-list/)                                              | 低       | 顶部todolist                                                                        | ---                                                                                                                                  |
+| [Lunar Calendar 农历](https://extensions.gnome.org/extension/675/lunar-calendar/)                             | 中       | 日历改为农历                                                                        | 需要先额外安装[Nei/ChineseCalendar](https://gitlab.gnome.org/Nei/ChineseCalendar/-/archive/20240107/ChineseCalendar-20240107.tar.gz) |
+| [weather-or-not](https://extensions.gnome.org/extension/5660/weather-or-not/)                                 | 中       | 顶部天气插件,需要有`gnome weahter`                                                  | ---                                                                                                                                  |
+| [desktop-lyric](https://extensions.gnome.org/extension/4006/desktop-lyric/)                                   | 中       | 桌面歌词                                                                            | ---                                                                                                                                  |
+| [applications-menu](https://extensions.gnome.org/extension/6/applications-menu/)                              | 低       | 顶部提供应用的归类入口                                                              | ---                                                                                                                                  |
+| [GNOME Fuzzy App Search](https://extensions.gnome.org/extension/3956/gnome-fuzzy-app-search/)                 | 中       | 模糊搜索工具                                                                        | ---                                                                                                                                  |
+| [Arrange Windows](https://extensions.gnome.org/extension/1604/arrange-windows/)                               | 低       | 用于自动排序窗口,并提供特定应用启动窗口自定义规则功能,多屏推荐                      | ---                                                                                                                                  |
+| [Auto Move Windows](https://extensions.gnome.org/extension/16/auto-move-windows/)                             | 低       | 用于自动将特定应用的窗口移动到指定的workspace,喜欢基于workspace的使用逻辑的用户推荐 | ---                                                                                                                                  |
+| [Hide Top Bar](https://extensions.gnome.org/extension/545/hide-top-bar/)                                      | 低       | 自动隐藏顶部工具栏,笔记本等小屏用户推荐                                             | ---                                                                                                                                  |
 
 除此之外,我个人推荐对系统默认插件做如下处理
 
@@ -1329,6 +1342,67 @@ sudo reboot
 ```bash
 flatpak install flathub io.github.flattool.Warehouse
 ```
+
+安装好的flatpak应用可以像下面这样展示:
+
+```bash
+flatpak list
+```
+
+它会列出所有安装的`flatpak`应用,包括`应用ID`,版本,架构,来源等信息.这个命令除了列出应用外,也会列出安装的runtime和sdk.
+
+一般`应用ID`是类似`com.spotify.Client`这样的格式,我们可以通过这个ID来管理应用.
+
+要查看一个应用的信息,可以用如下命令
+
+```bash
+flatpak info <应用ID>
+```
+
+要更新某个`flatpak`应用,可以用如下命令
+
+```bash
+flatpak update <应用ID>
+```
+
+
+如果要卸载某个`flatpak`应用,可以用如下命令
+
+```bash
+flatpak uninstall <应用ID>
+```
+
+如果flatpak环境坏了可以使用下面的命令进行修复
+
+```bash
+flatpak repair
+```
+
+要全量更新,可以直接使用
+
+```bash
+flatpak update
+```
+
+> 设置和运行`Flatpak应用`
+
+安装好`Flatpak`应用后,我们可以在`显示应用`中找到它们,点击运行即可.如果我们需要命令行运行,可以用如下命令
+
+```bash
+flatpak run [设置项] <应用ID> [参数]
+```
+
+这里的`应用ID`可以在`显示应用`中找到,也可以用如下命令列出所有安装的`Flatpak`应用
+
+由于flatpak是在沙盒中执行的,它会隔离应用和系统,因此有些应用可能无法访问系统中的某些资源,我们可以在设置项部分添加一些设置项来开放权限,常用的设置项有
+
+| 设置项               | 说明                             |
+| -------------------- | -------------------------------- |
+| --filesystem=/path    | 允许应用访问指定目录            |
+
+
+
+这时我们可以用`flatpak override`命令来设置权限.
 
 #### snap
 
@@ -1590,6 +1664,7 @@ linux下我会尽量推荐开源工具.下面是一些常用软件的安装信�
 
 | 软件                                                             | 渠道                                                               | 说明                                                             |
 | ---------------------------------------------------------------- | ------------------------------------------------------------------ | ---------------------------------------------------------------- |
+| Gnome Weather                                                    | [flathub](https://flathub.org/en/apps/org.gnome.Weather)           | 天气应用,注意搜索国内城市要用中文                                |
 | Disk Usage Analyzer                                              | [flathub](https://flathub.org/apps/org.gnome.baobab)               | 查看硬盘使用情况的工具                                           |
 | Remmina                                                          | [flathub](https://flathub.org/apps/org.remmina.Remmina)            | 远程桌面的连接客户端                                             |
 | timeshift                                                        | `sudo apt install timeshift`                                       | 系统快照,我们需要自备一块</br>空的U盘专门做快照,每半年做一份快照 |
@@ -1649,13 +1724,9 @@ gpu加速:
 
 #### 娱乐工具
 
- | 软件                     | 渠道                                                                          | 说明                                                     |
- | ------------------------ | ----------------------------------------------------------------------------- | -------------------------------------------------------- |
- | vlc                      | [flathub](https://flathub.org/apps/org.videolan.VLC)                          | 知名的开源视频播放器                                     |
- | NetEase Cloud Music Gtk4 | [flathub](https://flathub.org/apps/com.github.gmg137.netease-cloud-music-gtk) | 网易云音乐的开源第三方客户端                             |
- | steam                    | [官网下载](https://store.steampowered.com/about/)                             | 知名的pc游戏平台                                         |
- | ProtonUp-Qt              | [flathub](https://flathub.org/apps/net.davidotek.pupgui2)                     | 为steam管理GE-Proton                                     |
- | protontricks             | [flathub](https://flathub.org/apps/com.github.Matoking.protontricks)          | 为Steam/Proton游戏以及其他常见Wine功能运行Winetricks命令 |
-
+ | 软件                     | 渠道                                                                          | 说明                         |
+ | ------------------------ | ----------------------------------------------------------------------------- | ---------------------------- |
+ | vlc                      | [flathub](https://flathub.org/apps/org.videolan.VLC)                          | 知名的开源视频播放器         |
+ | NetEase Cloud Music Gtk4 | [flathub](https://flathub.org/apps/com.github.gmg137.netease-cloud-music-gtk) | 网易云音乐的开源第三方客户端 |
 
 [1]: {{site.url}}/img/in-post/ubuntu/gnome桌面结构.jpg
