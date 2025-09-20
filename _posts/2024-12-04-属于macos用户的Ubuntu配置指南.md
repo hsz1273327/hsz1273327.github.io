@@ -1162,9 +1162,9 @@ sudo apt-get install gnome-browser-connector
 | [Removable Drive Menu](https://extensions.gnome.org/extension/7/removable-drive-menu/)                        | 高       | 顶栏的移动存储操作工具                                                              | ---                                                                                                                                  |
 | [GSConnect](https://extensions.gnome.org/extension/1319/gsconnect/)                                           | 高       | 顶栏快速连接移动端设备                                                              | 需要配合app`kde connect`                                                                                                             |
 | [Clipboard Indicator](https://extensions.gnome.org/extension/779/clipboard-indicator/)                        | 中       | 顶栏剪切板管理功能,可以保存近期的复制内容                                           | ---                                                                                                                                  |
-| [Vitals](https://extensions.gnome.org/extension/1460/vitals/)                                                 | 中       | 顶栏系统监控                                                                        | ---                                                                                                                                  |
+| [Vitals](https://extensions.gnome.org/extension/1460/vitals/)                                                 | 中       | 顶栏系统监控                                                                        | 需要额外安装`sudo apt install gir1.2-gtop-2.0 lm-sensors`获取硬盘信息          ---                                                   |
 | [Lock Keys](https://extensions.gnome.org/extension/1532/lock-keys/)                                           | 低       | 顶栏大小写锁定提示                                                                  | ---                                                                                                                                  |
-| [Screenshort-cut](https://extensions.gnome.org/extension/6868/screenshort-cut/)                               | 低       | 顶栏截图工具                                                                        | 需要额外安装`sudo apt install gir1.2-gtop-2.0 lm-sensors`获取硬盘信息                                                                |
+| [Screenshort-cut](https://extensions.gnome.org/extension/6868/screenshort-cut/)                               | 低       | 顶栏截图工具                                                                        |                                                                                                                                      |
 | [Todoit](https://extensions.gnome.org/extension/7538/todo-list/)                                              | 低       | 顶部todolist                                                                        | ---                                                                                                                                  |
 | [Lunar Calendar 农历](https://extensions.gnome.org/extension/675/lunar-calendar/)                             | 中       | 日历改为农历                                                                        | 需要先额外安装[Nei/ChineseCalendar](https://gitlab.gnome.org/Nei/ChineseCalendar/-/archive/20240107/ChineseCalendar-20240107.tar.gz) |
 | [weather-or-not](https://extensions.gnome.org/extension/5660/weather-or-not/)                                 | 中       | 顶部天气插件,需要有`gnome weahter`                                                  | ---                                                                                                                                  |
@@ -1396,9 +1396,9 @@ flatpak run [设置项] <应用ID> [参数]
 
 由于flatpak是在沙盒中执行的,它会隔离应用和系统,因此有些应用可能无法访问系统中的某些资源,我们可以在设置项部分添加一些设置项来开放权限,常用的设置项有
 
-| 设置项               | 说明                             |
-| -------------------- | -------------------------------- |
-| --filesystem=/path    | 允许应用访问指定目录            |
+| 设置项             | 说明                 |
+| ------------------ | -------------------- |
+| --filesystem=/path | 允许应用访问指定目录 |
 
 
 
