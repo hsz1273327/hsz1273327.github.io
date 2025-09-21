@@ -1171,7 +1171,7 @@ sudo apt-get install gnome-browser-connector
 | [desktop-lyric](https://extensions.gnome.org/extension/4006/desktop-lyric/)                                   | 中       | 桌面歌词                                                                            | ---                                                                                                                                  |
 | [applications-menu](https://extensions.gnome.org/extension/6/applications-menu/)                              | 低       | 顶部提供应用的归类入口                                                              | ---                                                                                                                                  |
 | [GNOME Fuzzy App Search](https://extensions.gnome.org/extension/3956/gnome-fuzzy-app-search/)                 | 中       | 模糊搜索工具                                                                        | ---                                                                                                                                  |
-| [Arrange Windows](https://extensions.gnome.org/extension/1604/arrange-windows/)                               | 低       | 用于自动排序窗口,并提供特定应用启动窗口自定义规则功能,多屏推荐                      | ---                                                                                                                                  |
+| [Arrange Windows](https://extensions.gnome.org/extension/1604/arrange-windows/)                               | 中       | 用于整理排序窗口,喜欢基于单workspace使用逻辑的用户推荐                              | ---                                                                                                                                  |
 | [Auto Move Windows](https://extensions.gnome.org/extension/16/auto-move-windows/)                             | 低       | 用于自动将特定应用的窗口移动到指定的workspace,喜欢基于workspace的使用逻辑的用户推荐 | ---                                                                                                                                  |
 | [Hide Top Bar](https://extensions.gnome.org/extension/545/hide-top-bar/)                                      | 低       | 自动隐藏顶部工具栏,笔记本等小屏用户推荐                                             | ---                                                                                                                                  |
 
@@ -1399,10 +1399,9 @@ flatpak run [设置项] <应用ID> [参数]
 | 设置项             | 说明                 |
 | ------------------ | -------------------- |
 | --filesystem=/path | 允许应用访问指定目录 |
+| --env=VAR=VALUE | 设置环境变量         |
 
-
-
-这时我们可以用`flatpak override`命令来设置权限.
+用`flatpak run`运行应用时,这些设置项是临时生效的,如果要永久生效,我们可以用`flatpak override [设置项] <应用ID>`命令来设置.
 
 #### snap
 
