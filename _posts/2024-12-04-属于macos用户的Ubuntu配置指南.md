@@ -11,7 +11,7 @@ tags:
     - Linux
     - 美化
 header-img: "img/home-bg-o.jpg"
-update: 2025-09-18
+update: 2025-09-28
 ---
 # 属于MacOs用户的Ubuntu配置指南
 
@@ -976,11 +976,22 @@ ubuntu特有操作
 
 这么改有个缺陷就是只能使用`Control + Alt + C`在terminal中中断程序了
 
-### 多屏优化[2025-09-18更新]
+### 多屏优化[2025-09-28更新]
 
 如果你有多个显示器,可以在`设置->显示`中设置主显示器和显示器排列顺序,并且可以设置不同显示器的缩放比例和分辨率.
 
 需要注意,gnome对不同刷新率多显示器的支持并不好,如果你有多个显示器,建议自行测试,比如我有一个2k的60hz显示器和一个1080p的144hz显示器,我发现如果将2k显示器设置为主显示器,那么1080p显示器的刷新率最多只能设置为120hz.
+
+需要注意的是,在`设置->显示`中对显示器的设置并不会影响登陆页面(即`GDM(GNOME Display Manager)`),因为`GDM`是独立于用户会话的一个服务,因此我们还需要对`GDM`进行设置.在`设置->显示`中设置好后,我们可以将`~/.config/monitors.xml`复制到`/var/lib/gdm3/.config/`中,这样`GDM`就会使用和用户会话相同的显示器设置了.
+
+```bash
+# 复制 monitors.xml 到 gdm3 配置目录
+sudo cp ~/.config/monitors.xml /var/lib/gdm3/.config/
+# 设置文件权限
+sudo chown gdm:gdm /var/lib/gdm3/.config/monitors.xml
+# 重启以使更改生效
+sudo reboot
+```
 
 #### 指定应用的新窗口到指定显示器
 
