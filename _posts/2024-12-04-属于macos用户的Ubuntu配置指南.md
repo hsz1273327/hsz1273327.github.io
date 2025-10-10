@@ -11,7 +11,7 @@ tags:
     - Linux
     - 美化
 header-img: "img/home-bg-o.jpg"
-update: 2025-09-28
+update: 2025-10-10
 ---
 # 属于MacOs用户的Ubuntu配置指南
 
@@ -226,7 +226,7 @@ sudo rm -rf /var/lib/dpkg/info
 sudo mv /var/lib/dpkg/info_old /var/lib/dpkg/info
 ```
 
-## 显卡驱动和计算库[2025-09-03更新]
+## 显卡驱动和计算库[2025-10-10更新]
 
 要说和macos最大的区别恐怕就是linux下可以用独显了.这既是Linux系统相对macos的优势,也是麻烦的来源.因为显卡驱动和计算库的安装和配置往往是最麻烦的.
 
@@ -258,6 +258,12 @@ ubuntu 24.04lts中安装n卡驱动已经相当简单,只需要在安装系统时
 这是最不折腾的N卡驱动安装方式,你可以在`软件和更新(Software & Updates)`应用中切换到`附加驱动(Additional Drivers)`选项卡进行版本确认,也可以在terminal中使用`nvidia-smi`命令查看驱动版本.
 
 要更新驱动也可以在`软件和更新(Software & Updates)`应用中进行更新.
+
+需要注意如果你更新了N卡驱动,你需要检查下flatpak安装的软件是否还能运行,如果不能运行,通常就是因为n卡驱动不兼容了,你需要更新下flatpak通常就可以解决问题
+
+```bash
+flatpak update
+```
 
 #### A卡驱动安装
 
@@ -332,7 +338,7 @@ sudo reboot
 
 1. 安装驱动可以安装有开源部分的`nvidia-open`也可以安装完全闭源的`cuda-drivers`.为了兼容性和稳定性考虑,我推荐安装完全闭源的`cuda-drivers`,它包含了所有的功能,而且通常稳定性也更好.
 2. 安装好后可以使用`nvidia-smi`命令查看驱动和cuda是否安装成功.
-3. 由于pytorch一般跟不上最新版本的cuda,因此每次更新时要注意下,**不要轻易更新到最新版本的cuda**,否则pytorch可能无法使用.如果你要用pytorch,建议安装pytorch支持的最新版本的cuda即可.具体来说,最好在更新设置中关掉自动更新,同时每次提示有更新时检查下是否有nvidia相关的更新,如果有不要勾选
+3. 由于pytorch一般跟不上最新版本的cuda,因此如果你想在全局环境使用pytorch,每次更新时要注意下,**不要轻易更新到最新版本的cuda**,否则pytorch可能无法安装.不过如果你要用pytorch,建议安装pytorch支持的最新版本的cuda即可.具体来说,最好在更新设置中关掉自动更新,同时每次提示有更新时检查下是否有nvidia相关的更新,如果有不要勾选
 
 关于cuda的版本选择,我们可以总结如下:
 
@@ -349,6 +355,31 @@ sudo reboot
     sudo apt-get -y install cuda-toolkit-12-8
     ...
     ```
+
+然而如果你并不需要全局的pytorch,而且使用conda(或相关开源版本工具)管理python环境,那完全可以安装最新版本的cuda,然后在conda环境中根据pytorch的需求安装对应版本的cuda环境,这样就不会有兼容性问题.下面给出一个环境配置的例子
+
+```yaml
+name: py312cuda129
+channels:
+  - defaults
+  - nvidia
+  - conda-forge
+dependencies:
+  - cuda-toolkit ==12.9.1
+  - python ~=3.12
+  - jupyter
+  - jupyterlab
+  - ipywidgets
+  - ipyparallel
+```
+
+然后你可以激活这个环境,之后安装pytorch
+
+```bash
+conda activate py312cuda129
+pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu129
+```
+
 
 #### A卡rocm安装
 
