@@ -11,7 +11,7 @@ tags:
     - Linux
     - 美化
 header-img: "img/home-bg-o.jpg"
-update: 2025-10-10
+update: 2025-10-23
 ---
 # 属于MacOs用户的Ubuntu配置指南
 
@@ -1409,7 +1409,6 @@ flatpak info <应用ID>
 flatpak update <应用ID>
 ```
 
-
 如果要卸载某个`flatpak`应用,可以用如下命令
 
 ```bash
@@ -1568,6 +1567,15 @@ sudo apt install libfuse2t64
     ```bash
     chmod +x ~/Desktop/xxx.desktop
     ```
+
+这里我提供了一个小工具用于快速集成应用[hsz1273327/todotdesktop](https://github.com/hsz1273327/todotdesktop).这是一个用go写的小工具,下载下来就能用,能省不少事儿.
+
+> 独立`AppImage`的管理
+
+对于网上随处下下来的`AppImage`文件,我们最好放在同一个地方统一管理,我个人推荐放在`~/AppImages`目录下,这样方便备份和迁移,也不会和下面介绍的`appman`管理的`AppImage`冲突.
+
+另一个好处是可以将这个路径也放进`$PATH`中,这样就可以直接在terminal中运行这些`AppImage`文件了.
+
 
 > `PORTABLE LINUX APPS`管理工具
 
