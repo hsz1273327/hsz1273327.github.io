@@ -1777,10 +1777,10 @@ gpu加速:
 
 #### 娱乐工具
 
- | 软件                     | 渠道                                                                          | 说明                         |
- | ------------------------ | ----------------------------------------------------------------------------- | ---------------------------- |
- | vlc                      | [flathub](https://flathub.org/apps/org.videolan.VLC)                          | 知名的开源视频播放器         |
- | NetEase Cloud Music Gtk4 | [flathub](https://flathub.org/apps/com.github.gmg137.netease-cloud-music-gtk) | 网易云音乐的开源第三方客户端 |
+ | 软件                     | 渠道                                                                          | 说明                                                                                                                                             |
+ | ------------------------ | ----------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
+ | vlc                      | [flathub](https://flathub.org/apps/org.videolan.VLC)                          | 知名的开源视频播放器                                                                                                                             |
+ | NetEase Cloud Music Gtk4 | [flathub](https://flathub.org/apps/com.github.gmg137.netease-cloud-music-gtk) | 网易云音乐的开源第三方客户端</br>默认每日推荐是隐藏的</br>要激活可以参考[这个工单](https://github.com/gmg137/netease-cloud-music-gtk/issues/360) |
 
 ## 使用模式
 
