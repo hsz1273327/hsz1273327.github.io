@@ -588,8 +588,8 @@ nvidia-smi -i 0 -pl 200
 2. 启用并启动服务
 
     ```bash
-    sudo systemctl enable rocm-powerlimit.service
-    sudo systemctl start rocm-powerlimit.service
+    sudo systemctl enable amd-powerlimit.service
+    sudo systemctl start amd-powerlimit.service
     ```
 
 ## 基础设置
