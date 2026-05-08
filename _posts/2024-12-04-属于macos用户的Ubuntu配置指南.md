@@ -2,28 +2,29 @@
 layout: post
 title: "属于macos用户的Ubuntu配置指南"
 series:
-    ubuntu_experiment:
-        index: 1
+  ubuntu_experiment:
+    index: 1
 date: 2024-12-04
 author: "Hsz"
 category: recommend
 tags:
-    - Linux
-    - 美化
+  - Linux
+  - 美化
 header-img: "img/home-bg-o.jpg"
-update: 2025-11-13
+update: 2026-05-08
 ---
+
 # 属于MacOs用户的Ubuntu配置指南
 
 说来惭愧,作为一个整天折腾Linux服务器程序员,自己却没有真正折腾过Linux桌面系统,这主要是被MacOs和docker给惯坏了.这次搞aipc顺便就折腾下.
 
 作为一个老MacOs用户,我对这个桌面系统的要求是
 
-+ 精简流畅.
-+ 使用兼容性和支持尽量好的发行版.
-+ 界面和操作尽量接近MacOs.
-+ 能充分利用所有硬件,廉价的在本地折腾ai相关工具
-+ 能打游戏
+- 精简流畅.
+- 使用兼容性和支持尽量好的发行版.
+- 界面和操作尽量接近MacOs.
+- 能充分利用所有硬件,廉价的在本地折腾ai相关工具
+- 能打游戏
 
 选哪个发行版答案就呼之欲出了--标题上的ubuntu.
 
@@ -35,16 +36,18 @@ Ubuntu毕竟是个独立的操作系统,它有自己的一套操作逻辑和对�
 
 Ubuntu首先是个Linux系统,这就意味着它运行在linux内核上而且所有操作都可以在terminal中实现.而桌面图形界面其实可以理解为是一个gui化的bash命令.
 
-Ubuntu的桌面使用的是[GNOME桌面](https://www.gnome.org/),具体到我现在使用的`Ubuntu 24.04 LTS`使用的`GNOME 46`,而`GNOME`是GNU计划中的一部份,它基于纯C实现的[GTK](https://www.gtk.org/)开发. 在Linux桌面这个语境下GUI的实现方案一般就两个--GTK和QT.QT好用但会给用户带来法律上授权上的麻烦;GTK难用但完全开源不会有纠纷.所以作为GNU的一部分自然是选用的GTK.
+Ubuntu的桌面使用的是[GNOME桌面](https://www.gnome.org/),具体到我现在使用的`Ubuntu 24.04.4 LTS`使用的`GNOME 46`,而`GNOME`是GNU计划中的一部份,它基于纯C实现的[GTK](https://www.gtk.org/)开发. 在Linux桌面这个语境下GUI的实现方案一般就两个--GTK和QT.QT好用但会给用户带来法律上授权上的麻烦;GTK难用但完全开源不会有纠纷.所以作为GNU的一部分自然是选用的GTK.
 那由于用了相对开发难度大的GTK,自然的GNOME桌面的逻辑会更简单,资源占用也会相对多些,可配置性也会差不少.与之对应的是[arch linux](https://github.com/archlinux),它使用的就是QT,可配置性和资源占用都会更好,但小bug多,适合自定义桌面比较多的场景,比如steamos就是arch linux变体.
+
+**ps[2026-05-08更新]:Ubuntu的版本选择问题**. Ubuntu的版本分为lts和非lts两种,其中lts是长期支持版本,非lts是短期支持版本.一般来说lts版本更稳定,适合不想频繁更新系统的用户,而非lts版本则包含了更多的新特性和更新,适合喜欢尝鲜的用户.对于大多数用户来说,我推荐使用lts版本,因为它更稳定,而且对于桌面用户来说新特性并不是特别重要.截至到2026年5月,最新的lts版本是Ubuntu 26.04.1 LTS.那我为什么还在使用24.04呢?因为虽然Ubuntu的TLS版本是长期支持的,但并不代表它的linux内核是不会更新的(这也是Ubuntu常被人诟病的地方),而一些软件(点名n卡驱动)对linux内核版本的稳定性要求比较严格,一旦更新了很可能需要重新编译,甚至造成无法正常进系统的情况. 为了避免这种情况,我们要么选择最新版本然后锁定内核版本不更新,要们选上一个大版本的lts版本.比如现在的24.04.4,它的linux内核版本已经锁定了6.17,未来也不会更新了,因此我们就可以放心使用了.
 
 GNOME桌面的结构如下图,
 
 可管理的元素和windows/macos基本是一致的,都是`应用->窗口->工作区`这样的3级归属模式,但使用逻辑就不一样了.GNOME非常强调工作区的作用,它的使用逻辑是
 
-+ Ubuntu鼓励一个应用开一个窗口
-+ 一个窗口下可以多开应用,但应该是相关的应用
-+ 一个工作区下可以多开窗口,但这些窗口应该是相互关联的.
+- Ubuntu鼓励一个应用开一个窗口
+- 一个窗口下可以多开应用,但应该是相关的应用
+- 一个工作区下可以多开窗口,但这些窗口应该是相互关联的.
 
 比如你有一个工作区就专门用来编程,一个工作区就专门用来打游戏.拿来编程的工作区开一个vscode,开一个浏览器查资料,开一个pdf阅读器看文档,那在编程时你就只需要在这个工作区内切窗口就好了.而如果你想打游戏了,直接切工作区到打游戏的哪个工作区就行了.
 
@@ -72,41 +75,40 @@ ubuntu安装好后,默认的grub菜单是隐藏的.这对于一般使用来说�
 
 1. 打开终端,编辑`/etc/default/grub`文件
 
-    ```bash
-    sudo nano /etc/default/grub
-    ```
+   ```bash
+   sudo nano /etc/default/grub
+   ```
 
 2. 修改 GRUB 选项
 
-    找到以下几行,并根据需要进行修改:
+   找到以下几行,并根据需要进行修改:
+   - `GRUB_TIMEOUT_STYLE`,这个值用于设置grub的样式行为.可选值为`hidden`和`menu`.默认为`hidden`,改为`menu`,这样就会显示菜单
+   - `GRUB_TIMEOUT`,这个值表示grub菜单显示的时间,单位是秒.如果你想让它一直显示直到你选择,可以设置为`-1`,如果你想让它显示5秒钟,可以设置为`5`.默认是`0`,表示不显示菜单直接进入系统
+   - `GRUB_DEFAULT`,这个值表示默认启动的菜单项,默认是`0`,表示第一个菜单项.如果你想让它默认启动第二个菜单项,可以设置为`1`.如果你想让它默认启动最后一个菜单项,可以设置为`-1`.如果你想让它默认启动某个特定的菜单项,可以设置为`saved`,然后使用`sudo grub-set-default "菜单项名称"`来设置.
 
-    + `GRUB_TIMEOUT_STYLE`,这个值用于设置grub的样式行为.可选值为`hidden`和`menu`.默认为`hidden`,改为`menu`,这样就会显示菜单
-    + `GRUB_TIMEOUT`,这个值表示grub菜单显示的时间,单位是秒.如果你想让它一直显示直到你选择,可以设置为`-1`,如果你想让它显示5秒钟,可以设置为`5`.默认是`0`,表示不显示菜单直接进入系统
-    + `GRUB_DEFAULT`,这个值表示默认启动的菜单项,默认是`0`,表示第一个菜单项.如果你想让它默认启动第二个菜单项,可以设置为`1`.如果你想让它默认启动最后一个菜单项,可以设置为`-1`.如果你想让它默认启动某个特定的菜单项,可以设置为`saved`,然后使用`sudo grub-set-default "菜单项名称"`来设置.
+   我个人习惯设置如下:
 
-    我个人习惯设置如下:
-
-    ```txt
-    GRUB_TIMEOUT_STYLE=menu # 将 hidden 改为 menu
-    GRUB_TIMEOUT=5          # 设置等待时间为 5 秒,可以根据需要调整
-    GRUB_DEFAULT=0          # 默认启动第一个菜单项,可以根据需要调整
-    ```
+   ```txt
+   GRUB_TIMEOUT_STYLE=menu # 将 hidden 改为 menu
+   GRUB_TIMEOUT=5          # 设置等待时间为 5 秒,可以根据需要调整
+   GRUB_DEFAULT=0          # 默认启动第一个菜单项,可以根据需要调整
+   ```
 
 3. 保存并退出
 
-    在 nano 中,按 `Ctrl + O` 保存文件,然后按 `Ctrl + X` 退出编辑器.
+   在 nano 中,按 `Ctrl + O` 保存文件,然后按 `Ctrl + X` 退出编辑器.
 
 4. 更新 GRUB 配置
 
-    ```bash
-    sudo update-grub
-    ```
+   ```bash
+   sudo update-grub
+   ```
 
 5. 重启系统后生效
 
-    ```bash
-    sudo reboot
-    ```
+   ```bash
+   sudo reboot
+   ```
 
 ### 更换linux内核[危险操作不推荐]
 
@@ -130,55 +132,54 @@ sudo reboot
 
 1. 首先更新软件包列表：
 
-    ```bash
-    sudo apt update
-    ```
+   ```bash
+   sudo apt update
+   ```
 
 2. 然后,列出所有可用的内核映像包:
 
-    ```bash
-    sudo apt-cache search linux-image
-    ```
+   ```bash
+   sudo apt-cache search linux-image
+   ```
 
-    这样你会找到一大堆可用的内核版本. 通常你会看到几个不同的包名它们可能带有不同的后缀,例如:
+   这样你会找到一大堆可用的内核版本. 通常你会看到几个不同的包名它们可能带有不同的后缀,例如:
+   - `linux-image-6.11.0-xx-generic`: 这是标准的通用内核,适用于大多数桌面和服务器.
 
-    + `linux-image-6.11.0-xx-generic`: 这是标准的通用内核,适用于大多数桌面和服务器.
+   - `linux-image-6.11.0-xx-lowlatency`: 这是一个低延迟内核,专为音频制作,实时控制或其他需要极低延迟的应用设计
 
-    + `linux-image-6.11.0-xx-lowlatency`: 这是一个低延迟内核,专为音频制作,实时控制或其他需要极低延迟的应用设计
+   - `linux-image-unsigned-6.11.0-xx-generic`: 这是一个未签名的内核,通常用于需要自定义内核模块或在特定硬件上调试时.对于大多数用户来说你不需要安装这个版本
 
-    + `linux-image-unsigned-6.11.0-xx-generic`: 这是一个未签名的内核,通常用于需要自定义内核模块或在特定硬件上调试时.对于大多数用户来说你不需要安装这个版本
-
-    其中`xx`表示具体的版本号,比如`1019`,`1020`等,在大版本号不变的情况下,版本号越大表示内核更新的补丁越多.
+   其中`xx`表示具体的版本号,比如`1019`,`1020`等,在大版本号不变的情况下,版本号越大表示内核更新的补丁越多.
 
 3. 选择你需要的版本,比如说你想安装`linux-image-6.8.0-1019-generic`,你可以使用如下命令安装:
 
-    ```bash
-    sudo apt install linux-image-6.8.0-1019-generic
-    ```
+   ```bash
+   sudo apt install linux-image-6.8.0-1019-generic
+   ```
 
 4. 安装完成后,你需要更新引导加载器以确保新内核被正确识别:
 
-    ```bash
-    sudo update-grub
-    ```
+   ```bash
+   sudo update-grub
+   ```
 
-    在大多数情况下,当你使用apt命令安装新内核时apt的安装脚本会自动为你运行update-grub,但为了确保万无一失,手动执行一次这个命令总是一个好习惯.
+   在大多数情况下,当你使用apt命令安装新内核时apt的安装脚本会自动为你运行update-grub,但为了确保万无一失,手动执行一次这个命令总是一个好习惯.
 
 5. 最后,重启你的计算机以使用新内核:
 
-    ```bash
-    sudo reboot
-    ```
+   ```bash
+   sudo reboot
+   ```
 
 6. 重启后,在grub菜单中选择`advance`,找到你刚刚安装的内核版本,选择用它启动系统即可.
 
 7. 重新进入ubuntu后你可以使用`uname -r`命令来验证当前正在运行的内核版本:
 
-    ```bash
-    uname -r
-    ```
+   ```bash
+   uname -r
+   ```
 
-    这应该显示你刚刚安装的内核版本.
+   这应该显示你刚刚安装的内核版本.
 
 #### 后遗症
 
@@ -187,6 +188,36 @@ sudo reboot
 另外就是一些本来直接二进制分发的软件可能会因为内核版本不匹配而只能编译安装.
 
 因此,如果你不是特别需要,我并不推荐更换内核.
+
+## 锁定linux内核版本[2026-05-08更新]
+
+如果你用的是最新的tls版本,那这一步就是必须的操作了.我们可以执行如下操作锁定当前正在运行的系统的内核版本,让它不再更新:
+
+1. 动抓取当前版本并锁定
+
+   ```bash
+   # 定义当前版本变量
+   CUR_VERSION=$(uname -r)
+
+   # 锁定核心包（包含内核镜像、模块、头文件）
+   sudo apt-mark hold linux-image-$CUR_VERSION linux-headers-$CUR_VERSION linux-modules-$CUR_VERSION linux-modules-extra-$CUR_VERSION
+   ```
+
+2. [关键]防止“元包”把内核带跑
+
+   在 Ubuntu 中，内核更新通常是由一个叫`linux-generic`或`linux-image-generic`的"元包(Metapackage)"驱动的.它不含实际代码但永远指向最新版本.必须把它们也锁死，否则系统还是会尝试下载更新内核：
+
+   ```bash
+   sudo apt-mark hold linux-generic linux-image-generic linux-headers-generic
+   ```
+
+3. 检查锁定状态
+
+   ```bash
+   apt-mark showhold
+   ```
+
+   如果列表里出现了当前的内核版本号相关的项以及 linux-generic,那么你重启就会永远停留在当前版本了
 
 ## 修复依赖问题
 
@@ -217,12 +248,12 @@ dpkg: 处理软件包 xxxx (--configure)时出错：
 5. 旧的再改成info,删除自己
 
 ```bash
-sudo mv /var/lib/dpkg/info /var/lib/dpkg/info_old 
+sudo mv /var/lib/dpkg/info /var/lib/dpkg/info_old
 sudo mkdir /var/lib/dpkg/info
 sudo apt-get update
-sudo apt-get -f install  
-sudo mv /var/lib/dpkg/info/* /var/lib/dpkg/info_old   
-sudo rm -rf /var/lib/dpkg/info  
+sudo apt-get -f install
+sudo mv /var/lib/dpkg/info/* /var/lib/dpkg/info_old
+sudo rm -rf /var/lib/dpkg/info
 sudo mv /var/lib/dpkg/info_old /var/lib/dpkg/info
 ```
 
@@ -346,15 +377,15 @@ sudo reboot
 
 2. 如果你需要兼容一些老显卡,那你就必须给linux内核降级,比如你需要给MI50显卡安装rocm,那你可以把内核降级到6.11,然后安装n卡驱动570版本,再安装cuda 12.8版本.
 
-    ```bash
-    ...
-    wget https://developer.download.nvidia.com/compute/cuda/12.8.0/local_installers/cuda-repo-ubuntu2404-12-8-local_12.8.0-570.86.10-1_amd64.deb
-    sudo dpkg -i cuda-repo-ubuntu2404-12-8-local_12.8.0-570.86.10-1_amd64.deb
-    sudo cp /var/cuda-repo-ubuntu2404-12-8-local/cuda-*-keyring.gpg /usr/share/keyrings/
-    sudo apt-get update
-    sudo apt-get -y install cuda-toolkit-12-8
-    ...
-    ```
+   ```bash
+   ...
+   wget https://developer.download.nvidia.com/compute/cuda/12.8.0/local_installers/cuda-repo-ubuntu2404-12-8-local_12.8.0-570.86.10-1_amd64.deb
+   sudo dpkg -i cuda-repo-ubuntu2404-12-8-local_12.8.0-570.86.10-1_amd64.deb
+   sudo cp /var/cuda-repo-ubuntu2404-12-8-local/cuda-*-keyring.gpg /usr/share/keyrings/
+   sudo apt-get update
+   sudo apt-get -y install cuda-toolkit-12-8
+   ...
+   ```
 
 然而如果你并不需要全局的pytorch,而且使用conda(或相关开源版本工具)管理python环境,那完全可以安装最新版本的cuda,然后在conda环境中根据pytorch的需求安装对应版本的cuda环境,这样就不会有兼容性问题.下面给出一个环境配置的例子
 
@@ -379,7 +410,6 @@ dependencies:
 conda activate py312cuda129
 pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu129
 ```
-
 
 #### A卡rocm安装
 
@@ -426,7 +456,7 @@ vulkaninfo
 # 查看amd显卡支持情况
 vulkaninfo | grep "AMD"
 # 查看NVIDIA显卡支持情况
-vulkaninfo | grep "NVIDIA" 
+vulkaninfo | grep "NVIDIA"
 ```
 
 ##### vulkan sdk
@@ -449,16 +479,16 @@ export LD_LIBRARY_PATH=$VULKAN_SDK/lib:$LD_LIBRARY_PATH
 
 我们装ubuntu需要核显,对于消费级主机,核显大致可以分为两类
 
-+ 亮机核显,就是intel的核显和amd除了apu系列外的核显,这种核显性能很差,基本不能指望做计算任务,但足够带得起显示器.
-+ 计算核显,就是amd的apu系列的核显,这种核显性能还不错,可以做一些轻量级的计算任务,但也不能指望它能做重型计算任务.
+- 亮机核显,就是intel的核显和amd除了apu系列外的核显,这种核显性能很差,基本不能指望做计算任务,但足够带得起显示器.
+- 计算核显,就是amd的apu系列的核显,这种核显性能还不错,可以做一些轻量级的计算任务,但也不能指望它能做重型计算任务.
 
 通常多显卡的情况主要是如下几种情况:
 
-+ 亮机核显+a卡/n卡,最常见的情况,在linux下一般也是屏蔽核显使用的,所以可以忽略对这个配置的讨论.
-+ apu+a卡/n卡,apu本身带一个还不错的核显,而且由于砍pcie通道所以一般最多配一张显卡而且基本是70ti级别以下的独显,这种配置往往并不是追求性能的方案而是追求性价比的方案,往往是渐进式升级的结果,比如先买个apu,然后再加个独显.也算一种挺常见的配置.我们会在下面讨论单独讨论如何针对这种配置进行设置.
-+ 亮机核显+双n卡,一般是将消费级平台当小型工作站的用户,通常是用来跑ai的,这种配置在linux下也比较常见,我们也会在下面讨论如何针对这种配置进行设置.
-+ 亮机核显+n卡+a卡,比较奇葩的配置,但其实是一个万金油配置,也是可玩性比较高的一个配置,我们下面会有针对性的进行讨论.
-+ 亮机核显+双a卡,很少见,一般是用来跑ai推理的,这里就不讨论了.
+- 亮机核显+a卡/n卡,最常见的情况,在linux下一般也是屏蔽核显使用的,所以可以忽略对这个配置的讨论.
+- apu+a卡/n卡,apu本身带一个还不错的核显,而且由于砍pcie通道所以一般最多配一张显卡而且基本是70ti级别以下的独显,这种配置往往并不是追求性能的方案而是追求性价比的方案,往往是渐进式升级的结果,比如先买个apu,然后再加个独显.也算一种挺常见的配置.我们会在下面讨论单独讨论如何针对这种配置进行设置.
+- 亮机核显+双n卡,一般是将消费级平台当小型工作站的用户,通常是用来跑ai的,这种配置在linux下也比较常见,我们也会在下面讨论如何针对这种配置进行设置.
+- 亮机核显+n卡+a卡,比较奇葩的配置,但其实是一个万金油配置,也是可玩性比较高的一个配置,我们下面会有针对性的进行讨论.
+- 亮机核显+双a卡,很少见,一般是用来跑ai推理的,这里就不讨论了.
 
 对于多显卡用户,我们需要注意如下几点:
 
@@ -476,15 +506,15 @@ apu的核显也会受amd驱动的影响,因此实际上最好别配amd的独显,
 > nvidia独显
 
 对于独显为N卡的情况,我建议先安装amd的驱动,确保核显能用,然后再安装n卡的驱动.
-  
+
 #### 充分利用apu的核显
 
 为了充分利用apu,我建议用独显做主力卡,但apu也不要屏蔽核显,更加推荐显示器接核显使用混合模式.这并不会有什么坏处,反而在一些场景下可能还是更好的选择.原因有:
 
-+ 显示器接核显可以减少独显的负担,尤其是对于一些4k显示器来说,独显不需要处理桌面显示的任务,可以专心做计算任务.
-+ 可以利用比如小黄鸭(Lossless Scaling)插帧,插帧对显卡算力要求不高,核显完全可以胜任,独显可以专心做计算任务;同时核显比走pcie的独显离cpu更近,输出延迟可以得到更好的控制.这在游戏场景很常用(steam部分会做进一步介绍).
-+ 在重型任务时我们主要用独显,空出来的核显可以用来跑一些轻量级任务,比如显卡跑渲染的时候拿核显打打游戏,或者显卡跑训练的时候拿核显跑点推理什么的,这样可以更充分利用硬件资源.
-+ 核显使用内存,可以用来跑像qwen3 30BA3这样的吃显存但激活层少的moe模型,消费级显卡很少有足够的显存可以跑得动这种模型,但核显可以,还不影响独显的使用.
+- 显示器接核显可以减少独显的负担,尤其是对于一些4k显示器来说,独显不需要处理桌面显示的任务,可以专心做计算任务.
+- 可以利用比如小黄鸭(Lossless Scaling)插帧,插帧对显卡算力要求不高,核显完全可以胜任,独显可以专心做计算任务;同时核显比走pcie的独显离cpu更近,输出延迟可以得到更好的控制.这在游戏场景很常用(steam部分会做进一步介绍).
+- 在重型任务时我们主要用独显,空出来的核显可以用来跑一些轻量级任务,比如显卡跑渲染的时候拿核显打打游戏,或者显卡跑训练的时候拿核显跑点推理什么的,这样可以更充分利用硬件资源.
+- 核显使用内存,可以用来跑像qwen3 30BA3这样的吃显存但激活层少的moe模型,消费级显卡很少有足够的显存可以跑得动这种模型,但核显可以,还不影响独显的使用.
 
 ### 亮机核显+双n卡
 
@@ -496,27 +526,26 @@ apu的核显也会受amd驱动的影响,因此实际上最好别配amd的独显,
 
 这种配置比较奇葩,但其实是一个万金油配置,也是可玩性比较高的一个配置.这种配置可以让你同时利用n卡和a卡的优势,
 
-+ n卡有cuda,对于ai相关生态来说非常好用,尤其是训练方面
-+ a卡有rocm,hip,天生对opencl有更好的支持,很多工业软件对opencl的支持也不错,而且a卡的显存一般都比较大,对于一些大模型推理来说更有优势.
-+ 核显可以用来跑一些轻量级任务,带带显示器看看视频什么的.
-+ 想在打游戏时充分利用两张卡的性能可以像apu插帧一样借助小黄鸭(Lossless Scaling)来实现,具体就是
+- n卡有cuda,对于ai相关生态来说非常好用,尤其是训练方面
+- a卡有rocm,hip,天生对opencl有更好的支持,很多工业软件对opencl的支持也不错,而且a卡的显存一般都比较大,对于一些大模型推理来说更有优势.
+- 核显可以用来跑一些轻量级任务,带带显示器看看视频什么的.
+- 想在打游戏时充分利用两张卡的性能可以像apu插帧一样借助小黄鸭(Lossless Scaling)来实现,具体就是
+  1. 显示器接a卡
+  2. 用小黄鸭(Lossless Scaling)将游戏窗口放大到全屏,并开启插帧功能
+  3. 渲染用n卡跑,插帧用a卡跑
 
-    1. 显示器接a卡
-    2. 用小黄鸭(Lossless Scaling)将游戏窗口放大到全屏,并开启插帧功能
-    3. 渲染用n卡跑,插帧用a卡跑
-
-    这样就可以充分利用两张卡的性能了.
+  这样就可以充分利用两张卡的性能了.
 
 但这种配置坑是最多的,主要是驱动和计算库的冲突问题.因此我建议像下面这样安装:
 
-+ 插满卡后核显接显示器安装ubuntu,并在安装过程中勾选`第三方驱动安装`.
-+ 安装好系统后先安装amd的驱动和计算库,然后关机显示器改接n卡开机.确保驱动安装好核显能用.
-+ 然后关机,显示器再接回核显,再安装n卡的驱动和cuda.注意安装n卡驱动时选择完全闭源的`nvidia-driver`,不要选择带开源部分的`nvidia-open`,因为`nvidia-open`会缺失vulkan的支持,会影响游戏等程序使用n卡运行.
-+ 安装好后重启,然后使用`nvidia-smi`和`rocminfo`命令查看两张卡是否都能被识别.
+- 插满卡后核显接显示器安装ubuntu,并在安装过程中勾选`第三方驱动安装`.
+- 安装好系统后先安装amd的驱动和计算库,然后关机显示器改接n卡开机.确保驱动安装好核显能用.
+- 然后关机,显示器再接回核显,再安装n卡的驱动和cuda.注意安装n卡驱动时选择完全闭源的`nvidia-driver`,不要选择带开源部分的`nvidia-open`,因为`nvidia-open`会缺失vulkan的支持,会影响游戏等程序使用n卡运行.
+- 安装好后重启,然后使用`nvidia-smi`和`rocminfo`命令查看两张卡是否都能被识别.
 
 #### 多显卡的功耗限制
 
-多显卡情况下功耗往往是一个问题,一般来说apu功耗不会太高,120w基本就跑满了,但独显现在一个个都是耗电大户,因此如果是双独显方案我们需要先查清楚独显的功耗墙并准备一个足够冗余的大电源,建议1200w以上. 
+多显卡情况下功耗往往是一个问题,一般来说apu功耗不会太高,120w基本就跑满了,但独显现在一个个都是耗电大户,因此如果是双独显方案我们需要先查清楚独显的功耗墙并准备一个足够冗余的大电源,建议1200w以上.
 
 除了电源外,我们还可以通过软件来限制显卡的功耗,以确保电源不会超载.
 
@@ -544,53 +573,53 @@ nvidia-smi -i 0 -pl 200
 
 上面介绍的设置都是临时设置,在机器重启后会失效,如果要持久化功耗限制,可以利用`systemd`来实现.
 
->> n卡限制功耗的设置:
+> > n卡限制功耗的设置:
 
 1. 创建服务文件，例如 `/etc/systemd/system/nvidia-powerlimit.service`:
 
-    ```conf
-    [Unit]
-    Description=Set NVIDIA GPU power limit on startup
-    After=multi-user.target
+   ```conf
+   [Unit]
+   Description=Set NVIDIA GPU power limit on startup
+   After=multi-user.target
 
-    [Service]
-    Type=oneshot
-    ExecStart=/usr/bin/nvidia-smi -i 0 -pl 200  # 将参数改为你想要的功耗和显卡ID
+   [Service]
+   Type=oneshot
+   ExecStart=/usr/bin/nvidia-smi -i 0 -pl 200  # 将参数改为你想要的功耗和显卡ID
 
-    [Install]
-    WantedBy=multi-user.target
-    ```
+   [Install]
+   WantedBy=multi-user.target
+   ```
 
 2. 启用并启动服务
 
-    ```bash
-    sudo systemctl enable nvidia-powerlimit.service
-    sudo systemctl start nvidia-powerlimit.service
-    ```
+   ```bash
+   sudo systemctl enable nvidia-powerlimit.service
+   sudo systemctl start nvidia-powerlimit.service
+   ```
 
->> a卡限制功耗的设置:
+> > a卡限制功耗的设置:
 
 1. 创建服务文件，例如 `/etc/systemd/system/amd-powerlimit.service`:
 
-    ```conf
-    [Unit]
-    Description=Set AMD GPU power limit on startup
-    After=multi-user.target
+   ```conf
+   [Unit]
+   Description=Set AMD GPU power limit on startup
+   After=multi-user.target
 
-    [Service]
-    Type=oneshot
-    ExecStart=/usr/bin/rocm-smi --setpoweroverdrive 150 -d 0  # 将参数改为你想要的功耗和显卡ID
+   [Service]
+   Type=oneshot
+   ExecStart=/usr/bin/rocm-smi --setpoweroverdrive 150 -d 0  # 将参数改为你想要的功耗和显卡ID
 
-    [Install]
-    WantedBy=multi-user.target
-    ```
+   [Install]
+   WantedBy=multi-user.target
+   ```
 
 2. 启用并启动服务
 
-    ```bash
-    sudo systemctl enable amd-powerlimit.service
-    sudo systemctl start amd-powerlimit.service
-    ```
+   ```bash
+   sudo systemctl enable amd-powerlimit.service
+   sudo systemctl start amd-powerlimit.service
+   ```
 
 ## 基础设置
 
@@ -610,36 +639,36 @@ git工具我们需要好好设置下,毕竟ubuntu下很多东西,尤其是大文
 
 1. 安装`git`,ubuntu并不会默认安装git工具,因此我们需要先安装git
 
-    ```bash
-    sudo apt install git # 安装git
-    sudo apt-get install git-lfs
-    ```
+   ```bash
+   sudo apt install git # 安装git
+   sudo apt-get install git-lfs
+   ```
 
 2.设置以支持大文件传输
 
-+ `.gitconfig`
+- `.gitconfig`
 
-    ```txt
-    [filter "lfs"]
-        clean = git-lfs clean -- %f
-        smudge = git-lfs smudge -- %f
-        process = git-lfs filter-process
-        required = true
-    [user]
-        name = HUANG SIZHE
-        email = hsz1273327@gmail.com
-    [http]
-        postBuffer = 157286400
-        version = HTTP/1.1
+  ```txt
+  [filter "lfs"]
+      clean = git-lfs clean -- %f
+      smudge = git-lfs smudge -- %f
+      process = git-lfs filter-process
+      required = true
+  [user]
+      name = HUANG SIZHE
+      email = hsz1273327@gmail.com
+  [http]
+      postBuffer = 157286400
+      version = HTTP/1.1
 
-    [core] 
-        packedGitLimit = 512m 
-        packedGitWindowSize = 512m 
-    [pack] 
-        deltaCacheSize = 2047m 
-        packSizeLimit = 2047m 
-        windowMemory = 2047m
-    ```
+  [core]
+      packedGitLimit = 512m
+      packedGitWindowSize = 512m
+  [pack]
+      deltaCacheSize = 2047m
+      packSizeLimit = 2047m
+      windowMemory = 2047m
+  ```
 
 ### 配置代理
 
@@ -659,19 +688,19 @@ alias unsetproxy="unset https_proxy;unset http_proxy;unset all_proxy"
 
 ### ssh客户端设置
 
-+ `.ssh/config`
+- `.ssh/config`
 
-    ```txt
-    ControlPersist 4h
-    ServerAliveInterval 30
-    ControlMaster auto
-    ControlPath /tmp/ssh_mux_%h_%p_%r
-    ForwardX11Trusted yes
+  ```txt
+  ControlPersist 4h
+  ServerAliveInterval 30
+  ControlMaster auto
+  ControlPath /tmp/ssh_mux_%h_%p_%r
+  ForwardX11Trusted yes
 
-    HostKeyAlgorithms +ssh-rsa
-    PubkeyAcceptedKeyTypes +ssh-rsa
+  HostKeyAlgorithms +ssh-rsa
+  PubkeyAcceptedKeyTypes +ssh-rsa
 
-    ```
+  ```
 
 ### 安装gnome-tweaks
 
@@ -723,23 +752,23 @@ sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/too
 
 > zsh的经典插件安装
 
-+ autojump
+- autojump
 
-    ```bash
-    sudo apt install autojump
-    ```
+  ```bash
+  sudo apt install autojump
+  ```
 
-+ zsh-autosuggestions
+- zsh-autosuggestions
 
-    ```bash
-    git clone https://github.com/zsh-users/zsh-autosuggestions $ZSH_CUSTOM/plugins/zsh-autosuggestions
-    ```
+  ```bash
+  git clone https://github.com/zsh-users/zsh-autosuggestions $ZSH_CUSTOM/plugins/zsh-autosuggestions
+  ```
 
-+ `zsh-syntax-highlighting`
+- `zsh-syntax-highlighting`
 
-    ```bash
-    git clone https://github.com/zsh-users/zsh-syntax-highlighting $ZSH_CUSTOM/plugins/zsh-syntax-highlighting
-    ```
+  ```bash
+  git clone https://github.com/zsh-users/zsh-syntax-highlighting $ZSH_CUSTOM/plugins/zsh-syntax-highlighting
+  ```
 
 在`~/.zshrc`中配置启用这些插件:
 
@@ -807,27 +836,27 @@ ubuntu中字体分为`界面字体`,`文档字体`,`等宽字体`.所谓`界面�
 
 在中文环境中,我们对字体的要求自然是对中问支持良好,而作为编程写文档为主用途来说,字体优雅辨识度高就是重中之重. 下面是我推荐的几种字体
 
-+ [思源宋体/黑体](https://github.com/notofonts/noto-cjk),思源宋体/黑体是由Adobe和Google两家公司合作开发的中文字体,具有良好的字形结构和视觉效果.该字体支持的字符编码达到了GB18030字符集的完整覆盖,在Linux系统中运行稳定且无需进行额外的配置,舒适自然,适用于流畅的中英文混排场景.这个字体适合用作`界面字体`或者`文档字体`
+- [思源宋体/黑体](https://github.com/notofonts/noto-cjk),思源宋体/黑体是由Adobe和Google两家公司合作开发的中文字体,具有良好的字形结构和视觉效果.该字体支持的字符编码达到了GB18030字符集的完整覆盖,在Linux系统中运行稳定且无需进行额外的配置,舒适自然,适用于流畅的中英文混排场景.这个字体适合用作`界面字体`或者`文档字体`
 
-    ```bash
-    # `noto sans cjk sc`为黑体,`noto serif cjk sc`为宋体
-    sudo apt-get install fonts-noto-cjk
-    ```
+  ```bash
+  # `noto sans cjk sc`为黑体,`noto serif cjk sc`为宋体
+  sudo apt-get install fonts-noto-cjk
+  ```
 
-+ [nerd-fonts](https://github.com/ryanoasis/nerd-fonts),是一套专门为编程设计的字体,适合给terminal用
+- [nerd-fonts](https://github.com/ryanoasis/nerd-fonts),是一套专门为编程设计的字体,适合给terminal用
 
-    ```bash
-    cd workspace/init_source
-    git clone https://github.com/ryanoasis/nerd-fonts.git --depth 1
-    ```
+  ```bash
+  cd workspace/init_source
+  git clone https://github.com/ryanoasis/nerd-fonts.git --depth 1
+  ```
 
 ### 设置字体
 
 设置全局字体在`显示应用`->`工具`->`优化`.选中`字体`这个位置,我个人习惯设置成如下:
 
-+ `界面文本`: `Noto Sans CJK SC Meduim`
-+ `文档文本`: `Noto Serif CJK SC Meduim`
-+ `等宽文本`: `Ubuntu San Font`
+- `界面文本`: `Noto Sans CJK SC Meduim`
+- `文档文本`: `Noto Serif CJK SC Meduim`
+- `等宽文本`: `Ubuntu San Font`
 
 之后我们可以进terminal,在`首选项`->`default`->`自定义字体`中选择`Ubuntu Normal Nerd Font`.
 
@@ -879,9 +908,9 @@ ubuntu中蓝牙设备在机器长期不用后会自动断开连接.这对于一�
 
 在linux桌面环境下输入法似乎是一个比较麻烦的问题.在Linux系统上常见的输入法框架(Keyboard input method system)有三种:
 
-+ IBus(Intelligent Input Bus),也是ubuntu的默认输入法
-+ Fcitx(FlexibleInput Method Framework),谷歌搜狗等用的框架,
-+ XIM(X Input Method).一般没啥用
+- IBus(Intelligent Input Bus),也是ubuntu的默认输入法
+- Fcitx(FlexibleInput Method Framework),谷歌搜狗等用的框架,
+- XIM(X Input Method).一般没啥用
 
 上面的3种输入法框架Ubuntu 24.04都自带,但相对而言Fcitx可能是更智能的选择,因为字库比较多.
 
@@ -891,25 +920,25 @@ ubuntu中蓝牙设备在机器长期不用后会自动断开连接.这对于一�
 2. 在`语言支持`中选择默认的输入法框架为`Fcitx 5`
 3. 在`/etc/environment`中设置环境变量
 
-    ```bash
-    LANG=zh_CN.UTF-8
-    LANGUAGE=zh_CN:en_US
+   ```bash
+   LANG=zh_CN.UTF-8
+   LANGUAGE=zh_CN:en_US
 
-    XMODIFIERS=@im=fcitx
-    QT_IM_MODULE=fcitx
-    GTK_IM_MODULE=fcitx
-    ```
+   XMODIFIERS=@im=fcitx
+   QT_IM_MODULE=fcitx
+   GTK_IM_MODULE=fcitx
+   ```
 
-    之后重启
+   之后重启
 
 4. 在`显示应用->工具->优化`中将`Fcitx 5`添加自启动项,重启即可
 
 5. 安装Gnome插件`Input Method Panel`
 6. 着全局代理执行如下命令
 
-    ```bash
-    curl -sSL https://www.debuggerx.com/fcitx5_customizer/fcitx5_customizer.sh | bash -s -- recommend
-    ```
+   ```bash
+   curl -sSL https://www.debuggerx.com/fcitx5_customizer/fcitx5_customizer.sh | bash -s -- recommend
+   ```
 
 7. 之后除了去掉`搜狗词库`外都按推荐的来即可
 
@@ -919,47 +948,47 @@ ubuntu中蓝牙设备在机器长期不用后会自动断开连接.这对于一�
 
 1. 重新设置一些系统级快捷键
 
-    我们可以进入`设置->键盘->键盘快捷键->查看及自定义快捷键`
+   我们可以进入`设置->键盘->键盘快捷键->查看及自定义快捷键`
 
-    | 分类   | 操作             | 按键组合              |
-    | ------ | ---------------- | --------------------- |
-    | 启动器 | 启动终端         | `Control + Alt + T`   |
-    | 启动器 | 全局搜索         | `Super+ Space`        |
-    | 导航   | 切换应用         | `Control+ Tab`        |
-    | 截图   | 全屏截图         | `Shift + Control + 2` |
-    | 截图   | 窗口截图         | `Shift + Control + 3` |
-    | 截图   | 截图             | `Shift + Control + 4` |
-    | 截图   | 录屏             | `Shift + Control + 5` |
-    | 窗口   | 全屏模式切换     | `Super + Control + F` |
-    | 窗口   | 最大化模式切换   | `Alt + Control + F`   |
-    | 窗口   | 隐藏窗口(最小化) | `Control + M`         |
-    | 窗口   | 关闭应用         | `Control + Q`         |
-    | 系统   | 锁定屏幕         | `Control + Super + Q` |
+   | 分类   | 操作             | 按键组合              |
+   | ------ | ---------------- | --------------------- |
+   | 启动器 | 启动终端         | `Control + Alt + T`   |
+   | 启动器 | 全局搜索         | `Super+ Space`        |
+   | 导航   | 切换应用         | `Control+ Tab`        |
+   | 截图   | 全屏截图         | `Shift + Control + 2` |
+   | 截图   | 窗口截图         | `Shift + Control + 3` |
+   | 截图   | 截图             | `Shift + Control + 4` |
+   | 截图   | 录屏             | `Shift + Control + 5` |
+   | 窗口   | 全屏模式切换     | `Super + Control + F` |
+   | 窗口   | 最大化模式切换   | `Alt + Control + F`   |
+   | 窗口   | 隐藏窗口(最小化) | `Control + M`         |
+   | 窗口   | 关闭应用         | `Control + Q`         |
+   | 系统   | 锁定屏幕         | `Control + Super + Q` |
 
 2. 重新设置一些terminal快捷键
 
-    右键terminal,点击`首选项`,在`快捷键`中进行如下修改
+   右键terminal,点击`首选项`,在`快捷键`中进行如下修改
 
-    | 操作       | 按键组合      |
-    | ---------- | ------------- |
-    | 复制       | `Control + C` |
-    | 黏贴       | `Control + V` |
-    | 编辑器全选 | `Control + A` |
-    | 关闭窗口   | `Control + Q` |
+   | 操作       | 按键组合      |
+   | ---------- | ------------- |
+   | 复制       | `Control + C` |
+   | 黏贴       | `Control + V` |
+   | 编辑器全选 | `Control + A` |
+   | 关闭窗口   | `Control + Q` |
 
 3. 设置vscode.
 
-    进入`文件->首选项->键盘快捷方式`通过搜索关键字替换快捷键
+   进入`文件->首选项->键盘快捷方式`通过搜索关键字替换快捷键
 
-    | 操作       | 按键组合          | 冲突                                                |
-    | ---------- | ----------------- | --------------------------------------------------- |
-    | 格式化文档 | `Shift + Alt + F` | 会有两个冲突,分别设置为`Alt + F` 和`Shift + F` 即可 |
+   | 操作       | 按键组合          | 冲突                                                |
+   | ---------- | ----------------- | --------------------------------------------------- |
+   | 格式化文档 | `Shift + Alt + F` | 会有两个冲突,分别设置为`Alt + F` 和`Shift + F` 即可 |
 
 4. 左侧`Control`和`Win`键(Linux下`Super`键,Mac下`Command`键)互换映射.
 
-    点击`显示应用`,打开`工具->优化`,选择`键盘->布局->其他布局`,勾选`Ctrl位置->交换左win左ctrl`
+   点击`显示应用`,打开`工具->优化`,选择`键盘->布局->其他布局`,勾选`Ctrl位置->交换左win左ctrl`
 
-    这样操作起来就和mac中一样了.如果你的键盘是机械键盘,你也可以将`Contrl`和`Win`键互换位置
+   这样操作起来就和mac中一样了.如果你的键盘是机械键盘,你也可以将`Contrl`和`Win`键互换位置
 
 这样我们就可以将整机的快捷键统一为如下,需要注意现在你的键盘`Win`键和`Control`已经互换了位置:
 
@@ -1117,9 +1146,9 @@ cd WhiteSur-icon-theme
 
 在`显示应用->工具->优化`中选中`外观`然后设置.我个人习惯用如下设置
 
-+ `图标`: `WhiteSur-light`
-+ `shell`:  `WhiteSur-light-solid`
-+ `过时应用程序`: `WhiteSur-light-solid`
+- `图标`: `WhiteSur-light`
+- `shell`: `WhiteSur-light-solid`
+- `过时应用程序`: `WhiteSur-light-solid`
 
 #### 美化鼠标
 
@@ -1130,7 +1159,7 @@ cd WhiteSur-icon-theme
 
 ```bash
 cd macOS
-sudo mv macOS* /usr/share/icons/ 
+sudo mv macOS* /usr/share/icons/
 sudo reboot
 ```
 
@@ -1206,7 +1235,7 @@ sudo apt-get install gnome-browser-connector
 | [Removable Drive Menu](https://extensions.gnome.org/extension/7/removable-drive-menu/)                        | 高       | 顶栏的移动存储操作工具                                                              | ---                                                                                                                                  |
 | [GSConnect](https://extensions.gnome.org/extension/1319/gsconnect/)                                           | 高       | 顶栏快速连接移动端设备                                                              | 需要配合app`kde connect`                                                                                                             |
 | [Clipboard Indicator](https://extensions.gnome.org/extension/779/clipboard-indicator/)                        | 中       | 顶栏剪切板管理功能,可以保存近期的复制内容                                           | ---                                                                                                                                  |
-| [Vitals](https://extensions.gnome.org/extension/1460/vitals/)                                                 | 中       | 顶栏系统监控                                                                        | 需要额外安装`sudo apt install gir1.2-gtop-2.0 lm-sensors`获取硬盘信息          ---                                                   |
+| [Vitals](https://extensions.gnome.org/extension/1460/vitals/)                                                 | 中       | 顶栏系统监控                                                                        | 需要额外安装`sudo apt install gir1.2-gtop-2.0 lm-sensors`获取硬盘信息 ---                                                            |
 | [Lock Keys](https://extensions.gnome.org/extension/1532/lock-keys/)                                           | 低       | 顶栏大小写锁定提示                                                                  | ---                                                                                                                                  |
 | [Screenshort-cut](https://extensions.gnome.org/extension/6868/screenshort-cut/)                               | 低       | 顶栏截图工具                                                                        |                                                                                                                                      |
 | [Todoit](https://extensions.gnome.org/extension/7538/todo-list/)                                              | 低       | 顶部todolist                                                                        | ---                                                                                                                                  |
@@ -1221,76 +1250,76 @@ sudo apt-get install gnome-browser-connector
 
 除此之外,我个人推荐对系统默认插件做如下处理
 
-+ 如果安装了`dash to dock`我们最好把它关掉,因为自带插件`Ubuntu Dock`会在安装了`dash to dock`的情况下直接调用它,开了就相当于启动了两份`dash to dock`会造成混乱.
+- 如果安装了`dash to dock`我们最好把它关掉,因为自带插件`Ubuntu Dock`会在安装了`dash to dock`的情况下直接调用它,开了就相当于启动了两份`dash to dock`会造成混乱.
 
-+ 如果安装有`applications-menu`则在全部配置完成后`dash to dock`插件中关闭`显示应用程序`
+- 如果安装有`applications-menu`则在全部配置完成后`dash to dock`插件中关闭`显示应用程序`
 
-+ `weather-or-not`插件依赖`gnome weahter`,我们需要先安装`gnome weahter`之后打开,输入自己所在的城市(用中文搜),重启后就可以激活,推荐将插件的位置设置为`clock left center`
+- `weather-or-not`插件依赖`gnome weahter`,我们需要先安装`gnome weahter`之后打开,输入自己所在的城市(用中文搜),重启后就可以激活,推荐将插件的位置设置为`clock left center`
 
-+ [可选]禁用Desktop Icons,这个插件会让桌面有图标(默认会有你的home目录文件夹).如果无法关闭(我就碰到了这种情况)我们可以进去它的设置把`在桌面显示个人文件夹`关掉
+- [可选]禁用Desktop Icons,这个插件会让桌面有图标(默认会有你的home目录文件夹).如果无法关闭(我就碰到了这种情况)我们可以进去它的设置把`在桌面显示个人文件夹`关掉
 
 ## 安装docker环境
 
 可以这么说,原生的docker环境是linux系统最大的竞争力之一,docker自然是要装的,而且必须装原生docker!
 
-+ 添加docker源
+- 添加docker源
 
-    ```bash
-    # Add Docker's official GPG key:
-    sudo apt-get update
-    sudo apt-get install ca-certificates curl
-    sudo install -m 0755 -d /etc/apt/keyrings
-    sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
-    sudo chmod a+r /etc/apt/keyrings/docker.asc
+  ```bash
+  # Add Docker's official GPG key:
+  sudo apt-get update
+  sudo apt-get install ca-certificates curl
+  sudo install -m 0755 -d /etc/apt/keyrings
+  sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
+  sudo chmod a+r /etc/apt/keyrings/docker.asc
 
-    # Add the repository to Apt sources:
-    echo \
-    "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu \
-    $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
-    sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
-    
-    sudo apt-get update
-    ```
+  # Add the repository to Apt sources:
+  echo \
+  "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu \
+  $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
+  sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
 
-+ 安装docker
+  sudo apt-get update
+  ```
 
-    ```bash
-    sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
-    ```
+- 安装docker
 
-+ 设置非root权限使用docker
+  ```bash
+  sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+  ```
 
-    ```bash
-    sudo groupadd docker
-    sudo usermod -aG docker $USER
-    newgrp docker
-    ```
+- 设置非root权限使用docker
 
-+ 修改docker配置增加镜像站
+  ```bash
+  sudo groupadd docker
+  sudo usermod -aG docker $USER
+  newgrp docker
+  ```
 
-    ```bash
-    sudo nano /etc/docker/daemon.json
-    ```
+- 修改docker配置增加镜像站
 
-    ```json
-    {
-        "registry-mirrors":[
-            "https://hub.geekery.cn",
-            "https://hub.littlediary.cn",
-            "https://registry.dockermirror.com"
-        ]
-    }
-    ```
+  ```bash
+  sudo nano /etc/docker/daemon.json
+  ```
 
-+ 安装轻量级docker监控工具[whaler](https://flathub.org/apps/com.github.sdv43.whaler),这个工具可以监控系统中的容器和compose-stack.已经相当够用.
+  ```json
+  {
+    "registry-mirrors": [
+      "https://hub.geekery.cn",
+      "https://hub.littlediary.cn",
+      "https://registry.dockermirror.com"
+    ]
+  }
+  ```
 
-+ 重启后生效,然后就可以使用了
+- 安装轻量级docker监控工具[whaler](https://flathub.org/apps/com.github.sdv43.whaler),这个工具可以监控系统中的容器和compose-stack.已经相当够用.
+
+- 重启后生效,然后就可以使用了
 
 ## 安装常用环境
 
 ubuntu的apt是最常用的环境安装工具,但apt工具安装的包和应用都是系统级的,一旦出问题那就问题大了.因此遵循macos上的习惯,我们装[homebrew](https://docs.brew.sh/Installation).
 
-*注意*:
+_注意_:
 
 1. `arm`和`x86`架构无法使用`homebrew`,只有`x86_amd64`才可以
 2. linux下无法使用`Homebrew Cask`
@@ -1350,18 +1379,18 @@ linux上目前应用的分发是相当碎片化的,为了可以安装管理各�
 
 在ubuntu中我们要安装`Flatpak`应用需要先安装如下内容:
 
-+ `Flatpak`客户端工具
+- `Flatpak`客户端工具
 
-    ```bash
-    sudo apt install flatpak
-    ```
+  ```bash
+  sudo apt install flatpak
+  ```
 
-+ `Gnome`环境下的`Flatpak`支持插件
+- `Gnome`环境下的`Flatpak`支持插件
 
-    ```bash
-    sudo apt install gnome-software-plugin-flatpak
-    sudo reboot
-    ```
+  ```bash
+  sudo apt install gnome-software-plugin-flatpak
+  sudo reboot
+  ```
 
 > 设置`flatpak`仓库
 
@@ -1499,7 +1528,7 @@ sudo apt install synaptic ### 安装资源监控工具
 
 注意`AppImage`实际有两个版本,版本1基本已经废弃,只会在一些已经停止维护的古早软件上有机会看到,这里讨论的都是版本2的`AppImage应用`
 
->> 直接执行`AppImage应用`
+> > 直接执行`AppImage应用`[2026-05-08更新]
 
 直接执行`AppImage`文件的原理很简单,`AppImage`文件里面有个[SquashFS](https://docs.kernel.org/filesystems/squashfs.html)的文件系统,运行的时候会借助[libfuse](https://github.com/libfuse/libfuse)挂在到一个临时的endpoint,里面的内容类似`独立归档应用`,有所有只读的文件,包括可执行文件,库文件,静态数据等.除此之外都和普通的软件运行环境是一样.也就是说直接运行`AppImage`文件相当于挂载了一块只读盘执行其中的可执行文件.
 
@@ -1510,7 +1539,17 @@ sudo add-apt-repository universe
 sudo apt install libfuse2t64
 ```
 
-在满足这个条件后,安装`AppImage应用`就很简单了
+在较新版本的linux内核(Ubuntu 24.04.4使用的6.17就是)后增强了内核的安全性,默认限制了非特权用户创建`User Namespaces`,而这恰恰是`AppImage`和容器化应用运行的基础.因此我们需要用如下命令来放开这块的限制
+
+<!-- ```bash
+echo 'kernel.unprivileged_userns_clone=1' | sudo tee /etc/sysctl.d/99-userns.conf\nsudo sysctl -p /etc/sysctl.d/99-userns.conf
+``` -->
+
+```bash
+echo 'kernel.apparmor_restrict_unprivileged_userns = 0' | sudo tee /etc/sysctl.d/20-apparmor-mint.conf
+```
+
+在满足这些条件后,安装`AppImage应用`就很简单了
 
 1. 下载`.AppImage`为后缀的文件
 2. `chmod +x 文件名.AppImage`给`AppImage应用`服务可执行权限
@@ -1518,7 +1557,7 @@ sudo apt install libfuse2t64
 
 需要注意现在很多应用是`electron`开发的,他们底层是`Chromium`,对于这类应用我们需要执行是增加参数`--no-sandbox`,否则会报错,这是`Chromium`的限制
 
->> 提取`AppImage应用`后当做`独立归档应用`处理
+> > 提取`AppImage应用`后当做`独立归档应用`处理
 
 `AppImage应用`自带的运行时支持使用flage`--appimage-extract`将其中的内容解包成一个文件夹([AppDir](https://docs.appimage.org/reference/appdir.html))放到路径`squashfs-root`下.
 提取出来以后我们完全可以将它当做`独立归档应用`处理
@@ -1536,37 +1575,37 @@ sudo apt install libfuse2t64
 1. 下载软件压缩包,并解药到`~/Applications`目录
 2. 进入`~/.local/share/applications`目录,创建`xxx.desktop`并编辑
 
-    ```toml
-    [Desktop Entry]
-    Version=<应用版本>
-    Type=Application
-    Encoding=UTF-8
-    Name=<应用名>
-    Comment=<应用说明>
-    Icon=<应用图标路径>
-    Exec=<应用可执行文件路径> %U
-    Terminal=false
-    Categories=Application;
-    ```
+   ```toml
+   [Desktop Entry]
+   Version=<应用版本>
+   Type=Application
+   Encoding=UTF-8
+   Name=<应用名>
+   Comment=<应用说明>
+   Icon=<应用图标路径>
+   Exec=<应用可执行文件路径> %U
+   Terminal=false
+   Categories=Application;
+   ```
 
-    其中
-    + `Version`: 应用版本
-    + `Type`: 指定快捷方式类型
-    + `Encoding`: 指定编码格式
-    + `Name`: 快捷方式的名称
-    + `Comment`: 快捷方式的简短描述
-    + `Icon`: 快捷方式的图标路径,一般解压后都有
-    + `Exec`: 要执行的命令. 是一个占位符如果快捷方式是通过文件管理器启动的,则使用`%U`这个占位符指定文件将被作为参数传递给命令.
-    + `Terminal`: 如果程序需要在终端中运行,则设置为true;否则设置为false
-    + `Categories`: 用于帮助应用程序菜单对快捷方式进行分类
+   其中
+   - `Version`: 应用版本
+   - `Type`: 指定快捷方式类型
+   - `Encoding`: 指定编码格式
+   - `Name`: 快捷方式的名称
+   - `Comment`: 快捷方式的简短描述
+   - `Icon`: 快捷方式的图标路径,一般解压后都有
+   - `Exec`: 要执行的命令. 是一个占位符如果快捷方式是通过文件管理器启动的,则使用`%U`这个占位符指定文件将被作为参数传递给命令.
+   - `Terminal`: 如果程序需要在终端中运行,则设置为true;否则设置为false
+   - `Categories`: 用于帮助应用程序菜单对快捷方式进行分类
 
-    其他字段可以参考[desktop-entry-spec相关规定](https://specifications.freedesktop.org/desktop-entry-spec/latest/recognized-keys.html)
+   其他字段可以参考[desktop-entry-spec相关规定](https://specifications.freedesktop.org/desktop-entry-spec/latest/recognized-keys.html)
 
 3. 为这个`.desktop`文件赋予可执行权限
 
-    ```bash
-    chmod +x ~/Desktop/xxx.desktop
-    ```
+   ```bash
+   chmod +x ~/Desktop/xxx.desktop
+   ```
 
 这里我提供了一个小工具用于快速集成应用[hsz1273327/todotdesktop](https://github.com/hsz1273327/todotdesktop).这是一个用go写的小工具,下载下来就能用,能省不少事儿.
 
@@ -1576,7 +1615,6 @@ sudo apt install libfuse2t64
 
 另一个好处是可以将这个路径也放进`$PATH`中,这样就可以直接在terminal中运行这些`AppImage`文件了.
 
-
 > `PORTABLE LINUX APPS`管理工具
 
 `PORTABLE LINUX APPS`可以说是真正的去中心化,社区驱动,以至于时至今日已经有点驱动不下去了的感觉.
@@ -1585,8 +1623,8 @@ sudo apt install libfuse2t64
 
 为了做到这一点,我个人会给`PORTABLE LINUX APPS`的部署做如下限制
 
-+ 限制`PORTABLE LINUX APPS`仅用户级安装
-+ 限制`PORTABLE LINUX APPS`的应用全部安装在`~/Applications`目录下,且一个应用一个文件夹或一个`.appimage`文件不做嵌套
+- 限制`PORTABLE LINUX APPS`仅用户级安装
+- 限制`PORTABLE LINUX APPS`的应用全部安装在`~/Applications`目录下,且一个应用一个文件夹或一个`.appimage`文件不做嵌套
 
 说回到管理工具,`PORTABLE LINUX APPS`的管理工具其实也是有的,但一样也是相当的"去中心化"而且完成度相对低.我体验的相对靠谱的是[ivan-hc/AM](https://github.com/ivan-hc/AM)这套工具.
 这套的缺点是只有命令行工具没有带gui的管理应用.但相对的index整理的算比较全的,而且提供了一个轻量级沙盒功能可以进一步隔离应用和操作系统.
@@ -1595,7 +1633,7 @@ sudo apt install libfuse2t64
 
 `am`和`appman`共用一份[应用索引](https://portable-linux-apps.github.io/apps.html)作为应用仓库,
 
->> 安装`appman`
+> > 安装`appman`
 
 安装`appman`可以通过如下命令实现
 
@@ -1609,73 +1647,73 @@ wget -q https://raw.githubusercontent.com/ivan-hc/AM/main/AM-INSTALLER && chmod 
 
 安装完成后会有如下几个位置有相关文件
 
-+ 执行命令的目录下会有安装脚本`AM-INSTALLER`,可以删掉
-+ `~/.local/bin`下会有可执行文件`appman`
-+ `~/Applications`下会有文件夹`appman`
+- 执行命令的目录下会有安装脚本`AM-INSTALLER`,可以删掉
+- `~/.local/bin`下会有可执行文件`appman`
+- `~/Applications`下会有文件夹`appman`
 
 要卸载`appman`时先将`appman`安装的应用都卸载了,然后直接将这些文件,文件夹删除即可
 
->> 使用`appman`
+> > 使用`appman`
 
-+ 搜索am数据库中索引的应用
+- 搜索am数据库中索引的应用
 
-    ```bash
-    appman -q <关键字>
-    ```
+  ```bash
+  appman -q <关键字>
+  ```
 
-+ 安装am数据库中索引的应用
+- 安装am数据库中索引的应用
 
-    ```bash
-    appman -i <应用名>
-    ```
+  ```bash
+  appman -i <应用名>
+  ```
 
-    安装即可.如果希望安装`AppImage`而不是`独立归档应用`,可以添加flag`-a`
+  安装即可.如果希望安装`AppImage`而不是`独立归档应用`,可以添加flag`-a`
 
-    ```bash
-    appman -ia <应用名>
-    ```
+  ```bash
+  appman -ia <应用名>
+  ```
 
-    如果希望安装的同时进行沙盒化,可以加个flag`-s`
+  如果希望安装的同时进行沙盒化,可以加个flag`-s`
 
-    ```bash
-    appman -is <应用名>
-    ```
+  ```bash
+  appman -is <应用名>
+  ```
 
-    `am`工具的沙盒化是使用的[Aisap](https://github.com/mgord9518/aisap).
+  `am`工具的沙盒化是使用的[Aisap](https://github.com/mgord9518/aisap).
 
-+ 安装来自github而am数据库中索引未收录的应用
+- 安装来自github而am数据库中索引未收录的应用
 
-    如果我们希望让`apman`安装并管理未被收录的github上的`appimage`,则可以使用`-e`命令替代`-i`和`-ia`
+  如果我们希望让`apman`安装并管理未被收录的github上的`appimage`,则可以使用`-e`命令替代`-i`和`-ia`
 
-    ```bash
-    appman -e <github地址> <应用名> [关键字]
-    ```
+  ```bash
+  appman -e <github地址> <应用名> [关键字]
+  ```
 
-    如果这个地址中有不止一个`appimage`文件,可选的`关键字`可以用来指定实际需要的是哪个.而`<应用名>`则是这个安装好的`appimage`文件在系统内的命名.
+  如果这个地址中有不止一个`appimage`文件,可选的`关键字`可以用来指定实际需要的是哪个.而`<应用名>`则是这个安装好的`appimage`文件在系统内的命名.
 
-+ 将本地已经下载好的`appimage`文件注册到`appman`并集成进系统
+- 将本地已经下载好的`appimage`文件注册到`appman`并集成进系统
 
-    ```bash
-    appman --launcher /path/to/File.AppImage
-    ```
+  ```bash
+  appman --launcher /path/to/File.AppImage
+  ```
 
-+ 查看本地由`appman`维护的应用
+- 查看本地由`appman`维护的应用
 
-    ```bash
-    appman -f
-    ```
+  ```bash
+  appman -f
+  ```
 
-+ 更新应用
+- 更新应用
 
-    ```bash
-    appman -u <应用名>
-    ```
+  ```bash
+  appman -u <应用名>
+  ```
 
-+ 卸载应用
+- 卸载应用
 
-    ```bash
-    appman -R <应用名>
-    ```
+  ```bash
+  appman -R <应用名>
+  ```
 
 ### 选择应用安装方式的总结
 
@@ -1697,15 +1735,15 @@ wget -q https://raw.githubusercontent.com/ivan-hc/AM/main/AM-INSTALLER && chmod 
 
 可以看到如果这些平台都各有利弊.我们应该针对不同需求使用不同的平台.
 
-+ 对于比较大的公司或知名大项目提供的产品,比如谷歌微软blender什么的,尽量用官方提供的安装方案
-+ 对性能要求比较高的尤其是吃计算资源的应用
-    + 优先尝试使用`独立归档应用`
-    + 如果有`Appimage`也可以尝试用`Appimage`
-    + 如果没有就找官网有没有提供`deb`包
-+ 对于扩展性要求较高的比如要自己装插件改文件的应用
-    + 优先尝试使用`独立归档应用`
-    + 如果有`Appimage`,可以解压出来当做独立归档应用来尝试使用
-+ 其他应用无脑`Flatpak`即可.
+- 对于比较大的公司或知名大项目提供的产品,比如谷歌微软blender什么的,尽量用官方提供的安装方案
+- 对性能要求比较高的尤其是吃计算资源的应用
+  - 优先尝试使用`独立归档应用`
+  - 如果有`Appimage`也可以尝试用`Appimage`
+  - 如果没有就找官网有没有提供`deb`包
+- 对于扩展性要求较高的比如要自己装插件改文件的应用
+  - 优先尝试使用`独立归档应用`
+  - 如果有`Appimage`,可以解压出来当做独立归档应用来尝试使用
+- 其他应用无脑`Flatpak`即可.
 
 ### 常用软件
 
@@ -1729,6 +1767,7 @@ linux下我会尽量推荐开源工具.下面是一些常用软件的安装信�
 | synaptic                                                         | `sudo apt install synaptic`                                        | 新立得软件包管理器,管理deb应用和包                               |
 | appman                                                           | [官网脚本下载](https://github.com/ivan-hc/AppMan)                  | 管理`PORTABLE LINUX APPS`                                        |
 | whaler                                                           | [flathub](https://flathub.org/apps/com.github.sdv43.whaler)        | 轻量级docker容器监控工具                                         |
+flatseal| [flathub](https://flathub.org/en/apps/com.github.tchx84.Flatseal)| 用于管理flatpak应用权限的工具,可以方便的设置flatpak应用的权限,比如文件系统访问权限,网络访问权限等.|
 
 ##### 补充设置
 
@@ -1743,31 +1782,30 @@ gpu加速:
 
 在地址栏输入`chrome://flags/#disable-accelerated-video-decode`,找到其中的
 
-+ `Hardware-accelerated video decode`硬件解码设置,确保置为`已启用`
+- `Hardware-accelerated video decode`硬件解码设置,确保置为`已启用`
 
 #### 生产力工具
 
- | 软件                           | 渠道                                                                   | 说明                                                               |
- | ------------------------------ | ---------------------------------------------------------------------- | ------------------------------------------------------------------ |
- | Calculator                     | [flathub](https://flathub.org/apps/org.gnome.Calculator)               | 基本的计算器工具                                                   |
- | gimp                           | [flathub](https://flathub.org/apps/org.gimp.GIMP)                      | 开源的图像编辑软件,ps平替                                          |
- | Inkscape                       | [flathub](https://flathub.org/apps/org.inkscape.Inkscape)              | 矢量图编辑工具                                                     |
- | freecad                        | `appman -i freecad`                                                    | 开源的工程制图,autocad平替                                         |
- | blender                        | `appman -i blender`                                                    | 开源的3d建模渲染工具,maya平替                                      |
- | godot                          | `appman -i godot`                                                      | 开源的轻量级游戏引擎                                               |
- | unrealengine5                  | [官网下载](https://www.unrealengine.com/zh-CN/download)                | 大名鼎鼎的虚幻引擎,                                                |
- | shotcut                        | `appman -i shotcut`                                                    | 轻量级的开源视频剪辑工具                                           |
- | DaVinci Resolve                | [官网下载](http://www.blackmagicdesign.com/cn/products/davinciresolve) | 大名鼎鼎的生产级视频剪辑工具达芬奇,有免费的社区版                  |
- | KiCad                          | [flathub](https://flathub.org/apps/org.kicad.KiCad)                    | 知名的开源eda工具                                                  |
- | balenaEtcher                   | [官网下载](https://etcher.balena.io/)                                  | 镜像写入工具                                                       |
- | 飞书                           | [官网下载deb](https://www.feishu.cn/download)                          | 知名的办公协作工具,flathub版本无法后台挂载因此用官网版本           |
- | 微信                           | [官网下载deb](https://linux.weixin.qq.com/)                            | 知名的聊天工具,由于flathub版本的后台功能有缺陷因此使用AppImage版本 |
- | wps                            | [官网下载deb](https://www.wps.cn/product/wpslinux)                     | 知名的office套件,flatpak版本过低                                   |
- | [obs](https://obsproject.com/) | [flathub](https://flathub.org/apps/com.obsproject.Studio)              | 知名的开源直播录屏工具                                             |
- | vscode                         | [官网下载deb](https://code.visualstudio.com/Download)                  | 文本编辑器                                                         |
- | github desktop                 | [github下载deb](https://github.com/shiftkey/desktop)                   | github desktop的第三方linux fork                                   |
- | Xmind                          | [flathub](https://flathub.org/apps/net.xmind.XMind)                    | 知名的脑图工具                                                     |
- | minder                         | [flathub](https://flathub.org/apps/com.github.phase1geo.minder)        | xmind的开源替代                                                    |
+| 软件                           | 渠道                                                                   | 说明                                                               |
+| ------------------------------ | ---------------------------------------------------------------------- | ------------------------------------------------------------------ |
+| Calculator                     | [flathub](https://flathub.org/apps/org.gnome.Calculator)               | 基本的计算器工具                                                   |
+| gimp                           | [flathub](https://flathub.org/apps/org.gimp.GIMP)                      | 开源的图像编辑软件,ps平替                                          |
+| Inkscape                       | [flathub](https://flathub.org/apps/org.inkscape.Inkscape)              | 矢量图编辑工具                                                     |
+| freecad                        | [flathub](https://flathub.org/en/apps/org.freecad.FreeCAD)             | 开源的工程制图,autocad平替                                         |
+| blender                        | `appman -i blender`                                                    | 开源的3d建模渲染工具,maya平替                                      |
+| godot                          | `appman -i godot`                                                      | 开源的轻量级游戏引擎                                               |
+| unrealengine5                  | [官网下载](https://www.unrealengine.com/zh-CN/download)                | 大名鼎鼎的虚幻引擎,                                                |
+| shotcut                        | [flathub](https://flathub.org/en/apps/org.shotcut.Shotcut)             | 轻量级的开源视频剪辑工具                                           |
+| DaVinci Resolve                | [官网下载](http://www.blackmagicdesign.com/cn/products/davinciresolve) | 大名鼎鼎的生产级视频剪辑工具达芬奇,有免费的社区版                  |
+| KiCad                          | [flathub](https://flathub.org/apps/org.kicad.KiCad)                    | 知名的开源eda工具                                                  |
+| balenaEtcher                   | [官网下载](https://etcher.balena.io/)                                  | 镜像写入工具                                                       |
+| 飞书                           | [官网下载deb](https://www.feishu.cn/download)                          | 知名的办公协作工具,flathub版本无法后台挂载因此用官网版本           |
+| 微信                           | [官网下载deb](https://linux.weixin.qq.com/)                            | 知名的聊天工具,由于flathub版本的后台功能有缺陷因此使用AppImage版本 |
+| wps                            | [官网下载deb](https://www.wps.cn/product/wpslinux)                     | 知名的office套件,flatpak版本过低                                   |
+| [obs](https://obsproject.com/) | [flathub](https://flathub.org/apps/com.obsproject.Studio)              | 知名的开源直播录屏工具                                             |
+| vscode                         | snap                                                                   | 文本编辑器                                                         |
+| github desktop                 | [github下载deb](https://github.com/shiftkey/desktop)                   | github desktop的第三方linux fork                                   |
+| minder                         | [flathub](https://flathub.org/apps/com.github.phase1geo.minder)        | xmind的开源替代                                                    |
 
 ##### 补充设置[2025-11-13更新]
 
@@ -1777,10 +1815,11 @@ gpu加速:
 
 #### 娱乐工具
 
- | 软件                     | 渠道                                                                          | 说明                                                                                                                                             |
- | ------------------------ | ----------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
- | vlc                      | [flathub](https://flathub.org/apps/org.videolan.VLC)                          | 知名的开源视频播放器                                                                                                                             |
- | NetEase Cloud Music Gtk4 | [flathub](https://flathub.org/apps/com.github.gmg137.netease-cloud-music-gtk) | 网易云音乐的开源第三方客户端</br>默认每日推荐是隐藏的</br>要激活可以参考[这个工单](https://github.com/gmg137/netease-cloud-music-gtk/issues/360) |
+| 软件                     | 渠道                                                                          | 说明                                                                                                                                             |
+| ------------------------ | ----------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
+| vlc                      | [flathub](https://flathub.org/apps/org.videolan.VLC)                          | 知名的开源视频播放器                                                                                                                             |
+| Celluloid                | [flathub](https://flathub.org/en/apps/io.github.celluloid_player.Celluloid)   | mpv的图形界面版本                                                                                                                                |
+| NetEase Cloud Music Gtk4 | [flathub](https://flathub.org/apps/com.github.gmg137.netease-cloud-music-gtk) | 网易云音乐的开源第三方客户端</br>默认每日推荐是隐藏的</br>要激活可以参考[这个工单](https://github.com/gmg137/netease-cloud-music-gtk/issues/360) |
 
 ## 使用模式
 
@@ -1818,15 +1857,14 @@ macos的桌面使用逻辑总体是基于单一桌面的,而gnome的桌面使用
 
 在gnome中workspace有两种模式,一种是固定数量workspace,另一种是动态数量workspace.他们可以在`设置->多任务`中的`工作空间`进行切换.
 
-+ 默认是动态数量workspace,这种模式下我们可以随时创建新的workspace,但缺点是无法预知当前有多少个workspace,因此无法通过快捷键直接切换到某个特定的workspace.在工作流不定的情况下,动态数量workspace更适合我们使用.
-+ 而固定数量workspace则可以通过快捷键直接切换到某个特定的workspace,但缺点是无法随时创建新的workspace.在工作流比较固定的情况下,固定数量workspace更适合我们使用.
+- 默认是动态数量workspace,这种模式下我们可以随时创建新的workspace,但缺点是无法预知当前有多少个workspace,因此无法通过快捷键直接切换到某个特定的workspace.在工作流不定的情况下,动态数量workspace更适合我们使用.
+- 而固定数量workspace则可以通过快捷键直接切换到某个特定的workspace,但缺点是无法随时创建新的workspace.在工作流比较固定的情况下,固定数量workspace更适合我们使用.
 
 > 多显示器下的workspace
 
 如果你有多个显示器,那么你可以在`设置->多任务`中的`多显示器`中将进行设置.
 
-+ 默认情况下只有主显示器有workspace,副显示器不会随着workspace切换而切换.
-+ 如果你希望所有显示器的workspace都随着主显示器的workspace切换而切换,可以将`工作区在所有显示器上`打开.这样所有显示器的workspace都会随着主显示器的workspace切换而切换.
-
+- 默认情况下只有主显示器有workspace,副显示器不会随着workspace切换而切换.
+- 如果你希望所有显示器的workspace都随着主显示器的workspace切换而切换,可以将`工作区在所有显示器上`打开.这样所有显示器的workspace都会随着主显示器的workspace切换而切换.
 
 [1]: {{site.url}}/img/in-post/ubuntu/gnome桌面结构.jpg
