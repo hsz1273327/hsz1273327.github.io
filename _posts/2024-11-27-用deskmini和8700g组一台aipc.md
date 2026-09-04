@@ -16,7 +16,7 @@ update: 2024-11-27
 ---
 # 用deskmini和8700g组一台AIPC
 
-我在2024年8月就入手了[华擎的deskmini x600准系统](https://www.asrock.com/nettop/AMD/DeskMini%20X600%20Series/index.cn.asp).基于它配合[8700g](https://blog.hszofficial.site/experiment/2024/11/08/aipc%E6%8A%98%E8%85%BE%E8%AE%B0/#amd-ryzen-7-8700g)我会组一台APIC带到单位作为办公机使用替换我装了黑苹果的nuc8.
+我在2024年8月就入手了[华擎的deskmini x600准系统](https://www.asrock.com/nettop/AMD/DeskMini%20X600%20Series/index.cn.asp).基于它配合[8700g](https://hsz1273327.github.io/experiment/2024/11/08/aipc%E6%8A%98%E8%85%BE%E8%AE%B0/#amd-ryzen-7-8700g)我会组一台APIC带到单位作为办公机使用替换我装了黑苹果的nuc8.
 
 计划这个机器的生命周期为3年,在这三年中它会被用来:
 

@@ -151,7 +151,7 @@ faas-cli list --gateway http://192.168.3.40:8080
 
     ```shell
     curl <ip>:8080/function/functest --data-binary '{
-        "url": "https://blog.hszofficial.site/",
+        "url": "https://hsz1273327.github.io/",
         "term": "docker"
     }'
     ```

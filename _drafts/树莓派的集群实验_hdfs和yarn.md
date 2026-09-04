@@ -60,7 +60,7 @@ YARN 即为hadoop的资源调度系统,它的职能就是将资源调度和任�
 
 ### 依赖
 
-hadoop依赖java8环境,在[树莓派linux系统安装和配置](http://blog.hszofficial.site/blog/2018/02/19/%E6%A0%91%E8%8E%93%E6%B4%BElinux%E7%B3%BB%E7%BB%9F%E5%AE%89%E8%A3%85%E5%92%8C%E9%85%8D%E7%BD%AE/)一文中已经有描述了如何安装java环境,照方抓药即可.
+hadoop依赖java8环境,在[树莓派linux系统安装和配置](http://hsz1273327.github.io/blog/2018/02/19/%E6%A0%91%E8%8E%93%E6%B4%BElinux%E7%B3%BB%E7%BB%9F%E5%AE%89%E8%A3%85%E5%92%8C%E9%85%8D%E7%BD%AE/)一文中已经有描述了如何安装java环境,照方抓药即可.
 
 <!-- 另一个一来是google的protocol buffers,我们可以安装[protocol buffers v2.5](https://protobuf.googlecode.com/files/protobuf-2.5.0.tar.gz).随便找个文件夹下载后执行下述操作,等待编译完成即可. -->
 

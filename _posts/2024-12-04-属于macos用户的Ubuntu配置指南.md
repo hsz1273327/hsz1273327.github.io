@@ -672,7 +672,7 @@ git工具我们需要好好设置下,毕竟ubuntu下很多东西,尤其是大文
 
 ### 配置代理
 
-作为一个写代码的,代理几乎波不可少.作为一台主力办公机,没道理不按一个clash客户端.[clashverge](https://github.com/clash-verge-rev/clash-verge-rev/releases/tag/v1.7.7)自然是ubuntu下的首选,安装也只是下载下来,先安装依赖再安装本体即可,具体可以看[我的这一篇博文](https://blog.hszofficial.site/introduce/2024/11/29/clash%E9%83%A8%E7%BD%B2/#linuxdebian%E7%B3%BB%E4%B8%8B%E7%9A%84%E5%AE%89%E8%A3%85).
+作为一个写代码的,代理几乎波不可少.作为一台主力办公机,没道理不按一个clash客户端.[clashverge](https://github.com/clash-verge-rev/clash-verge-rev/releases/tag/v1.7.7)自然是ubuntu下的首选,安装也只是下载下来,先安装依赖再安装本体即可,具体可以看[我的这一篇博文](https://hsz1273327.github.io/introduce/2024/11/29/clash%E9%83%A8%E7%BD%B2/#linuxdebian%E7%B3%BB%E4%B8%8B%E7%9A%84%E5%AE%89%E8%A3%85).
 
 和在macos上一样,我们可以在`.zshrc`或其他shell的配置文件中像这样配置代理
 

@@ -25,7 +25,7 @@ series:
 
 但这两位都不今天的主角,今天的主角是[gogs](https://gogs.io/),这是一个go写的代码托管应用,很小,但也功能单一,它的优势是资源消耗少,甚至可以在树莓派上安装,非常适合10人以下的小型团队作为代码托管工具.它有完整的工单系统和分组系统(虽然只有一层)同时支持邮件推送.文档也可以使用自带的wiki模板解决.如果需要ci/cd工具,则可以使用[Jenkins](https://jenkins.io/)
 
-本文使用docker部署gogs和Jenkins,因此需要[相关的前置知识](http://blog.hszofficial.site/blog/2018/05/31/%E6%A0%91%E8%8E%93%E6%B4%BE%E7%9A%84%E9%9B%86%E7%BE%A4%E5%AE%9E%E9%AA%8C_%E9%85%8D%E7%BD%AEdocker%E5%8F%8Aswarm/)
+本文使用docker部署gogs和Jenkins,因此需要[相关的前置知识](http://hsz1273327.github.io/blog/2018/05/31/%E6%A0%91%E8%8E%93%E6%B4%BE%E7%9A%84%E9%9B%86%E7%BE%A4%E5%AE%9E%E9%AA%8C_%E9%85%8D%E7%BD%AEdocker%E5%8F%8Aswarm/)
 
 ## gogs部署
 

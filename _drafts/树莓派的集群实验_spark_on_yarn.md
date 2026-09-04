@@ -169,7 +169,7 @@ spark有两种运行方式,
 spark很早就支持python,pyspark是spark官方的python接口库.原本是和spark一起安装的,现在也可以使用pip安装.pyspark本质上就是使用py4j来将python代码转译到jvm上运行而已.
 
 集群模式中使用pyspark就是写好python程序,然后通过`$SPARK_HOME/bin/spark-submit`工具执行即可,
-而客户端模式也就是在python的交互模式下使用pyspark即可.通常,为了方便我们会将pyspark与jupyter notebook结合使用,jupyter notebook的相关介绍和经验我在[Jupyter攻略](http://blog.hszofficial.site/TutorialForJupyter/)系列文章中已经做过介绍,此处不再复述.
+而客户端模式也就是在python的交互模式下使用pyspark即可.通常,为了方便我们会将pyspark与jupyter notebook结合使用,jupyter notebook的相关介绍和经验我在[Jupyter攻略](http://hsz1273327.github.io/TutorialForJupyter/)系列文章中已经做过介绍,此处不再复述.
 
 ### 集群模式使用pyspark演示word count
 
